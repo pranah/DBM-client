@@ -14,10 +14,10 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import { nftmarketaddress, nftaddress } from "../config";
+import { pranaAddress, pranaHelperAddress } from "../config";
 
-import Market from "../artifacts/contracts/Market.sol/NFTMarket.json";
-import NFT from "../artifacts/contracts/NFT.sol/NFT.json";
+// import Market from "../artifacts/contracts/Market.sol/NFTMarket.json";
+import Prana from "../artifacts/contracts/Prana.sol/Prana.json";
 
 export default function MyBooks() {
   const [nfts, setNfts] = useState([]);
@@ -26,33 +26,34 @@ export default function MyBooks() {
     loadNFTs();
   }, []);
   async function loadNFTs() {
-    const web3Modal = new Web3Modal({
-      network: "mainnet",
-      cacheProvider: true,
-    });
+    const web3Modal = new Web3Modal();
+
     const connection = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
 
-    const marketContract = new ethers.Contract(
-      nftmarketaddress,
-      Market.abi,
-      signer
-    );
-    const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
-    const data = await marketContract.fetchMyNFTs();
-
+    const pranaContract = new ethers.Contract(pranaAddress, Prana.abi, signer);
+    console.log(signer, "signer");
+    let tokenCount = await pranaContract.balanceOf(signer.getAddress());
+    console.log(tokenCount, "tokenCount");
+    let data = [];
+    for (let i = 0; i < tokenCount; i++) {
+      //contract call to get the tokenId at index i
+      let tokenId = await pranaContract.tokenOfOwnerByIndex(
+        signer.getAddress(),
+        i
+      );
+      const book = await pranaContract.viewTokenDetails(tokenId);
+      data.push(book);
+    }
+    console.log(data);
     const items = await Promise.all(
       data.map(async (i) => {
-        const tokenUri = await tokenContract.tokenURI(i.tokenId);
-        const meta = await axios.get(tokenUri);
-        let price = ethers.utils.formatUnits(i.price.toString(), "ether");
+        const meta = await axios.get(i[1]);
+        console.log(meta);
+        let price = ethers.utils.formatUnits(i[2].toString(), "ether");
         let item = {
           price,
-          tokenId: i.tokenId.toNumber(),
-          itemId: i.itemId.toNumber(),
-          seller: i.seller,
-          owner: i.owner,
           image: meta.data.image,
           name: meta.data.name,
           description: meta.data.description,
@@ -98,7 +99,6 @@ export default function MyBooks() {
               <CardContent>
                 <Typography variant="h6">{book.name}</Typography>
                 <Typography variant="caption">by {book.author}</Typography>
-                <Typography variant="h5">{book.price} ETH</Typography>
 
                 <Typography variant="body2" color="text.secondary">
                   {book.description.substring(0, 100) + " ..."}

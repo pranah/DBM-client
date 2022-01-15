@@ -17,9 +17,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Web3Modal from "web3modal";
 
-import { nftaddress, nftmarketaddress } from "../config";
-import NFT from "../artifacts/contracts/NFT.sol/NFT.json";
-import Market from "../artifacts/contracts/Market.sol/NFTMarket.json";
+import { pranaAddress, pranaHelperAddress } from "../config";
+import Prana from "../artifacts/contracts/prana.sol/prana.json";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
@@ -32,25 +31,29 @@ const Home: NextPage = () => {
   }, []);
   async function loadNFTs() {
     const provider = new ethers.providers.JsonRpcProvider(rpcEndpoint);
-    const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
-    const marketContract = new ethers.Contract(
-      nftmarketaddress,
-      Market.abi,
+    const pranaContract = new ethers.Contract(
+      pranaAddress,
+      Prana.abi,
       provider
     );
-    const data = await marketContract.fetchMarketItems();
 
+    const data = await pranaContract.filters.BookPublished();
+    // console.log(data, "---------------");
+    // const nullAddress = "0x0000000000000000000000000000000000000000";
+    // let filter = await pranaContract.filters.BookPublished(
+    //   null,
+    //   nullAddress,
+    //   null
+    // );
+    const eventLog = await pranaContract.queryFilter(data);
+    const bookData = eventLog.map((log: any) => log.args);
+    console.log(bookData);
     const items = await Promise.all(
-      data.map(async (i) => {
-        const tokenUri = await tokenContract.tokenURI(i.tokenId);
-        const meta = await axios.get(tokenUri);
+      bookData.map(async (i) => {
+        const meta = await axios.get(i.bookCoverAndDetails);
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
         let item = {
           price,
-          tokenId: i.tokenId.toNumber(),
-          itemId: i.itemId.toNumber(),
-          seller: i.seller,
-          owner: i.owner,
           image: meta.data.image,
           file: meta.data.file,
           name: meta.data.name,
@@ -58,7 +61,7 @@ const Home: NextPage = () => {
           author: meta.data.author,
           isbn: meta.data.isbn,
           publisher: meta.data.publisher,
-          royality: meta.data.royality,
+          royalty: meta.data.royalty,
           genre: meta.data.genre,
         };
         return item;
@@ -67,21 +70,40 @@ const Home: NextPage = () => {
     setNfts(items);
     setLoadingState("loaded");
   }
-  async function buyNft(nft) {
+  // async function buyNft(book) {
+  //   const web3Modal = new Web3Modal();
+  //   const connection = await web3Modal.connect();
+  //   const provider = new ethers.providers.Web3Provider(connection);
+  //   const signer = provider.getSigner();
+  //   const contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
+
+  //   const price = ethers.utils.parseUnits(book.price.toString(), "ether");
+  //   const transaction = await contract.createMarketSale(
+  //     pranaAddress,
+  //     nft.itemId,
+  //     {
+  //       value: price,
+  //     }
+  //   );
+  //   await transaction.wait();
+  //   loadNFTs();
+  // }
+  async function buyNft(book) {
     const web3Modal = new Web3Modal();
     const connection = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
-    const contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
+    console.log(signer);
+    const contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
+    console.log(book);
+    const price = ethers.utils.parseUnits(book.price, "ether");
+    console.log(price);
+    let isbn = book.isbn;
+    //contract call to mint a new token
 
-    const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
-    const transaction = await contract.createMarketSale(
-      nftaddress,
-      nft.itemId,
-      {
-        value: price,
-      }
-    );
+    const transaction = await contract.directPurchase(isbn, {
+      value: price,
+    });
     await transaction.wait();
     loadNFTs();
   }
