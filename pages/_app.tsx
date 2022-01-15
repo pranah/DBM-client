@@ -7,6 +7,8 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 import Layout from "../components/layout";
 import createEmotionCache from "../styles/createEmotionsCache";
 import theme from "../styles/theme";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 // material
 

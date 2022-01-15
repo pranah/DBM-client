@@ -52,6 +52,7 @@ const Home: NextPage = () => {
           seller: i.seller,
           owner: i.owner,
           image: meta.data.image,
+          file: meta.data.file,
           name: meta.data.name,
           description: meta.data.description,
           author: meta.data.author,
@@ -128,6 +129,9 @@ const Home: NextPage = () => {
                 </Button>
                 <Link href={`/${book.tokenId}`}>
                   <Button size="large">View</Button>
+                </Link>
+                <Link href={`/read/${book.tokenId}?url=${book.file}`}>
+                  <Button size="large">Read</Button>
                 </Link>
               </CardActionArea>
             </Card>{" "}
