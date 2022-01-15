@@ -91,18 +91,28 @@ const Book: NextPage = () => {
       <Grid container spacing={2}>
         <Grid xs={12} md={4} item>
           <Box>
-            <img src={book.image} alt="book1" />
+            <img style={{ width: "100%" }} src={book.image} alt="book1" />
           </Box>
         </Grid>
         <Grid xs={12} md={8} item>
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
+              height: "100%",
+            }}
+          >
             <Typography variant="h2">{book.name}</Typography>
-            <Typography variant="h6">by {book.author}</Typography>
+            <Typography variant="subtitle1">by {book.author}</Typography>
             <br />
-            <Typography variant="h1">{book.price}</Typography>
             <Typography>{book.description}</Typography>
+            <div>
+              Price: <span>{book.price} Eth</span>
+            </div>
             <br />
             <Button
+              sx={{ width: "fit-content" }}
               variant="contained"
               size="large"
               onClick={() => buyNft(book)}
