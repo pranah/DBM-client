@@ -8,6 +8,11 @@ import type { ERC165, ERC165Interface } from "../ERC165";
 
 const _abi = [
   {
+    inputs: [],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
     inputs: [
       {
         internalType: "bytes4",

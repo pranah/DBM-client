@@ -9,10 +9,10 @@ import Web3Modal from "web3modal";
 
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
-import { nftaddress, nftmarketaddress } from "../../config";
+import { pranaAddress } from "../../config";
 
-import NFT from "../../artifacts/contracts/NFT.sol/NFT.json";
-import Market from "../../artifacts/contracts/Market.sol/NFTMarket.json";
+import Prana from "../../artifacts/contracts/prana.sol/prana.json";
+
 const Publish: NextPage = () => {
   const [fileUrl, setFileUrl] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
@@ -35,31 +35,54 @@ const Publish: NextPage = () => {
       console.log("Error uploading file: ", error);
     }
   }
-  async function createSale(url, bookPrice) {
+  // async function createSale(url, bookPrice,values) {
+  //   const web3Modal = new Web3Modal();
+  //   const connection = await web3Modal.connect();
+  //   const provider = new ethers.providers.Web3Provider(connection);
+  //   const signer = provider.getSigner();
+
+  //   /* next, create the item */
+  //   let contract = new ethers.Contract(nftaddress, Prana.abi, signer);
+  //   let transaction = await contract.createToken(url);
+  //   let tx = await transaction.wait();
+  //   let event = tx.events[0];
+  //   let value = event.args[2];
+  //   let tokenId = value.toNumber();
+
+  //   const price = ethers.utils.parseUnits(bookPrice, "ether");
+
+  //   /* then list the item for sale on the marketplace */
+  //   contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
+  //   let listingPrice = await contract.getListingPrice();
+  //   listingPrice = listingPrice.toString();
+
+  //   transaction = await contract.createMarketItem(nftaddress, tokenId, price, {
+  //     value: listingPrice,
+  //   });
+  //   await transaction.wait();
+  //   router.push("/");
+  // }
+  async function createSale(url, bookPrice, data) {
+    const values = JSON.parse(data);
     const web3Modal = new Web3Modal();
     const connection = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
-
+    console.log(signer);
     /* next, create the item */
-    let contract = new ethers.Contract(nftaddress, NFT.abi, signer);
-    let transaction = await contract.createToken(url);
-    let tx = await transaction.wait();
-    let event = tx.events[0];
-    let value = event.args[2];
-    let tokenId = value.toNumber();
-
+    let contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
     const price = ethers.utils.parseUnits(bookPrice, "ether");
 
-    /* then list the item for sale on the marketplace */
-    contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
-    let listingPrice = await contract.getListingPrice();
-    listingPrice = listingPrice.toString();
+    const transaction = await contract.publishBook(
+      values.file,
+      values.isbn,
+      price,
+      url,
+      values.royalty
+    );
 
-    transaction = await contract.createMarketItem(nftaddress, tokenId, price, {
-      value: listingPrice,
-    });
     await transaction.wait();
+
     router.push("/");
   }
   const { control, handleSubmit } = useForm({
@@ -69,7 +92,7 @@ const Publish: NextPage = () => {
       isbn: "",
       publisher: "",
       price: "",
-      royality: "",
+      royalty: "",
       genre: "",
       description: "",
     },
@@ -82,7 +105,7 @@ const Publish: NextPage = () => {
       author,
       isbn,
       publisher,
-      royality,
+      royalty,
       genre,
       price,
     } = values;
@@ -91,7 +114,7 @@ const Publish: NextPage = () => {
       !author ||
       !isbn ||
       !publisher ||
-      !royality ||
+      !royalty ||
       !genre ||
       !price ||
       !fileUrl ||
@@ -103,7 +126,7 @@ const Publish: NextPage = () => {
         author,
         isbn,
         publisher,
-        royality,
+        royalty,
         genre,
         image: imageUrl,
         file: fileUrl,
@@ -116,7 +139,7 @@ const Publish: NextPage = () => {
       author,
       isbn,
       publisher,
-      royality,
+      royalty,
       genre,
       price,
       image: imageUrl,
@@ -126,7 +149,7 @@ const Publish: NextPage = () => {
       const added = await client.add(data);
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
-      createSale(url, price);
+      createSale(url, price, data);
     } catch (error) {
       console.log("Error uploading file: ", error);
     }
@@ -210,11 +233,11 @@ const Publish: NextPage = () => {
           <br />
           <Controller
             control={control}
-            name="royality"
+            name="royalty"
             render={({ field }) => (
               // Material UI TextField already supports
               // `value` and `onChange`
-              <TextField {...field} label="royality" />
+              <TextField {...field} label="royalty" />
             )}
           />
           <br />

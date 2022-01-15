@@ -8,8 +8,8 @@ import axios from "axios";
 import Web3Modal from "web3modal";
 
 import { nftaddress, nftmarketaddress } from "../../config";
-import NFT from "../../artifacts/contracts/NFT.sol/NFT.json";
-import Market from "../../artifacts/contracts/Market.sol/NFTMarket.json";
+// import NFT from "../../artifacts/contracts/NFT.sol/NFT.json";
+// import Market from "../../artifacts/contracts/Market.sol/NFTMarket.json";
 
 let rpcEndpoint = null;
 
@@ -25,7 +25,7 @@ const Book: NextPage = () => {
     isbn: "",
     publisher: "",
     price: "",
-    royality: "",
+    royalty: "",
     genre: "",
     description: "",
     image: "",
@@ -47,7 +47,7 @@ const Book: NextPage = () => {
       author: meta.data.author,
       isbn: meta.data.isbn,
       publisher: meta.data.publisher,
-      royality: meta.data.royality,
+      royalty: meta.data.royalty,
       genre: meta.data.genre,
     };
 

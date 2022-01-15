@@ -21,7 +21,7 @@
     "@mui/styles": "^5.2.3",
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
-    "@openzeppelin/contracts": "^4.4.0",
+    "@openzeppelin/contracts": "3.1.0",
     "@typechain/ethers-v5": "^9.0.0",
     "@typechain/hardhat": "^4.0.0",
     "axios": "^0.24.0",
@@ -45,6 +45,7 @@
     "@types/react": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
+    "hardhat-contract-sizer": "^2.3.1",
     "ts-node": "^10.4.0",
     "typescript": "latest"
   }
