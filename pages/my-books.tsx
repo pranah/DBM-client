@@ -107,7 +107,7 @@ export default function MyBooks() {
               </CardContent>
 
               <CardActionArea>
-                <Link href={`/read/${book.tokenId}?url=${book.file}`}>
+                <Link href={`/read/${book.isbn}?url=${book.file}`}>
                   <Button size="large">Read</Button>
                 </Link>
               </CardActionArea>
