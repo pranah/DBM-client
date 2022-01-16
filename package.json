@@ -40,7 +40,10 @@
     "react": "latest",
     "react-dom": "latest",
     "react-hook-form": "^7.22.5",
+<<<<<<< HEAD
     "react-moralis": "^0.3.11",
+=======
+>>>>>>> epub-reader
     "react-reader": "^0.20.4",
     "react-router-dom": "^6.2.1",
     "react-slick": "^0.28.1",

@@ -62,6 +62,7 @@ export default function MyBooks() {
           publisher: meta.data.publisher,
           royality: meta.data.royality,
           genre: meta.data.genre,
+          file: meta.data.file,
         };
         return item;
       })
@@ -106,8 +107,8 @@ export default function MyBooks() {
               </CardContent>
 
               <CardActionArea>
-                <Link href={`/${book.tokenId}`}>
-                  <Button size="large">View</Button>
+                <Link href={`/read/${book.isbn}?url=${book.file}`}>
+                  <Button size="large">Read</Button>
                 </Link>
               </CardActionArea>
             </Card>
