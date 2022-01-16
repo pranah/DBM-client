@@ -160,12 +160,6 @@ const Home: NextPage = () => {
                 <Button size="large" onClick={() => buyNft(book)}>
                   Buy
                 </Button>
-                <Link href={`/${book.tokenId}`}>
-                  <Button size="large">View</Button>
-                </Link>
-                <Link href={`/read/${book.tokenId}?url=${book.file}`}>
-                  <Button size="large">Read</Button>
-                </Link>
               </CardActionArea>
             </Card>{" "}
           </Grid>
