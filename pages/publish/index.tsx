@@ -19,6 +19,7 @@ const Publish: NextPage = () => {
   const [imageUrl, setImageUrl] = useState(null);
 
   const { saveFile, moralisFile } = useMoralisFile();
+  const { Moralis } = useMoralis();
 
   const onChange = async (e) => {
     // console.log("FILE", f);
@@ -87,12 +88,54 @@ const Publish: NextPage = () => {
   //   await transaction.wait();
   //   router.push("/");
   // }
+
   async function createSale(url, bookPrice, data) {
     const values = JSON.parse(data);
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
+    const publishAbi = [
+      {
+        inputs: [
+          {
+            internalType: "string",
+            name: "_encryptedBookDataHash",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "_isbn",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "_price",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "_unencryptedBookDetailsCID",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "_transactionCut",
+            type: "uint256",
+          },
+        ],
+        name: "publishBook",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+    ];
+    let options = {
+      contractAddress: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      functionName: "publishBook",
+      abi: publishAbi,
+      msgValue: Moralis.Units.ETH(bookPrice),
+    };
+    // const web3Modal = new Web3Modal();
+    // const connection = await web3Modal.connect();
+    // const provider = new ethers.providers.Web3Provider(connection);
+    // const signer = provider.getSigner();
     /* next, create the item */
     let contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
     const price = ethers.utils.parseUnits(bookPrice, "ether");
@@ -171,9 +214,16 @@ const Publish: NextPage = () => {
       file: fileUrl,
     });
     try {
-      const added = await client.add(data);
-      console.log(added);
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      // const added = await client.add(data);
+      const metaData = await saveFile(
+        "data.json",
+        { base64: window.btoa(data) },
+        { saveIPFS: true }
+      );
+      // console.log(added);
+      // const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      const url = metaData._ipfs;
+      console.log("url", url);
       /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
       createSale(url, price, data);
     } catch (error) {

@@ -17,7 +17,7 @@ import {
 import { pranaAddress, pranaHelperAddress } from "../config";
 
 // import Market from "../artifacts/contracts/Market.sol/NFTMarket.json";
-import Prana from "../artifacts/contracts/Prana.sol/Prana.json";
+import Prana from "../artifacts/contracts/prana.sol/prana.json";
 
 export default function MyBooks() {
   const [nfts, setNfts] = useState([]);
