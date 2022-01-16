@@ -1,7 +1,7 @@
 prana:
 Build Setup
 # install dependencies
-$ yarm
+$ yarn
 
 # serve with hot reload at localhost:3000
 $ yarn dev
