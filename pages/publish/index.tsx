@@ -6,6 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { ethers } from "ethers";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import Web3Modal from "web3modal";
+import { useMoralis, useMoralisFile } from "react-moralis";
 
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
@@ -17,24 +18,48 @@ const Publish: NextPage = () => {
   const [fileUrl, setFileUrl] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
-  const router = useRouter();
+  const { saveFile, moralisFile } = useMoralisFile();
 
-  async function onChange(e) {
+  const onChange = async (e) => {
+    // console.log("FILE", f);
+    // const fileIpfs = await saveFile(f.name, file, { saveIPFS: true });
+    // console.log(fileIpfs);
+
     const file = e.target.files[0];
     try {
-      const added = await client.add(file, {
-        progress: (prog) => console.log(`received: ${prog}`),
-      });
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      const uploadedFile = await saveFile(file.name, file, { saveIPFS: true });
+      let ipfs = "";
+      if (uploadedFile?._ipfs) {
+        ipfs = uploadedFile._ipfs;
+      }
       if (e.target.name == "thumbnail") {
-        setImageUrl(url);
+        setImageUrl(ipfs);
       } else {
-        setFileUrl(url);
+        setFileUrl(ipfs);
       }
     } catch (error) {
       console.log("Error uploading file: ", error);
     }
-  }
+  };
+
+  const router = useRouter();
+
+  // async function onChange(e) {
+  //   const file = e.target.files[0];
+  //   try {
+  //     const added = await client.add(file, {
+  //       progress: (prog) => console.log(`received: ${prog}`),
+  //     });
+  //     const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+  //     if (e.target.name == "thumbnail") {
+  //       setImageUrl(url);
+  //     } else {
+  //       setFileUrl(url);
+  //     }
+  //   } catch (error) {
+  //     console.log("Error uploading file: ", error);
+  //   }
+  // }
   // async function createSale(url, bookPrice,values) {
   //   const web3Modal = new Web3Modal();
   //   const connection = await web3Modal.connect();
@@ -68,12 +93,12 @@ const Publish: NextPage = () => {
     const connection = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
-    console.log(signer);
     /* next, create the item */
     let contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
     const price = ethers.utils.parseUnits(bookPrice, "ether");
 
     const transaction = await contract.publishBook(
+      //
       values.file,
       values.isbn,
       price,
@@ -147,6 +172,7 @@ const Publish: NextPage = () => {
     });
     try {
       const added = await client.add(data);
+      console.log(added);
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
       createSale(url, price, data);

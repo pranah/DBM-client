@@ -12,8 +12,9 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/router";
+import { useMoralis } from "react-moralis";
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Login", "Logout"];
 const pages = [
   {
     name: "Home",
@@ -31,6 +32,8 @@ const pages = [
 
 const Header = () => {
   const router = useRouter();
+  const { authenticate, isAuthenticated, logout, user } = useMoralis();
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -43,6 +46,18 @@ const Header = () => {
 
   const handleCloseNavMenu = (url) => {
     setAnchorElNav(null);
+    if (url === "Login") {
+      authenticate({ provider: "metamask" });
+    } else if (url === "Logout") {
+      logout();
+    }
+
+    // if (url) {
+    //   router.push(url);
+    // }
+  };
+
+  const handleNavigation = (url) => {
     if (url) {
       router.push(url);
     }
@@ -51,6 +66,7 @@ const Header = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  console.log("isAuthenticated", isAuthenticated);
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -135,7 +151,7 @@ const Header = () => {
               <Button
                 key={page.name}
                 onClick={async () => {
-                  handleCloseNavMenu(page.url);
+                  handleNavigation(page.url);
                 }}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
@@ -167,7 +183,10 @@ const Header = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseNavMenu}>
+                <MenuItem
+                  key={setting}
+                  onClick={() => handleCloseNavMenu(setting)}
+                >
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
