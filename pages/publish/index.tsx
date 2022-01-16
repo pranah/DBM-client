@@ -1,18 +1,14 @@
 import { Button, Container, Stack, TextField, Typography } from "@mui/material";
+import React, { useEffect } from "react";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { ethers } from "ethers";
-import { create as ipfsHttpClient } from "ipfs-http-client";
-import Web3Modal from "web3modal";
 import {
   useMoralis,
   useMoralisFile,
   useWeb3ExecuteFunction,
 } from "react-moralis";
-
-const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
 import { pranaAddress } from "../../config";
 
@@ -23,26 +19,41 @@ const Publish: NextPage = () => {
   const [imageUrl, setImageUrl] = useState(null);
 
   const { saveFile, moralisFile } = useMoralisFile();
-  const { Moralis } = useMoralis();
+  const { Moralis, isAuthenticated, authenticate } = useMoralis();
   const contractProcessor = useWeb3ExecuteFunction();
 
-  const onChange = async (e) => {
-    // console.log("FILE", f);
-    // const fileIpfs = await saveFile(f.name, file, { saveIPFS: true });
-    // console.log(fileIpfs);
+  const authMeta = async () => {
+    if (!isAuthenticated) {
+      await authenticate({ provider: "metamask" });
+    }
+  };
 
+  useEffect(async () => {
+    const res = await authMeta();
+  }, []);
+
+  const onChange = async (e) => {
     const file = e.target.files[0];
+    await authMeta();
     try {
-      const uploadedFile = await saveFile(file.name, file, { saveIPFS: true });
+      // if (isAuthenticated) {
+      const uploadedFile = await saveFile(file.name, file, {
+        saveIPFS: true,
+      });
       let ipfs = "";
       if (uploadedFile?._ipfs) {
-        ipfs = uploadedFile._ipfs;
+        ipfs = uploadedFile?._ipfs;
+      } else {
+        throw new Error("File uploaded not correctly");
       }
       if (e.target.name == "thumbnail") {
         setImageUrl(ipfs);
       } else {
         setFileUrl(ipfs);
       }
+      // } else {
+      //   authMeta();
+      // }
     } catch (error) {
       console.log("Error uploading file: ", error);
     }
@@ -95,47 +106,14 @@ const Publish: NextPage = () => {
   // }
 
   async function createSale(url, bookPrice, data) {
+    await authMeta();
     const values = JSON.parse(data);
     const price = Moralis.Units.ETH(bookPrice);
-    const publishAbi = [
-      {
-        inputs: [
-          {
-            internalType: "string",
-            name: "_encryptedBookDataHash",
-            type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "_isbn",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "_price",
-            type: "uint256",
-          },
-          {
-            internalType: "string",
-            name: "_unencryptedBookDetailsCID",
-            type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "_transactionCut",
-            type: "uint256",
-          },
-        ],
-        name: "publishBook",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-    ];
+
     let options = {
-      contractAddress: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      contractAddress: pranaAddress,
       functionName: "publishBook",
-      abi: publishAbi,
+      abi: Prana.abi.filter((fn) => fn.name === "publishBook"),
       params: {
         _encryptedBookDataHash: values.file,
         _isbn: values.isbn,
@@ -144,24 +122,26 @@ const Publish: NextPage = () => {
         _transactionCut: values.royalty,
       },
     };
+
+    try {
+      await contractProcessor.fetch({
+        params: options,
+        onError: (err) => {
+          console.log(err);
+          throw err;
+        },
+        onSuccess: () => {
+          router.push("/");
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
     // const web3Modal = new Web3Modal();
     // const connection = await web3Modal.connect();
     // const provider = new ethers.providers.Web3Provider(connection);
     // const signer = provider.getSigner();
     /* next, create the item */
-    try {
-      const test = await contractProcessor.fetch({
-        params: options,
-        onComplete: () => console.log("Complete"),
-        onError: (err) => console.log(err),
-        onSuccess: (x) => console.log(x),
-      });
-      console.log("error", contractProcessor.error);
-      console.log("error", contractProcessor.data);
-      console.log("test", test);
-    } catch (error) {
-      console.log("errpr", error);
-    }
 
     // let contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
     // const price = ethers.utils.parseUnits(bookPrice, "ether");
@@ -214,17 +194,6 @@ const Publish: NextPage = () => {
       !fileUrl ||
       !imageUrl
     ) {
-      console.log({
-        name,
-        description,
-        author,
-        isbn,
-        publisher,
-        royalty,
-        genre,
-        image: imageUrl,
-        file: fileUrl,
-      });
       return;
     } /* first, upload to IPFS */
     const data = JSON.stringify({
@@ -241,15 +210,14 @@ const Publish: NextPage = () => {
     });
     try {
       // const added = await client.add(data);
+      if (isAuthenticated) {
+      }
       const metaData = await saveFile(
         "data.json",
         { base64: window.btoa(data) },
         { saveIPFS: true }
       );
-      // console.log(added);
-      // const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       const url = metaData._ipfs;
-      console.log("url", url);
       /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
       createSale(url, price, data);
     } catch (error) {

@@ -19,37 +19,45 @@ import Web3Modal from "web3modal";
 
 import { pranaAddress, pranaHelperAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
+import {
+  useMoralis,
+  useMoralisFile,
+  useWeb3ExecuteFunction,
+} from "react-moralis";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
 }
 const Home: NextPage = () => {
+  const { Moralis, isAuthenticated, authenticate, isInitialized } =
+    useMoralis();
+  const contractProcessor = useWeb3ExecuteFunction();
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
-  useEffect(() => {
-    loadNFTs();
-  }, []);
-  async function loadNFTs() {
-    const provider = new ethers.providers.JsonRpcProvider(rpcEndpoint);
-    const pranaContract = new ethers.Contract(
-      pranaAddress,
-      Prana.abi,
-      provider
-    );
 
-    const data = await pranaContract.filters.BookPublished();
-    // console.log(data, "---------------");
-    // const nullAddress = "0x0000000000000000000000000000000000000000";
-    // let filter = await pranaContract.filters.BookPublished(
-    //   null,
-    //   nullAddress,
-    //   null
-    // );
-    const eventLog = await pranaContract.queryFilter(data);
-    const bookData = eventLog.map((log: any) => log.args);
-    console.log(bookData);
+  const authMeta = async () => {
+    if (!isAuthenticated) {
+      await authenticate({ provider: "metamask" });
+    }
+  };
+
+  useEffect(() => {
+    console.log("bookyes dep");
+    if (isInitialized) loadNFTs();
+  }, [isInitialized]);
+
+  useEffect(() => {
+    console.log("book");
+    if (isInitialized) loadNFTs();
+  }, []);
+
+  async function loadNFTs() {
+    const query = new Moralis.Query("BookPublished");
+    const books = await query.find();
+    const booksResponse = books.map((book) => book.attributes);
+
     const items = await Promise.all(
-      bookData.map(async (i) => {
+      booksResponse.map(async (i) => {
         const meta = await axios.get(i.bookCoverAndDetails);
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
         let item = {
@@ -70,41 +78,44 @@ const Home: NextPage = () => {
     setNfts(items);
     setLoadingState("loaded");
   }
-  // async function buyNft(book) {
-  //   const web3Modal = new Web3Modal();
-  //   const connection = await web3Modal.connect();
-  //   const provider = new ethers.providers.Web3Provider(connection);
-  //   const signer = provider.getSigner();
-  //   const contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
 
-  //   const price = ethers.utils.parseUnits(book.price.toString(), "ether");
-  //   const transaction = await contract.createMarketSale(
-  //     pranaAddress,
-  //     nft.itemId,
-  //     {
-  //       value: price,
-  //     }
-  //   );
-  //   await transaction.wait();
-  //   loadNFTs();
-  // }
   async function buyNft(book) {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    console.log(signer);
-    const contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
-    console.log(book);
-    const price = ethers.utils.parseUnits(book.price, "ether");
-    console.log(price);
+    await authMeta();
+
+    // const web3Modal = new Web3Modal();
+    // const connection = await web3Modal.connect();
+    // const provider = new ethers.providers.Web3Provider(connection);
+    // const signer = provider.getSigner();
+    // const contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
+    // const price = ethers.utils.parseUnits(book.price, "ether");
     let isbn = book.isbn;
     //contract call to mint a new token
-
-    const transaction = await contract.directPurchase(isbn, {
-      value: price,
-    });
-    await transaction.wait();
+    let options = {
+      contractAddress: pranaAddress,
+      functionName: "directPurchase",
+      abi: Prana.abi.filter((fn) => fn.name === "directPurchase"),
+      params: {
+        _isbn: isbn,
+      },
+      msgValue: Moralis.Units.ETH(book.price),
+    };
+    try {
+      await contractProcessor.fetch({
+        params: options,
+        onError: (err) => {
+          console.log(err);
+        },
+        onSuccess: () => {
+          console.log("Success");
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    // const transaction = await contract.directPurchase(isbn, {
+    //   value: price,
+    // });
+    // await transaction.wait();
     loadNFTs();
   }
   if (loadingState !== "loaded" && !nfts.length)
