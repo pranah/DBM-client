@@ -6,7 +6,11 @@ import { useForm, Controller } from "react-hook-form";
 import { ethers } from "ethers";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import Web3Modal from "web3modal";
-import { useMoralis, useMoralisFile } from "react-moralis";
+import {
+  useMoralis,
+  useMoralisFile,
+  useWeb3ExecuteFunction,
+} from "react-moralis";
 
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
@@ -20,6 +24,7 @@ const Publish: NextPage = () => {
 
   const { saveFile, moralisFile } = useMoralisFile();
   const { Moralis } = useMoralis();
+  const contractProcessor = useWeb3ExecuteFunction();
 
   const onChange = async (e) => {
     // console.log("FILE", f);
@@ -91,6 +96,7 @@ const Publish: NextPage = () => {
 
   async function createSale(url, bookPrice, data) {
     const values = JSON.parse(data);
+    const price = Moralis.Units.ETH(bookPrice);
     const publishAbi = [
       {
         inputs: [
@@ -130,28 +136,48 @@ const Publish: NextPage = () => {
       contractAddress: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       functionName: "publishBook",
       abi: publishAbi,
-      msgValue: Moralis.Units.ETH(bookPrice),
+      params: {
+        _encryptedBookDataHash: values.file,
+        _isbn: values.isbn,
+        _price: price,
+        _unencryptedBookDetailsCID: url,
+        _transactionCut: values.royalty,
+      },
     };
     // const web3Modal = new Web3Modal();
     // const connection = await web3Modal.connect();
     // const provider = new ethers.providers.Web3Provider(connection);
     // const signer = provider.getSigner();
     /* next, create the item */
-    let contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
-    const price = ethers.utils.parseUnits(bookPrice, "ether");
+    try {
+      const test = await contractProcessor.fetch({
+        params: options,
+        onComplete: () => console.log("Complete"),
+        onError: (err) => console.log(err),
+        onSuccess: (x) => console.log(x),
+      });
+      console.log("error", contractProcessor.error);
+      console.log("error", contractProcessor.data);
+      console.log("test", test);
+    } catch (error) {
+      console.log("errpr", error);
+    }
 
-    const transaction = await contract.publishBook(
-      //
-      values.file,
-      values.isbn,
-      price,
-      url,
-      values.royalty
-    );
+    // let contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
+    // const price = ethers.utils.parseUnits(bookPrice, "ether");
 
-    await transaction.wait();
+    // const transaction = await contract.publishBook(
+    //   //
+    //   values.file,
+    //   values.isbn,
+    //   price,
+    //   url,
+    //   values.royalty
+    // );
 
-    router.push("/");
+    // await transaction.wait();
+
+    // router.push("/");
   }
   const { control, handleSubmit } = useForm({
     defaultValues: {
