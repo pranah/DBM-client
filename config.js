@@ -1,2 +1,2 @@
-export const pranaAddress = "0x8d3D13D7289DA0e4d0cbaff6AF96E5F8dD157B95";
-export const pranaHelperAddress = "0x96117739Bb6Ba55d24D924a892108BAfd8B17377";
+export const pranaAddress = "0xdc0c57B43f211de3324B5b5BBe9118a5bFA689a2";
+export const pranaHelperAddress = "0xEC199767A676dcD1FF6Cf4b883E447b8C23d4048";
