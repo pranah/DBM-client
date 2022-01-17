@@ -24,6 +24,7 @@
     "@openzeppelin/contracts": "3.1.0",
     "@typechain/ethers-v5": "^9.0.0",
     "@typechain/hardhat": "^4.0.0",
+    "@zoralabs/auction-house": "^1.1.3",
     "axios": "^0.24.0",
     "chai": "^4.3.4",
     "dotenv": "^11.0.0",
