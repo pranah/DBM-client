@@ -1,8 +1,7 @@
-import { Button, Container, Stack, TextField, Typography } from "@mui/material";
-import React, { useEffect } from "react";
 import type { NextPage } from "next";
+import React, { useState, useEffect } from "react";
+import { Button, Container, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   useMoralis,
@@ -13,12 +12,14 @@ import {
 import { pranaAddress } from "../../config";
 
 import Prana from "../../artifacts/contracts/prana.sol/prana.json";
+import { Publish as PublishForm } from "../../components/PublishForm";
+import Loader from "../../components/loader/Loader";
 
 const Publish: NextPage = () => {
   const [fileUrl, setFileUrl] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
-  const { saveFile, moralisFile } = useMoralisFile();
+  const { saveFile, isUploading } = useMoralisFile();
   const { Moralis, isAuthenticated, authenticate } = useMoralis();
   const contractProcessor = useWeb3ExecuteFunction();
 
@@ -32,83 +33,11 @@ const Publish: NextPage = () => {
     const res = await authMeta();
   }, []);
 
-  const onChange = async (e) => {
-    const file = e.target.files[0];
-    await authMeta();
-    try {
-      // if (isAuthenticated) {
-      const uploadedFile = await saveFile(file.name, file, {
-        saveIPFS: true,
-      });
-      let ipfs = "";
-      if (uploadedFile?._ipfs) {
-        ipfs = uploadedFile?._ipfs;
-      } else {
-        throw new Error("File uploaded not correctly");
-      }
-      if (e.target.name == "thumbnail") {
-        setImageUrl(ipfs);
-      } else {
-        setFileUrl(ipfs);
-      }
-      // } else {
-      //   authMeta();
-      // }
-    } catch (error) {
-      console.log("Error uploading file: ", error);
-    }
-  };
-
   const router = useRouter();
 
-  // async function onChange(e) {
-  //   const file = e.target.files[0];
-  //   try {
-  //     const added = await client.add(file, {
-  //       progress: (prog) => console.log(`received: ${prog}`),
-  //     });
-  //     const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-  //     if (e.target.name == "thumbnail") {
-  //       setImageUrl(url);
-  //     } else {
-  //       setFileUrl(url);
-  //     }
-  //   } catch (error) {
-  //     console.log("Error uploading file: ", error);
-  //   }
-  // }
-  // async function createSale(url, bookPrice,values) {
-  //   const web3Modal = new Web3Modal();
-  //   const connection = await web3Modal.connect();
-  //   const provider = new ethers.providers.Web3Provider(connection);
-  //   const signer = provider.getSigner();
-
-  //   /* next, create the item */
-  //   let contract = new ethers.Contract(nftaddress, Prana.abi, signer);
-  //   let transaction = await contract.createToken(url);
-  //   let tx = await transaction.wait();
-  //   let event = tx.events[0];
-  //   let value = event.args[2];
-  //   let tokenId = value.toNumber();
-
-  //   const price = ethers.utils.parseUnits(bookPrice, "ether");
-
-  //   /* then list the item for sale on the marketplace */
-  //   contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
-  //   let listingPrice = await contract.getListingPrice();
-  //   listingPrice = listingPrice.toString();
-
-  //   transaction = await contract.createMarketItem(nftaddress, tokenId, price, {
-  //     value: listingPrice,
-  //   });
-  //   await transaction.wait();
-  //   router.push("/");
-  // }
-
-  async function createSale(url, bookPrice, data) {
+  async function createSale(url, values) {
     await authMeta();
-    const values = JSON.parse(data);
-    const price = Moralis.Units.ETH(bookPrice);
+    const price = Moralis.Units.ETH(values.price);
 
     let options = {
       contractAddress: pranaAddress,
@@ -137,205 +66,57 @@ const Publish: NextPage = () => {
     } catch (error) {
       console.log(error);
     }
-    // const web3Modal = new Web3Modal();
-    // const connection = await web3Modal.connect();
-    // const provider = new ethers.providers.Web3Provider(connection);
-    // const signer = provider.getSigner();
-    /* next, create the item */
-
-    // let contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
-    // const price = ethers.utils.parseUnits(bookPrice, "ether");
-
-    // const transaction = await contract.publishBook(
-    //   //
-    //   values.file,
-    //   values.isbn,
-    //   price,
-    //   url,
-    //   values.royalty
-    // );
-
-    // await transaction.wait();
-
-    // router.push("/");
   }
-  const { control, handleSubmit } = useForm({
-    defaultValues: {
-      name: "",
-      author: "",
-      isbn: "",
-      publisher: "",
-      price: "",
-      royalty: "",
-      genre: "",
-      description: "",
-    },
-  });
 
-  const onSubmit = async (values) => {
-    const {
-      name,
-      description,
-      author,
-      isbn,
-      publisher,
-      royalty,
-      genre,
-      price,
-    } = values;
-    if (
-      !name ||
-      !author ||
-      !isbn ||
-      !publisher ||
-      !royalty ||
-      !genre ||
-      !price ||
-      !fileUrl ||
-      !imageUrl
-    ) {
-      return;
-    } /* first, upload to IPFS */
-    const data = JSON.stringify({
-      name,
-      description,
-      author,
-      isbn,
-      publisher,
-      royalty,
-      genre,
-      price,
-      image: imageUrl,
-      file: fileUrl,
-    });
+  const uploadToIpfs = async (file) => {
     try {
-      // const added = await client.add(data);
-      if (isAuthenticated) {
+      console.log(file);
+      const uploadedFile = await saveFile(file.name, file, {
+        saveIPFS: true,
+      });
+      if (uploadedFile?._ipfs) {
+        return uploadedFile?._ipfs;
+      } else {
+        throw new Error("File Upload Failed");
       }
-      const metaData = await saveFile(
-        "data.json",
-        { base64: window.btoa(data) },
-        { saveIPFS: true }
-      );
-      const url = metaData._ipfs;
-      /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
-      createSale(url, price, data);
     } catch (error) {
-      console.log("Error uploading file: ", error);
+      console.log(error);
+      throw error;
     }
   };
+
+  const handleSubmit = async (values) => {
+    try {
+      const epubIpfsUrl = await uploadToIpfs(values.content);
+
+      const imageIpfsUrl = await uploadToIpfs(values.metaData);
+
+      const metaDataForIpfs = {
+        ...values,
+      };
+      delete metaDataForIpfs["content"];
+      delete metaDataForIpfs["metaData"];
+      metaDataForIpfs.file = epubIpfsUrl;
+      metaDataForIpfs.image = imageIpfsUrl;
+      const metaDataJsonString = JSON.stringify(metaDataForIpfs);
+      const metaDataIpfsIResp = await saveFile(
+        "data.json",
+        { base64: window.btoa(metaDataJsonString) },
+        { saveIPFS: true }
+      );
+      const url = metaDataIpfsIResp._ipfs;
+      /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
+      createSale(url, metaDataForIpfs);
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(values);
+  };
+
   return (
     <Container sx={{ pt: 2 }}>
-      <h1>Create New Book</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack>
-          <Controller
-            control={control}
-            name="name"
-            render={({ field }) => (
-              // Material UI TextField already supports
-              // `value` and `onChange`
-              <TextField {...field} label="name" />
-            )}
-          />
-          <br />
-          <Typography>Upload file</Typography>
-          <input
-            type="file"
-            name="Asset"
-            className="my-4"
-            onChange={onChange}
-          />
-          <br />
-          {fileUrl && (
-            <img className="rounded mt-4" width="350" src={fileUrl} />
-          )}
-          <Typography>Upload thumbnail</Typography>
-          <input
-            type="file"
-            name="thumbnail"
-            className="my-4"
-            onChange={onChange}
-          />
-          <br />
-          {imageUrl && (
-            <img className="rounded mt-4" width="350" src={imageUrl} />
-          )}
-          <Controller
-            control={control}
-            name="author"
-            render={({ field }) => (
-              // Material UI TextField already supports
-              // `value` and `onChange`
-              <TextField {...field} label="author" />
-            )}
-          />
-          <br />
-          <Controller
-            control={control}
-            name="isbn"
-            render={({ field }) => (
-              // Material UI TextField already supports
-              // `value` and `onChange`
-              <TextField {...field} label="isbn" />
-            )}
-          />
-          <br />
-          <Controller
-            control={control}
-            name="publisher"
-            render={({ field }) => (
-              // Material UI TextField already supports
-              // `value` and `onChange`
-              <TextField {...field} label="publisher" />
-            )}
-          />
-          <br />
-          <Controller
-            control={control}
-            name="price"
-            render={({ field }) => (
-              // Material UI TextField already supports
-              // `value` and `onChange`
-              <TextField {...field} label="price" />
-            )}
-          />
-          <br />
-          <Controller
-            control={control}
-            name="royalty"
-            render={({ field }) => (
-              // Material UI TextField already supports
-              // `value` and `onChange`
-              <TextField {...field} label="royalty" />
-            )}
-          />
-          <br />
-          <Controller
-            control={control}
-            name="genre"
-            render={({ field }) => (
-              // Material UI TextField already supports
-              // `value` and `onChange`
-              <TextField {...field} label="genre" />
-            )}
-          />
-          <br />
-          <Controller
-            control={control}
-            name="description"
-            render={({ field }) => (
-              // Material UI TextField already supports
-              // `value` and `onChange`
-              <TextField {...field} label="description" />
-            )}
-          />
-          <br />
-          <Button type="submit" variant="contained" color="primary">
-            Submit
-          </Button>
-        </Stack>
-      </form>
+      {isUploading && <Loader />}
+      <PublishForm handleSubmit={handleSubmit} />
     </Container>
   );
 };

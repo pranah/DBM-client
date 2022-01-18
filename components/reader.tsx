@@ -2,15 +2,6 @@ import React, { useRef, useState, useEffect } from "react";
 import { ReactReader } from "react-reader";
 import { useRouter } from "next/router";
 
-// import AroundtheWorldin28Languages from 'public/Around the World in 28 Languages.epub'
-// import AlicesAdventuresinWonderland from '/Alices Adventures in Wonderland.epub'
-// import famouspaintings from '/famouspaintings.epub'
-// import Sway from '/Sway.epub'
-
-// const books = {
-//     AlicesAdventuresinWonderland, AroundtheWorldin28Languages, famouspaintings, Sway
-// }
-
 export const Reader = () => {
   let router = useRouter();
   const { url } = router.query;

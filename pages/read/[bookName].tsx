@@ -1,12 +1,11 @@
-import {Reader} from '../../components/reader';
+import { Reader } from "../../components/reader";
 
-function About() {
-    return (
-      <>
-        <Reader />
-      </>
-    );
-  }
-  
-  export default About;
-  
+function ReadPage() {
+  return (
+    <>
+      <Reader />
+    </>
+  );
+}
+
+export default ReadPage;

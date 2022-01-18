@@ -21,7 +21,7 @@ const pages = [
     url: "/",
   },
   {
-    name: "Sell Books",
+    name: "Publish",
     url: "/publish",
   },
   {

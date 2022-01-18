@@ -1,29 +1,23 @@
 import type { NextPage } from "next";
+
 import Container from "@mui/material/Container";
-import {
-  Typography,
-  Grid,
-  CardActionArea,
-  CardMedia,
-  Card,
-  CardContent,
-  Button,
-  Box,
-} from "@mui/material";
-import Link from "next/link";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import CardMedia from "@mui/material/CardMedia";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+
 let rpcEndpoint = null;
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Web3Modal from "web3modal";
 
-import { pranaAddress, pranaHelperAddress } from "../config";
+import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
-import {
-  useMoralis,
-  useMoralisFile,
-  useWeb3ExecuteFunction,
-} from "react-moralis";
+import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
@@ -81,21 +75,12 @@ const Home: NextPage = () => {
 
   async function buyNft(book) {
     await authMeta();
-
-    // const web3Modal = new Web3Modal();
-    // const connection = await web3Modal.connect();
-    // const provider = new ethers.providers.Web3Provider(connection);
-    // const signer = provider.getSigner();
-    // const contract = new ethers.Contract(pranaAddress, Prana.abi, signer);
-    // const price = ethers.utils.parseUnits(book.price, "ether");
-    let isbn = book.isbn;
-    //contract call to mint a new token
     let options = {
       contractAddress: pranaAddress,
       functionName: "directPurchase",
       abi: Prana.abi.filter((fn) => fn.name === "directPurchase"),
       params: {
-        _isbn: isbn,
+        _isbn: book.isbn,
       },
       msgValue: Moralis.Units.ETH(book.price),
     };
@@ -112,10 +97,6 @@ const Home: NextPage = () => {
     } catch (error) {
       console.log(error);
     }
-    // const transaction = await contract.directPurchase(isbn, {
-    //   value: price,
-    // });
-    // await transaction.wait();
     loadNFTs();
   }
   if (loadingState !== "loaded" && !nfts.length)
@@ -156,11 +137,11 @@ const Home: NextPage = () => {
                 </Typography>
               </CardContent>
 
-              <CardActionArea>
+              <CardActions>
                 <Button size="large" onClick={() => buyNft(book)}>
                   Buy
                 </Button>
-              </CardActionArea>
+              </CardActions>
             </Card>{" "}
           </Grid>
         ))}

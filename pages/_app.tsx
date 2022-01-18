@@ -9,8 +9,6 @@ import { MoralisProvider } from "react-moralis";
 
 import createEmotionCache from "../styles/createEmotionsCache";
 import theme from "../styles/theme";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 // material
 

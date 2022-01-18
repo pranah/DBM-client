@@ -1,75 +1,120 @@
-import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Web3Modal from "web3modal";
-import {
-  Typography,
-  Grid,
-  CardActionArea,
-  CardMedia,
-  Card,
-  CardContent,
-  Container,
-  Link,
-  Box,
-  Button,
-} from "@mui/material";
-import { pranaAddress, pranaHelperAddress } from "../config";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import CardMedia from "@mui/material/CardMedia";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
 
-// import Market from "../artifacts/contracts/Market.sol/NFTMarket.json";
+import { ResellMyBook } from "../components/ResellMyBook";
+
+import { pranaAddress } from "../config";
+
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
+import {
+  useMoralis,
+  useWeb3ExecuteFunction,
+  useNFTBalances,
+} from "react-moralis";
 
 export default function MyBooks() {
+  const { Moralis, isInitialized } = useMoralis();
+
+  const contractProcessor = useWeb3ExecuteFunction();
+
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
+
   useEffect(() => {
-    loadNFTs();
-  }, []);
-  async function loadNFTs() {
-    const web3Modal = new Web3Modal();
+    if (isInitialized) loadNFTs();
+  }, [isInitialized]);
 
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-
-    const pranaContract = new ethers.Contract(pranaAddress, Prana.abi, signer);
-    console.log(signer, "signer");
-    let tokenCount = await pranaContract.balanceOf(signer.getAddress());
-    console.log(tokenCount, "tokenCount");
-    let data = [];
-    for (let i = 0; i < tokenCount; i++) {
-      //contract call to get the tokenId at index i
-      let tokenId = await pranaContract.tokenOfOwnerByIndex(
-        signer.getAddress(),
-        i
-      );
-      const book = await pranaContract.viewTokenDetails(tokenId);
-      data.push(book);
+  const getTokens = async (tokenId) => {
+    const options = {
+      contractAddress: pranaAddress,
+      functionName: "viewTokenDetails",
+      abi: Prana.abi.filter((fn) => fn.name === "viewTokenDetails"),
+      params: { _tokenId: tokenId },
+    };
+    try {
+      await contractProcessor.fetch({
+        params: options,
+        onError: (err) => {
+          console.log(err);
+          throw err;
+        },
+        onSuccess: async (viewTokenDetailsRespose) => {
+          console.log("viewTokenDetailsRespose", viewTokenDetailsRespose);
+          // fetch meta data from ipfs
+          const ipfsMetaDataResponse = await axios.get(
+            viewTokenDetailsRespose[1]
+          );
+          if (ipfsMetaDataResponse.status !== 200) {
+            throw new Error("Something went wrong");
+          } else {
+            const metaDataFromApi = ipfsMetaDataResponse.data;
+            const item = {
+              ...metaDataFromApi,
+              tokenId,
+            };
+            setNfts([...nfts, item]);
+          }
+        },
+      });
+    } catch (error) {
+      console.log("Error", error);
     }
-    console.log(data);
-    const items = await Promise.all(
-      data.map(async (i) => {
-        const meta = await axios.get(i[1]);
-        console.log(meta);
-        let price = ethers.utils.formatUnits(i[2].toString(), "ether");
-        let item = {
-          price,
-          image: meta.data.image,
-          name: meta.data.name,
-          description: meta.data.description,
-          author: meta.data.author,
-          isbn: meta.data.isbn,
-          publisher: meta.data.publisher,
-          royality: meta.data.royality,
-          genre: meta.data.genre,
-          file: meta.data.file,
-        };
-        return item;
-      })
-    );
-    setNfts(items);
-    setLoadingState("loaded");
+  };
+
+  const getTokenList = async (tokenCount, owner) => {
+    for (let index = 0; index < tokenCount; index++) {
+      const options = {
+        contractAddress: pranaAddress,
+        functionName: "tokenOfOwnerByIndex",
+        abi: Prana.abi.filter((fn) => fn.name === "tokenOfOwnerByIndex"),
+        params: { owner: owner, index },
+      };
+      await contractProcessor.fetch({
+        params: options,
+        onError: (err) => {
+          console.log(err);
+          throw err;
+        },
+        onSuccess: (token) => {
+          getTokens(token);
+        },
+      });
+    }
+  };
+
+  async function loadNFTs() {
+    const currentUser = Moralis.User.current();
+    const owner = currentUser.attributes.ethAddress;
+
+    const options = {
+      contractAddress: pranaAddress,
+      functionName: "balanceOf",
+      abi: Prana.abi.filter((fn) => fn.name === "balanceOf"),
+      params: { owner },
+    };
+
+    await contractProcessor.fetch({
+      params: options,
+      onError: (err) => {
+        console.log(err);
+        throw err;
+      },
+      onSuccess: (resp) => {
+        getTokenList(resp, owner);
+      },
+    });
   }
+
   if (loadingState === "loaded" && !nfts.length)
     return (
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
@@ -106,11 +151,12 @@ export default function MyBooks() {
                 </Typography>
               </CardContent>
 
-              <CardActionArea>
+              <CardActions>
                 <Link href={`/read/${book.isbn}?url=${book.file}`}>
                   <Button size="large">Read</Button>
                 </Link>
-              </CardActionArea>
+                <ResellMyBook tokenId={book.tokenId} bookName={book.name} />
+              </CardActions>
             </Card>
           </Grid>
         ))}

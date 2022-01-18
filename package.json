@@ -44,8 +44,6 @@
     "react-moralis": "^0.3.11",
     "react-reader": "^0.20.4",
     "react-router-dom": "^6.2.1",
-    "react-slick": "^0.28.1",
-    "slick-carousel": "^1.8.1",
     "solidity-coverage": "^0.7.17",
     "typechain": "^7.0.0",
     "web3modal": "^1.9.5",
