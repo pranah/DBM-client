@@ -2,6 +2,13 @@ import React, { useRef, useState, useEffect } from "react";
 import { ReactReader } from "react-reader";
 import { useRouter } from "next/router";
 
+import ReaderOption from "./reader-option/ReaderOption";
+import HighLightDrawer from "./high-light-drawer/HighLightDrawer";
+import Snackbar from "@mui/material/Snackbar";
+
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+
 export const Reader = () => {
   let router = useRouter();
   const { url } = router.query;
@@ -11,6 +18,12 @@ export const Reader = () => {
   const [selections, setSelections] = useState([]);
   const [page, setPage] = useState("");
   const [location, setLocation] = useState(null);
+  const [showPageBar, setShowPageBar] = useState(false);
+  const [highlightDrawer, setHighlightDrawer] = useState(false);
+
+  const handleShowDrawer = () => setHighlightDrawer(true);
+  const handleDrawerClose = () => setHighlightDrawer(false);
+  const handlePageSnackBarClose = () => setShowPageBar(false);
 
   const renditionRef = useRef(null);
   useEffect(() => {
@@ -52,6 +65,43 @@ export const Reader = () => {
       );
     }
   };
+
+  const toggleHighlightColor = (cfiRange) => {
+    renditionRef.current.annotations.remove(cfiRange, "highlight");
+    renditionRef.current.annotations.add(
+      "highlight",
+      cfiRange,
+      { test: "test" },
+      () => {},
+      "hl",
+      { fill: "red", "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
+    );
+  };
+
+  const showHeightlightedContent = (cfiRange) => {
+    renditionRef.current.display(cfiRange);
+    renditionRef.current.annotations.remove(cfiRange, "highlight");
+    renditionRef.current.annotations.add(
+      "highlight",
+      cfiRange,
+      { test: "test" },
+      () => {},
+      "hl",
+      {
+        fill: "blue",
+        "fill-opacity": "0.5",
+        "mix-blend-mode": "multiply",
+      }
+    );
+    setTimeout(() => {
+      toggleHighlightColor(cfiRange);
+    }, 250);
+  };
+
+  const deleteHighlight = (index, cfiRange) => {
+    renditionRef.current.annotations.remove(cfiRange, "highlight");
+    setSelections(selections.filter((item, j) => j !== index));
+  };
   return (
     <>
       <div style={{ height: "100vh", position: "relative" }}>
@@ -73,34 +123,36 @@ export const Reader = () => {
           tocChanged={(toc) => (tocRef.current = toc)}
         />
       </div>
-      {/* <div style={{ position: 'absolute', bottom: '1rem', right: '1rem', zIndex: 1, backgroundColor: 'white' }}>
-                Selection:
-                <ul>
-                    {selections.map(({ text, cfiRange }, i) => (
-                        <li key={i}>
-                            {text} <button onClick={() => {
-                                renditionRef.current.display(cfiRange)
-                            }}>Show</button>
-                            <button onClick={() => {
-                                renditionRef.current.annotations.remove(cfiRange, 'highlight')
-                                setSelections(selections.filter((item, j) => j !== i))
-                            }}>x</button>
-                        </li>
-                    ))}
-                </ul>
-            </div> */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "1rem",
-          right: "1rem",
-          left: "1rem",
-          textAlign: "center",
-          zIndex: 1,
-        }}
-      >
-        {page}
-      </div>
+      <Snackbar
+        open={showPageBar}
+        onClose={handlePageSnackBarClose}
+        message={page}
+        autoHideDuration={2000}
+        action={
+          <React.Fragment>
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              sx={{ p: 0.5 }}
+              onClick={handlePageSnackBarClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
+      <HighLightDrawer
+        open={highlightDrawer}
+        handleDrawerClose={handleDrawerClose}
+        showHeightlightedContent={showHeightlightedContent}
+        deleteHighlight={deleteHighlight}
+        highLightText={selections}
+      />
+      <ReaderOption
+        handleShowDrawer={handleShowDrawer}
+        showPageBar={showPageBar}
+        setShowPageBar={setShowPageBar}
+      />
     </>
   );
 };
