@@ -124,18 +124,20 @@ export default function MyBooks() {
       </Box>
     );
   return (
-    <Container maxWidth="100%">
+    <Container
+      sx={{
+        pt: 4,
+        pb: 4,
+      }}
+      maxWidth="xl"
+    >
       <Typography variant="h4" sx={{ mb: 5 }}>
         My Books
       </Typography>
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
+      <Grid container spacing={{ xs: 2, md: 3 }}>
         {nfts.map((book, index) => (
-          <Grid item xs={1} sm={2} md={2} key={index}>
-            <Card sx={{ maxWidth: 345 }}>
+          <Grid item xs={12} sm={12} md={4} lg={4} xl={3} key={index}>
+            <Card>
               <CardMedia
                 component="img"
                 height="300"
@@ -147,13 +149,20 @@ export default function MyBooks() {
                 <Typography variant="caption">by {book.author}</Typography>
 
                 <Typography variant="body2" color="text.secondary">
-                  {book.description.substring(0, 100) + " ..."}
+                  {book.description.substring(0, 50) + " ..."}
                 </Typography>
               </CardContent>
 
               <CardActions>
                 <Link href={`/read/${book.isbn}?url=${book.file}`}>
-                  <Button size="large">Read</Button>
+                  <Button
+                    fullWidth
+                    color="primary"
+                    variant="contained"
+                    size="large"
+                  >
+                    Read
+                  </Button>
                 </Link>
                 <ResellMyBook tokenId={book.tokenId} bookName={book.name} />
               </CardActions>

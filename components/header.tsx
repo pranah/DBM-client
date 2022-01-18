@@ -46,15 +46,10 @@ const Header = () => {
 
   const handleCloseNavMenu = (url) => {
     setAnchorElNav(null);
-    if (url === "Login") {
-      authenticate({ provider: "metamask" });
-    } else if (url === "Logout") {
-      logout();
-    }
 
-    // if (url) {
-    //   router.push(url);
-    // }
+    if (url) {
+      router.push(url);
+    }
   };
 
   const handleNavigation = (url) => {
@@ -63,8 +58,13 @@ const Header = () => {
     }
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (url) => {
     setAnchorElUser(null);
+    if (url === "Login") {
+      authenticate({ provider: "metamask" });
+    } else if (url === "Logout") {
+      logout();
+    }
   };
   console.log("isAuthenticated", isAuthenticated);
   return (
@@ -132,6 +132,7 @@ const Header = () => {
                   onClick={async () => {
                     handleCloseNavMenu(page.url);
                   }}
+                  selected={router.pathname === page.url}
                 >
                   <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
@@ -146,14 +147,23 @@ const Header = () => {
           >
             LOGO
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ ml: 2, flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page.name}
                 onClick={async () => {
                   handleNavigation(page.url);
                 }}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  borderRadius: 0,
+                  borderBottom:
+                    router.pathname === page.url
+                      ? "1px solid white"
+                      : undefined,
+                }}
               >
                 {page.name}
               </Button>
@@ -185,7 +195,7 @@ const Header = () => {
               {settings.map((setting) => (
                 <MenuItem
                   key={setting}
-                  onClick={() => handleCloseNavMenu(setting)}
+                  onClick={() => handleCloseUserMenu(setting)}
                 >
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>

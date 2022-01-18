@@ -109,18 +109,24 @@ const Home: NextPage = () => {
     );
 
   return (
-    <Container maxWidth="100%">
+    <Container
+      maxWidth="xl"
+      sx={{
+        pt: 4,
+        pb: 4,
+      }}
+    >
       <Typography variant="h4" sx={{ mb: 5 }}>
         Books
       </Typography>
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 9, md: 12 }}
+        // columns={{ xs: 4, sm: 9, md: 12 }}
       >
         {nfts.map((book, index) => (
-          <Grid item xs={2} sm={3} md={2} key={index}>
-            <Card sx={{ maxWidth: 345 }}>
+          <Grid item xs={12} sm={12} md={4} lg={4} xl={3} key={index}>
+            <Card>
               <CardMedia
                 component="img"
                 height="300"
@@ -130,15 +136,23 @@ const Home: NextPage = () => {
               <CardContent>
                 <Typography variant="h6">{book.name}</Typography>
                 <Typography variant="caption">by {book.author}</Typography>
-                <Typography variant="h5">{book.price} ETH</Typography>
+                <Typography variant="subtitle1">
+                  Price: {book.price} ETH
+                </Typography>
 
                 <Typography variant="body2" color="text.secondary">
-                  {book.description.substring(0, 100) + " ..."}
+                  {book.description.substring(0, 50) + " ..."}
                 </Typography>
               </CardContent>
 
               <CardActions>
-                <Button size="large" onClick={() => buyNft(book)}>
+                <Button
+                  fullWidth
+                  color="primary"
+                  size="large"
+                  onClick={() => buyNft(book)}
+                  variant="contained"
+                >
                   Buy
                 </Button>
               </CardActions>
