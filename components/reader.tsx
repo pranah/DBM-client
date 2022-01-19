@@ -123,9 +123,7 @@ export const Reader = () => {
           location={location}
           epubInitOptions={{ openAs: "epub" }}
           locationChanged={onLocationChange}
-          url={
-            "https://ipfs.moralis.io:2053/ipfs/QmdtfD52fVGzw4Z5bniYQ5ccDfzuRiprjrfRkCppgwUyTW"
-          }
+          url={url ? url : ""}
           getRendition={(rendition) => {
             renditionRef.current = rendition;
             renditionRef.current.themes.default({

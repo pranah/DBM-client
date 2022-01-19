@@ -8,7 +8,7 @@ import CardActions from "@mui/material/CardActions";
 import CardMedia from "@mui/material/CardMedia";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
+import Link from "next/link";
 import Typography from "@mui/material/Typography";
 
 import { ResellMyBook } from "../components/ResellMyBook";
@@ -155,12 +155,7 @@ export default function MyBooks() {
 
               <CardActions>
                 <Link href={`/reader/${book.isbn}?url=${book.file}`}>
-                  <Button
-                    fullWidth
-                    color="primary"
-                    variant="contained"
-                    size="large"
-                  >
+                  <Button color="primary" variant="contained" size="large">
                     Read
                   </Button>
                 </Link>
