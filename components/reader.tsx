@@ -8,7 +8,7 @@ import Snackbar from "@mui/material/Snackbar";
 
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
+import uniqid from "uniqid";
 
 export const Reader = () => {
   let router = useRouter();
@@ -47,9 +47,12 @@ export const Reader = () => {
           selections.concat({
             text: renditionRef.current.getRange(cfiRange).toString(),
             cfiRange,
+            isEditing: true,
+            annotation: "",
+            id: uniqid(),
           })
         );
-
+        handleShowDrawer();
         renditionRef.current.annotations.add(
           "highlight",
           cfiRange,
@@ -116,6 +119,23 @@ export const Reader = () => {
     renditionRef.current.annotations.remove(cfiRange, "highlight");
     setSelections(selections.filter((item, j) => j !== index));
   };
+
+  const handleSaveButtonClick = (annotation, index) => {
+    const newSelectionObj = selections.map((selection, i) => {
+      if (index === i) {
+        return {
+          ...selection,
+          isEditing: false,
+          annotation,
+        };
+      } else {
+        return selection;
+      }
+    });
+    setSelections(newSelectionObj);
+    localStorage.setItem("annotation", JSON.stringify(newSelectionObj));
+  };
+
   return (
     <>
       <div style={{ height: "100vh", position: "relative" }}>
@@ -131,8 +151,24 @@ export const Reader = () => {
                 background: "orange",
               },
             });
-
-            setSelections([]);
+            const storedSelection = localStorage.getItem("annotation")
+              ? JSON.parse(localStorage.getItem("annotation"))
+              : [];
+            setSelections(storedSelection);
+            storedSelection.forEach((item) => {
+              renditionRef.current.annotations.add(
+                "highlight",
+                item.cfiRange,
+                { test: "test" },
+                () => {},
+                "hl",
+                {
+                  fill: "red",
+                  "fill-opacity": "0.5",
+                  "mix-blend-mode": "multiply",
+                }
+              );
+            });
           }}
           tocChanged={(toc) => (tocRef.current = toc)}
         />
@@ -161,6 +197,7 @@ export const Reader = () => {
         showHeightlightedContent={showHeightlightedContent}
         deleteHighlight={deleteHighlight}
         highLightText={selections}
+        handleSaveButtonClick={handleSaveButtonClick}
       />
       <ReaderOption
         handleShowDrawer={handleShowDrawer}

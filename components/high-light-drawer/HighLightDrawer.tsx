@@ -12,7 +12,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-
+import DrawerListItem from "../DrawerListItem/DrawerListItem";
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -28,6 +28,7 @@ export default function HighLightDrawer({
   deleteHighlight,
   showHeightlightedContent,
   handleDrawerClose,
+  handleSaveButtonClick,
 }) {
   return (
     <div>
@@ -55,30 +56,28 @@ export default function HighLightDrawer({
             <Divider />
 
             <List component="nav" aria-label="main mailbox folders">
-              {highLightText.map(({ text, cfiRange }, index) => {
-                return (
-                  <>
-                    <ListItem
-                      secondaryAction={
-                        <IconButton
-                          onClick={() => deleteHighlight(index, cfiRange)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      }
-                    >
-                      <ListItemButton
-                        // selected={true}
-                        onClick={(event) => showHeightlightedContent(cfiRange)}
-                      >
-                        <ListItemText primary={<>{text}</>} />
-                      </ListItemButton>
-                    </ListItem>
-
-                    <Divider />
-                  </>
-                );
-              })}
+              {highLightText.map(
+                ({ text, cfiRange, annotation, isEditing, id }, index) => {
+                  return (
+                    <>
+                      <DrawerListItem
+                        text={text}
+                        isEdit={isEditing}
+                        annotation={annotation}
+                        onListItemClick={(event) =>
+                          showHeightlightedContent(cfiRange)
+                        }
+                        onDeleteIconClick={() =>
+                          deleteHighlight(index, cfiRange)
+                        }
+                        handleSaveButtonClick={(annotation) =>
+                          handleSaveButtonClick(annotation, index)
+                        }
+                      />
+                    </>
+                  );
+                }
+              )}
             </List>
           </Box>
         </Drawer>
