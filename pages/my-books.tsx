@@ -154,7 +154,7 @@ export default function MyBooks() {
               </CardContent>
 
               <CardActions>
-                <Link href={`/read/${book.isbn}?url=${book.file}`}>
+                <Link href={`/reader/${book.isbn}?url=${book.file}`}>
                   <Button
                     fullWidth
                     color="primary"
