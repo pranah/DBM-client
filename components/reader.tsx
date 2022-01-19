@@ -8,6 +8,7 @@ import Snackbar from "@mui/material/Snackbar";
 
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
 
 export const Reader = () => {
   let router = useRouter();
@@ -20,12 +21,25 @@ export const Reader = () => {
   const [location, setLocation] = useState(null);
   const [showPageBar, setShowPageBar] = useState(false);
   const [highlightDrawer, setHighlightDrawer] = useState(false);
+  // const [book, setUrl] = useState(null);
 
   const handleShowDrawer = () => setHighlightDrawer(true);
   const handleDrawerClose = () => setHighlightDrawer(false);
   const handlePageSnackBarClose = () => setShowPageBar(false);
 
   const renditionRef = useRef(null);
+
+  // useEffect(async () => {
+  //   if (url) {
+  //     const epubFile = await axios({
+  //       url, //your url
+  //       method: "GET",
+  //       responseType: "blob",
+  //     });
+  //     setUrl(epubFile);
+  //   }
+  // }, [url]);
+
   useEffect(() => {
     if (renditionRef.current) {
       function setRenderSelection(cfiRange, contents) {
@@ -109,7 +123,9 @@ export const Reader = () => {
           location={location}
           epubInitOptions={{ openAs: "epub" }}
           locationChanged={onLocationChange}
-          url={url ? url.toString() : ""}
+          url={
+            "https://ipfs.moralis.io:2053/ipfs/QmdtfD52fVGzw4Z5bniYQ5ccDfzuRiprjrfRkCppgwUyTW"
+          }
           getRendition={(rendition) => {
             renditionRef.current = rendition;
             renditionRef.current.themes.default({
