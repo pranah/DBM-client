@@ -55,6 +55,7 @@ const Home: NextPage = () => {
         let item = {
           price,
           image: meta.data.image,
+          file: meta.data.file,
           name: meta.data.name,
           description: meta.data.description,
           author: meta.data.author,
@@ -148,9 +149,6 @@ const Home: NextPage = () => {
                 <Button size="large" onClick={() => buyNft(book)}>
                   Buy
                 </Button>
-                <Link href={`/${book.tokenId}`}>
-                  <Button size="large">View</Button>
-                </Link>
               </CardActionArea>
             </Card>{" "}
           </Grid>
