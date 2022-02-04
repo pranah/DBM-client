@@ -28,6 +28,10 @@ const pages = [
     name: "My Books",
     url: "/my-books",
   },
+  {
+    name: "Used Books",
+    url: "/used-books",
+  },
 ];
 
 const Header = () => {
@@ -66,7 +70,6 @@ const Header = () => {
       logout();
     }
   };
-  console.log("isAuthenticated", isAuthenticated);
   return (
     <AppBar position="static">
       <Container maxWidth="xl">

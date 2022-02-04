@@ -1,44 +1,47 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import type { NextPage } from "next";
+
+import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import CardMedia from "@mui/material/CardMedia";
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Link from "next/link";
 import Typography from "@mui/material/Typography";
 
-import { ResellMyBook } from "../components/ResellMyBook";
+let rpcEndpoint = null;
+import { ethers } from "ethers";
+import { useCallback, useEffect, useState } from "react";
+import axios from "axios";
 
 import { pranaAddress } from "../config";
-
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
-import {
-  useMoralis,
-  useWeb3ExecuteFunction,
-  useNFTBalances,
-} from "react-moralis";
+import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 
-export default function MyBooks() {
+if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
+  rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
+}
+const Home: NextPage = () => {
   const { Moralis, isAuthenticated, authenticate, isInitialized } =
     useMoralis();
-
   const contractProcessor = useWeb3ExecuteFunction();
-
   const [nfts, setNfts] = useState([]);
-  const [loadingState, setLoadingState] = useState(true);
+  const [loadingState, setLoadingState] = useState("not-loaded");
 
-  useEffect(async () => {
+  const authMeta = useCallback(async () => {
+    if (!isAuthenticated) {
+      await authenticate();
+    }
+  }, [authenticate]);
+
+  useEffect(() => {
     if (isAuthenticated && isInitialized) {
       loadNFTs();
     } else {
-      await authenticate();
+      authMeta();
     }
   }, [isInitialized, isAuthenticated]);
-
   const getTokens = async (tokenId) => {
     const options = {
       contractAddress: pranaAddress,
@@ -66,9 +69,11 @@ export default function MyBooks() {
             const item = {
               ...metaDataFromApi,
               tokenId,
+              resalePrice: viewTokenDetailsRespose[3],
             };
+            console.log(item);
             setNfts([...nfts, item]);
-            setLoadingState(false);
+            setLoadingState("loaded");
           }
         },
       });
@@ -76,14 +81,13 @@ export default function MyBooks() {
       console.log("Error", error);
     }
   };
-
   const getTokenList = async (tokenCount, owner) => {
     for (let index = 0; index < tokenCount; index++) {
       const options = {
         contractAddress: pranaAddress,
-        functionName: "tokenOfOwnerByIndex",
-        abi: Prana.abi.filter((fn) => fn.name === "tokenOfOwnerByIndex"),
-        params: { owner: owner, index },
+        functionName: "tokenForResaleAtIndex",
+        abi: Prana.abi.filter((fn) => fn.name === "tokenForResaleAtIndex"),
+        params: { index },
       };
       await contractProcessor.fetch({
         params: options,
@@ -93,15 +97,14 @@ export default function MyBooks() {
       });
     }
   };
-
-  const loadNFTs = async () => {
+  async function loadNFTs() {
     const currentUser = Moralis.User.current();
     const owner = currentUser.attributes.ethAddress;
 
     const options = {
       contractAddress: pranaAddress,
-      functionName: "balanceOf",
-      abi: Prana.abi.filter((fn) => fn.name === "balanceOf"),
+      functionName: "numberofTokensForResale",
+      abi: Prana.abi.filter((fn) => fn.name === "numberofTokensForResale"),
       params: { owner },
     };
     console.log("isAuthenticatedloadNFTs", isAuthenticated);
@@ -112,28 +115,59 @@ export default function MyBooks() {
           getTokenList(resp, owner);
         },
       });
-  };
+  }
 
-  if (loadingState && !nfts.length)
+  async function buyNft(book) {
+    await authMeta();
+    let options = {
+      contractAddress: pranaAddress,
+      functionName: "buyTokenFromPrana",
+      abi: Prana.abi.filter((fn) => fn.name === "buyTokenFromPrana"),
+      params: {
+        tokenId: book.tokenId,
+      },
+      msgValue: Moralis.Units.FromWei(book.resalePrice, 18),
+    };
+    try {
+      await contractProcessor.fetch({
+        params: options,
+        onError: (err) => {
+          console.log(err);
+        },
+        onSuccess: () => {
+          console.log("Success");
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    loadNFTs();
+  }
+  if (loadingState !== "loaded" && !nfts.length)
     return (
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
         <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>
-          No Books found
+          No items in marketplace
         </Typography>
       </Box>
     );
+
   return (
     <Container
+      maxWidth="xl"
       sx={{
         pt: 4,
         pb: 4,
       }}
-      maxWidth="xl"
     >
       <Typography variant="h4" sx={{ mb: 5 }}>
-        My Books
+        Books
       </Typography>
-      <Grid container spacing={{ xs: 2, md: 3 }}>
+      <Grid
+        container
+        spacing={{ xs: 2, md: 3 }}
+        // columns={{ xs: 4, sm: 9, md: 12 }}
+      >
         {nfts.map((book, index) => (
           <Grid item xs={12} sm={12} md={4} lg={4} xl={3} key={index}>
             <Card>
@@ -146,6 +180,9 @@ export default function MyBooks() {
               <CardContent>
                 <Typography variant="h6">{book.name}</Typography>
                 <Typography variant="caption">by {book.author}</Typography>
+                <Typography variant="subtitle1">
+                  Price: {Moralis.Units.FromWei(book.resalePrice, 18)} ETH
+                </Typography>
 
                 <Typography variant="body2" color="text.secondary">
                   {book.description.substring(0, 50) + " ..."}
@@ -153,17 +190,22 @@ export default function MyBooks() {
               </CardContent>
 
               <CardActions>
-                <Link href={`/reader/${book.isbn}?url=${book.file}`}>
-                  <Button color="primary" variant="contained" size="large">
-                    Read
-                  </Button>
-                </Link>
-                <ResellMyBook tokenId={book.tokenId} bookName={book.name} />
+                <Button
+                  fullWidth
+                  color="primary"
+                  size="large"
+                  onClick={() => buyNft(book)}
+                  variant="contained"
+                >
+                  Buy
+                </Button>
               </CardActions>
-            </Card>
+            </Card>{" "}
           </Grid>
         ))}
       </Grid>
     </Container>
   );
-}
+};
+
+export default Home;

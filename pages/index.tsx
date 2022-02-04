@@ -40,11 +40,6 @@ const Home: NextPage = () => {
     if (isInitialized) loadNFTs();
   }, [isInitialized]);
 
-  useEffect(() => {
-    console.log("book");
-    if (isInitialized) loadNFTs();
-  }, []);
-
   async function loadNFTs() {
     const query = new Moralis.Query("BookPublished");
     const books = await query.find();
