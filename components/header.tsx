@@ -61,7 +61,7 @@ const Header = () => {
   const handleCloseUserMenu = (url) => {
     setAnchorElUser(null);
     if (url === "Login") {
-      authenticate({ provider: "metamask" });
+      authenticate();
     } else if (url === "Logout") {
       logout();
     }
