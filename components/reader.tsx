@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import { ReactReader } from "react-reader";
 import { useRouter } from "next/router";
 
@@ -9,11 +9,24 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import uniqid from "uniqid";
+import { BookDetailsContext } from "../context/providers/book-details.provider";
+import { useMoralis, useMoralisQuery } from "react-moralis";
 
 export const Reader = () => {
-  let router = useRouter();
-  const { url } = router.query;
+  const { bookDetails } = useContext(BookDetailsContext);
 
+  const { user, Moralis } = useMoralis();
+  const BookAnnotations = Moralis.Object.extend("BookAnnotations");
+
+  let router = useRouter();
+  const { url, tokenId } = router.query;
+
+  const { fetch, isFetching, isLoading } = useMoralisQuery(
+    BookAnnotations,
+    (q) => q.equalTo("user", user).equalTo("tokenId", tokenId),
+    // q.equalTo();
+    [user, tokenId]
+  );
   const tocRef = useRef(null);
 
   const [selections, setSelections] = useState([]);
@@ -21,6 +34,7 @@ export const Reader = () => {
   const [location, setLocation] = useState(null);
   const [showPageBar, setShowPageBar] = useState(false);
   const [highlightDrawer, setHighlightDrawer] = useState(false);
+  const [existingBookAnnotation, setExistingBookAnnotation] = useState(null);
   // const [book, setUrl] = useState(null);
 
   const handleShowDrawer = () => setHighlightDrawer(true);
@@ -28,39 +42,53 @@ export const Reader = () => {
   const handlePageSnackBarClose = () => setShowPageBar(false);
 
   const renditionRef = useRef(null);
+  const saveBookOwnerToMoralis = async (newSelection) => {
+    const bookAnnotations = existingBookAnnotation
+      ? existingBookAnnotation
+      : new BookAnnotations();
+    bookAnnotations.set("user", user);
+    bookAnnotations.set("tokenId", tokenId);
+    bookAnnotations.set("annotations", newSelection);
+    try {
+      const bookAnnotationsResp = await bookAnnotations.save();
+      setExistingBookAnnotation(bookAnnotationsResp);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // useEffect(async () => {
-  //   if (url) {
-  //     const epubFile = await axios({
-  //       url, //your url
-  //       method: "GET",
-  //       responseType: "blob",
-  //     });
-  //     setUrl(epubFile);
-  //   }
-  // }, [url]);
+  const addAnnotation = (cfiRange, color = "red") => {
+    if (renditionRef.current?.annotations) {
+      renditionRef.current.annotations.add(
+        "highlight",
+        cfiRange,
+        {},
+        () => {},
+        "hl",
+        { fill: color, "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
+      );
+    }
+  };
+
+  const removeAnnotation = (cfiRange) => {
+    renditionRef.current.annotations.remove(cfiRange, "highlight");
+  };
 
   useEffect(() => {
     if (renditionRef.current) {
       function setRenderSelection(cfiRange, contents) {
-        setSelections(
-          selections.concat({
-            text: renditionRef.current.getRange(cfiRange).toString(),
-            cfiRange,
-            isEditing: true,
-            annotation: "",
-            id: uniqid(),
-          })
-        );
-        handleShowDrawer();
-        renditionRef.current.annotations.add(
-          "highlight",
+        const newSelection = selections.concat({
+          text: renditionRef.current.getRange(cfiRange).toString(),
           cfiRange,
-          { test: "test" },
-          () => {},
-          "hl",
-          { fill: "red", "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
-        );
+          isEditing: true,
+          annotation: "",
+          id: uniqid(),
+        });
+        setSelections(newSelection);
+        saveBookOwnerToMoralis(newSelection);
+        handleShowDrawer();
+        addAnnotation(cfiRange);
+
         contents.window.getSelection().removeAllRanges();
       }
       renditionRef.current.on("selected", setRenderSelection);
@@ -84,40 +112,24 @@ export const Reader = () => {
   };
 
   const toggleHighlightColor = (cfiRange) => {
-    renditionRef.current.annotations.remove(cfiRange, "highlight");
-    renditionRef.current.annotations.add(
-      "highlight",
-      cfiRange,
-      { test: "test" },
-      () => {},
-      "hl",
-      { fill: "red", "fill-opacity": "0.5", "mix-blend-mode": "multiply" }
-    );
+    removeAnnotation(cfiRange);
+    addAnnotation(cfiRange);
   };
 
   const showHeightlightedContent = (cfiRange) => {
     renditionRef.current.display(cfiRange);
-    renditionRef.current.annotations.remove(cfiRange, "highlight");
-    renditionRef.current.annotations.add(
-      "highlight",
-      cfiRange,
-      { test: "test" },
-      () => {},
-      "hl",
-      {
-        fill: "blue",
-        "fill-opacity": "0.5",
-        "mix-blend-mode": "multiply",
-      }
-    );
+    removeAnnotation(cfiRange);
+    addAnnotation(cfiRange, "blue");
     setTimeout(() => {
       toggleHighlightColor(cfiRange);
     }, 250);
   };
 
   const deleteHighlight = (index, cfiRange) => {
-    renditionRef.current.annotations.remove(cfiRange, "highlight");
-    setSelections(selections.filter((item, j) => j !== index));
+    removeAnnotation(cfiRange);
+    const newSelection = selections.filter((item, j) => j !== index);
+    setSelections(newSelection);
+    saveBookOwnerToMoralis(newSelection);
   };
 
   const handleSaveButtonClick = (annotation, index) => {
@@ -133,7 +145,8 @@ export const Reader = () => {
       }
     });
     setSelections(newSelectionObj);
-    localStorage.setItem("annotation", JSON.stringify(newSelectionObj));
+
+    saveBookOwnerToMoralis(newSelectionObj);
   };
 
   return (
@@ -151,23 +164,20 @@ export const Reader = () => {
                 background: "orange",
               },
             });
-            const storedSelection = localStorage.getItem("annotation")
-              ? JSON.parse(localStorage.getItem("annotation"))
-              : [];
-            setSelections(storedSelection);
-            storedSelection.forEach((item) => {
-              renditionRef.current.annotations.add(
-                "highlight",
-                item.cfiRange,
-                { test: "test" },
-                () => {},
-                "hl",
-                {
-                  fill: "red",
-                  "fill-opacity": "0.5",
-                  "mix-blend-mode": "multiply",
-                }
-              );
+            fetch({
+              onSuccess: (result) => {
+                const annotationForDb = result && result[0] ? result[0] : null;
+                setExistingBookAnnotation(annotationForDb);
+                const storedSelection =
+                  annotationForDb?.attributes?.annotations || [];
+                setSelections(storedSelection);
+                storedSelection.forEach((item) => {
+                  addAnnotation(item.cfiRange);
+                });
+              },
+              onError: (err) => {
+                console.log("err", error);
+              },
             });
           }}
           tocChanged={(toc) => (tocRef.current = toc)}

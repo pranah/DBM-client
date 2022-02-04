@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -16,6 +16,7 @@ import { ResellMyBook } from "../components/ResellMyBook";
 import { pranaAddress } from "../config";
 
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
+import { BookDetailsContext } from "../context/providers/book-details.provider";
 import {
   useMoralis,
   useWeb3ExecuteFunction,
@@ -30,6 +31,7 @@ export default function MyBooks() {
 
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState(true);
+  const { updateBookDetails } = useContext(BookDetailsContext);
 
   useEffect(async () => {
     if (isAuthenticated && isInitialized) {
@@ -153,8 +155,21 @@ export default function MyBooks() {
               </CardContent>
 
               <CardActions>
-                <Link href={`/reader/${book.isbn}?url=${book.file}`}>
-                  <Button color="primary" variant="contained" size="large">
+                <Link
+                  href={`/reader/${book.isbn}?url=${book.file}&tokenId=${book.tokenId}`}
+                >
+                  <Button
+                    onClick={() => {
+                      updateBookDetails({
+                        isbn: book.isbn,
+                        tokenId: book.tokenId,
+                        bookUrl: book.file,
+                      });
+                    }}
+                    color="primary"
+                    variant="contained"
+                    size="large"
+                  >
                     Read
                   </Button>
                 </Link>

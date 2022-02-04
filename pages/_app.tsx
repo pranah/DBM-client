@@ -9,6 +9,7 @@ import { MoralisProvider } from "react-moralis";
 
 import createEmotionCache from "../styles/createEmotionsCache";
 import theme from "../styles/theme";
+import BookDetailsProvider from "../context/providers/book-details.provider";
 
 // material
 
@@ -34,9 +35,11 @@ export default function MyApp(props: MyAppProps) {
 
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <BookDetailsProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </BookDetailsProvider>
         </ThemeProvider>
       </CacheProvider>
     </MoralisProvider>
