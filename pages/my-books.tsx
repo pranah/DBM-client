@@ -17,14 +17,10 @@ import { pranaAddress } from "../config";
 
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { BookDetailsContext } from "../context/providers/book-details.provider";
-import {
-  useMoralis,
-  useWeb3ExecuteFunction,
-  useNFTBalances,
-} from "react-moralis";
+import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 
 export default function MyBooks() {
-  const { Moralis, isInitialized } = useMoralis();
+  const { Moralis, isInitialized, chainId, account } = useMoralis();
 
   const contractProcessor = useWeb3ExecuteFunction();
 
@@ -32,7 +28,10 @@ export default function MyBooks() {
   const [loadingState, setLoadingState] = useState("not-loaded");
   const { updateBookDetails } = useContext(BookDetailsContext);
   useEffect(() => {
-    if (isInitialized) loadNFTs();
+    if (isInitialized) {
+      setNfts([]);
+      loadNFTs();
+    }
   }, [isInitialized]);
 
   const getTokens = async (tokenId) => {
@@ -63,7 +62,7 @@ export default function MyBooks() {
               ...metaDataFromApi,
               tokenId,
             };
-            setNfts([...nfts, item]);
+            setNfts((prevNft) => [...prevNft, item]);
           }
         },
       });
@@ -72,47 +71,16 @@ export default function MyBooks() {
     }
   };
 
-  const getTokenList = async (tokenCount, owner) => {
-    for (let index = 0; index < tokenCount; index++) {
-      const options = {
-        contractAddress: pranaAddress,
-        functionName: "tokenOfOwnerByIndex",
-        abi: Prana.abi.filter((fn) => fn.name === "tokenOfOwnerByIndex"),
-        params: { owner: owner, index },
-      };
-      await contractProcessor.fetch({
-        params: options,
-        onError: (err) => {
-          console.log(err);
-          throw err;
-        },
-        onSuccess: (token) => {
-          getTokens(token);
-        },
-      });
-    }
-  };
-
+  console.log("account", account);
   async function loadNFTs() {
-    const currentUser = Moralis.User.current();
-    const owner = currentUser.attributes.ethAddress;
-
-    const options = {
-      contractAddress: pranaAddress,
-      functionName: "balanceOf",
-      abi: Prana.abi.filter((fn) => fn.name === "balanceOf"),
-      params: { owner },
-    };
-
-    await contractProcessor.fetch({
-      params: options,
-      onError: (err) => {
-        console.log(err);
-        throw err;
-      },
-      onSuccess: (resp) => {
-        getTokenList(resp, owner);
-      },
+    const nftTokens = await Moralis.Web3API.account.getNFTsForContract({
+      chain: chainId,
+      address: account,
+      token_address: pranaAddress,
+    });
+    const tokens = nftTokens?.result;
+    tokens.forEach((token) => {
+      getTokens(token.token_id);
     });
   }
 
