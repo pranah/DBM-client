@@ -33,9 +33,7 @@ export default function MyBooks() {
     const signer = provider.getSigner();
 
     const pranaContract = new ethers.Contract(pranaAddress, Prana.abi, signer);
-    console.log(signer, "signer");
     let tokenCount = await pranaContract.balanceOf(signer.getAddress());
-    console.log(tokenCount, "tokenCount");
     let data = [];
     for (let i = 0; i < tokenCount; i++) {
       //contract call to get the tokenId at index i
@@ -44,13 +42,13 @@ export default function MyBooks() {
         i
       );
       const book = await pranaContract.viewTokenDetails(tokenId);
+
       data.push(book);
     }
-    console.log(data);
+    console.log("data-----------", data);
     const items = await Promise.all(
       data.map(async (i) => {
         const meta = await axios.get(i[1]);
-        console.log(meta);
         let price = ethers.utils.formatUnits(i[2].toString(), "ether");
         let item = {
           price,
@@ -67,6 +65,8 @@ export default function MyBooks() {
         return item;
       })
     );
+    console.log("items-----------", items);
+
     setNfts(items);
     setLoadingState("loaded");
   }
