@@ -12,7 +12,7 @@ import Typography from "@mui/material/Typography";
 
 let rpcEndpoint = null;
 import { ethers } from "ethers";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 
 import { pranaAddress } from "../config";
@@ -29,55 +29,104 @@ const Home: NextPage = () => {
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
 
-  const authMeta = async () => {
+  const authMeta = useCallback(async () => {
     if (!isAuthenticated) {
-      await authenticate({ provider: "metamask" });
+      await authenticate();
     }
-  };
+  }, [authenticate]);
 
   useEffect(() => {
-    console.log("bookyes dep");
-    if (isInitialized) loadNFTs();
-  }, [isInitialized]);
-
+    if (isAuthenticated && isInitialized) {
+      loadNFTs();
+    } else {
+      authMeta();
+    }
+  }, [isInitialized, isAuthenticated]);
+  const getTokens = async (tokenId) => {
+    const options = {
+      contractAddress: pranaAddress,
+      functionName: "viewTokenDetails",
+      abi: Prana.abi.filter((fn) => fn.name === "viewTokenDetails"),
+      params: { _tokenId: tokenId },
+    };
+    try {
+      await contractProcessor.fetch({
+        params: options,
+        onError: (err) => {
+          console.log(err);
+          throw err;
+        },
+        onSuccess: async (viewTokenDetailsRespose) => {
+          console.log("viewTokenDetailsRespose", viewTokenDetailsRespose);
+          // fetch meta data from ipfs
+          const ipfsMetaDataResponse = await axios.get(
+            viewTokenDetailsRespose[1]
+          );
+          if (ipfsMetaDataResponse.status !== 200) {
+            throw new Error("Something went wrong");
+          } else {
+            const metaDataFromApi = ipfsMetaDataResponse.data;
+            const item = {
+              ...metaDataFromApi,
+              tokenId,
+              resalePrice: viewTokenDetailsRespose[3],
+            };
+            console.log(item);
+            setNfts([...nfts, item]);
+            setLoadingState("loaded");
+          }
+        },
+      });
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+  const getTokenList = async (tokenCount, owner) => {
+    for (let index = 0; index < tokenCount; index++) {
+      const options = {
+        contractAddress: pranaAddress,
+        functionName: "tokenForResaleAtIndex",
+        abi: Prana.abi.filter((fn) => fn.name === "tokenForResaleAtIndex"),
+        params: { index },
+      };
+      await contractProcessor.fetch({
+        params: options,
+        onSuccess: (token) => {
+          getTokens(token);
+        },
+      });
+    }
+  };
   async function loadNFTs() {
-    const query = new Moralis.Query("BookPublished");
-    const books = await query.find();
-    const booksResponse = books.map((book) => book.attributes);
+    const currentUser = Moralis.User.current();
+    const owner = currentUser.attributes.ethAddress;
 
-    const items = await Promise.all(
-      booksResponse.map(async (i) => {
-        const meta = await axios.get(i.bookCoverAndDetails);
-        let price = ethers.utils.formatUnits(i.price.toString(), "ether");
-        let item = {
-          price,
-          image: meta.data.image,
-          file: meta.data.file,
-          name: meta.data.name,
-          description: meta.data.description,
-          author: meta.data.author,
-          isbn: meta.data.isbn,
-          publisher: meta.data.publisher,
-          royalty: meta.data.royalty,
-          genre: meta.data.genre,
-        };
-        return item;
-      })
-    );
-    setNfts(items);
-    setLoadingState("loaded");
+    const options = {
+      contractAddress: pranaAddress,
+      functionName: "numberofTokensForResale",
+      abi: Prana.abi.filter((fn) => fn.name === "numberofTokensForResale"),
+      params: { owner },
+    };
+    console.log("isAuthenticatedloadNFTs", isAuthenticated);
+    if (isAuthenticated)
+      await contractProcessor.fetch({
+        params: options,
+        onSuccess: (resp) => {
+          getTokenList(resp, owner);
+        },
+      });
   }
 
   async function buyNft(book) {
     await authMeta();
     let options = {
       contractAddress: pranaAddress,
-      functionName: "directPurchase",
-      abi: Prana.abi.filter((fn) => fn.name === "directPurchase"),
+      functionName: "buyTokenFromPrana",
+      abi: Prana.abi.filter((fn) => fn.name === "buyTokenFromPrana"),
       params: {
-        _isbn: book.isbn,
+        tokenId: book.tokenId,
       },
-      msgValue: Moralis.Units.ETH(book.price),
+      msgValue: Moralis.Units.FromWei(book.resalePrice, 18),
     };
     try {
       await contractProcessor.fetch({
@@ -132,7 +181,7 @@ const Home: NextPage = () => {
                 <Typography variant="h6">{book.name}</Typography>
                 <Typography variant="caption">by {book.author}</Typography>
                 <Typography variant="subtitle1">
-                  Price: {book.price} ETH
+                  Price: {Moralis.Units.FromWei(book.resalePrice, 18)} ETH
                 </Typography>
 
                 <Typography variant="body2" color="text.secondary">

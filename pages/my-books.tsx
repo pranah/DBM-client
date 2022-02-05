@@ -20,19 +20,29 @@ import { BookDetailsContext } from "../context/providers/book-details.provider";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 
 export default function MyBooks() {
-  const { Moralis, isInitialized, chainId, account } = useMoralis();
+  const {
+    Moralis,
+    isAuthenticated,
+    authenticate,
+    isInitialized,
+    chainId,
+    account,
+  } = useMoralis();
 
   const contractProcessor = useWeb3ExecuteFunction();
 
   const [nfts, setNfts] = useState([]);
-  const [loadingState, setLoadingState] = useState("not-loaded");
+  const [loadingState, setLoadingState] = useState(true);
   const { updateBookDetails } = useContext(BookDetailsContext);
-  useEffect(() => {
-    if (isInitialized) {
+
+  useEffect(async () => {
+    if (isAuthenticated && isInitialized) {
       setNfts([]);
       loadNFTs();
+    } else {
+      await authenticate();
     }
-  }, [isInitialized]);
+  }, [isInitialized, isAuthenticated]);
 
   const getTokens = async (tokenId) => {
     const options = {
@@ -63,6 +73,7 @@ export default function MyBooks() {
               tokenId,
             };
             setNfts((prevNft) => [...prevNft, item]);
+            setLoadingState(false);
           }
         },
       });
@@ -84,7 +95,7 @@ export default function MyBooks() {
     });
   }
 
-  if (loadingState === "loaded" && !nfts.length)
+  if (loadingState && !nfts.length)
     return (
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
         <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>
