@@ -15,8 +15,10 @@ import { ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 
-import { pranaAddress } from "../config";
+import { pranaAddress, pranaHelperAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
+import PranaHelper from "../artifacts/contracts/pranaHelper.sol/pranaHelper.json";
+
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
@@ -72,7 +74,7 @@ const Home: NextPage = () => {
               resalePrice: viewTokenDetailsRespose[3],
             };
             console.log(item);
-            setNfts([...nfts, item]);
+            setNfts((prevNft) => [...prevNft, item]);
             setLoadingState("loaded");
           }
         },
@@ -98,6 +100,7 @@ const Home: NextPage = () => {
     }
   };
   async function loadNFTs() {
+    setNfts([]);
     const currentUser = Moralis.User.current();
     const owner = currentUser.attributes.ethAddress;
 
@@ -120,13 +123,13 @@ const Home: NextPage = () => {
   async function buyNft(book) {
     await authMeta();
     let options = {
-      contractAddress: pranaAddress,
+      contractAddress: pranaHelperAddress,
       functionName: "buyTokenFromPrana",
-      abi: Prana.abi.filter((fn) => fn.name === "buyTokenFromPrana"),
+      abi: PranaHelper.abi.filter((fn) => fn.name === "buyTokenFromPrana"),
       params: {
         tokenId: book.tokenId,
       },
-      msgValue: Moralis.Units.FromWei(book.resalePrice, 18),
+      msgValue: book.resalePrice,
     };
     try {
       await contractProcessor.fetch({
@@ -135,13 +138,13 @@ const Home: NextPage = () => {
           console.log(err);
         },
         onSuccess: () => {
+          loadNFTs();
           console.log("Success");
         },
       });
     } catch (error) {
       console.log(error);
     }
-    loadNFTs();
   }
   if (loadingState !== "loaded" && !nfts.length)
     return (
