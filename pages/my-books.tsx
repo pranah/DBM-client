@@ -10,6 +10,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
 
 import { ResellMyBook } from "../components/ResellMyBook";
 
@@ -18,6 +19,7 @@ import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { BookDetailsContext } from "../context/providers/book-details.provider";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
+import { RentMyBook } from "../components/RentMyBook";
 
 export default function MyBooks() {
   const {
@@ -70,6 +72,8 @@ export default function MyBooks() {
             const item = {
               ...metaDataFromApi,
               tokenId,
+              copyNumber: Number(viewTokenDetailsRespose[2]),
+              isUpForRenting: viewTokenDetailsRespose[4],
             };
             setNfts((prevNft) => [...prevNft, item]);
             setLoadingState(false);
@@ -123,7 +127,15 @@ export default function MyBooks() {
                 alt="green iguana"
               />
               <CardContent>
-                <Typography variant="h6">{book.name}</Typography>
+                <Grid container justifyContent="space-between">
+                  <Typography variant="h6">{book.name}</Typography>
+                  <Chip
+                    variant="outlined"
+                    color="info"
+                    label={`Copy number ${book.copyNumber}`}
+                  />
+                </Grid>
+
                 <Typography variant="caption">by {book.author}</Typography>
 
                 <Typography variant="body2" color="text.secondary">
@@ -151,6 +163,7 @@ export default function MyBooks() {
                   </Button>
                 </Link>
                 <ResellMyBook tokenId={book.tokenId} bookName={book.name} />
+                <RentMyBook tokenId={book.tokenId} bookName={book.name} />
               </CardActions>
             </Card>
           </Grid>

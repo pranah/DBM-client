@@ -32,6 +32,10 @@ const pages = [
     name: "Used Books",
     url: "/used-books",
   },
+  {
+    name: "Rent a Books",
+    url: "/rented-books",
+  },
 ];
 
 const Header = () => {

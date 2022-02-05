@@ -10,10 +10,13 @@ import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 
 import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
+import { FormLabel, TextField } from "@mui/material";
+import Loader from "./loader/Loader";
 
-export function ResellMyBook({ bookName, tokenId }) {
+export function RentMyBook({ bookName, tokenId }) {
   const [open, setOpen] = React.useState(false);
   const [myBookValueInEth, setMyBookValueInEth] = React.useState(0);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const { Moralis, isInitialized } = useMoralis();
   const contractProcessor = useWeb3ExecuteFunction();
@@ -26,43 +29,48 @@ export function ResellMyBook({ bookName, tokenId }) {
     setOpen(false);
   };
 
-  async function resellNFT() {
-    const resalePrice = Moralis.Units.ETH(myBookValueInEth);
+  async function rentNFT() {
+    const rentPrice = Moralis.Units.ETH(myBookValueInEth);
+    setIsLoading(true);
     let options = {
       contractAddress: pranaAddress,
-      functionName: "putTokenForSale",
-      abi: Prana.abi.filter((fn) => fn.name === "putTokenForSale"),
+      functionName: "putForRent",
+      abi: Prana.abi.filter((fn) => fn.name === "putForRent"),
       params: {
-        salePrice: resalePrice,
-        tokenId: tokenId,
+        _newPrice: rentPrice,
+        tokenId,
       },
     };
     try {
       await contractProcessor.fetch({
         params: options,
         onError: (err) => {
-          console.log("error", err);
+          setIsLoading(false);
+          console.log(err);
           throw err;
         },
         onSuccess: () => {
           console.log("success");
+          setIsLoading(false);
           handleClose();
         },
       });
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   }
 
   return (
     <div>
+      {isLoading && <Loader />}
       <Button
         size="large"
         sx={{ ml: 1 }}
         variant="outlined"
         onClick={handleClickOpen}
       >
-        Sell{" "}
+        Rent{" "}
       </Button>
       <Dialog
         open={open}
@@ -70,22 +78,27 @@ export function ResellMyBook({ bookName, tokenId }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Sell you copy</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Rent your copy</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {`Do you want to sell you copy of ${bookName}`}
+            {`Do you want to rent your copy of ${bookName}`}
           </DialogContentText>
-          <Input
+
+          <TextField
+            helperText="Enter a value greater than 0"
+            sx={{ mt: 2 }}
+            id="my-book-value"
+            label="Value in Eth"
+            variant="standard"
+            type="number"
             value={myBookValueInEth}
             onChange={(e) => setMyBookValueInEth(Number(e.target.value))}
-            id="resalePrice"
-            type="number"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
-          <Button onClick={resellNFT} autoFocus>
-            Sell
+          <Button disabled={!myBookValueInEth} onClick={rentNFT} autoFocus>
+            Rent
           </Button>
         </DialogActions>
       </Dialog>
@@ -93,6 +106,6 @@ export function ResellMyBook({ bookName, tokenId }) {
   );
 }
 
-ResellMyBook.defaultProps = {
+RentMyBook.defaultProps = {
   bookName: "",
 };
