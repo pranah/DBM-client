@@ -50,7 +50,7 @@ export default function DrawerListItem({
               <TextareaAutosize
                 aria-label="annotation"
                 minRows={3}
-                placeholder="Annontation"
+                placeholder="Annotation"
                 style={{ width: "100%" }}
                 value={annotationText}
                 onChange={onChangeAnnotation}

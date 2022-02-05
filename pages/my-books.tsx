@@ -59,7 +59,6 @@ export default function MyBooks() {
           throw err;
         },
         onSuccess: async (viewTokenDetailsRespose) => {
-          console.log("viewTokenDetailsRespose", viewTokenDetailsRespose);
           // fetch meta data from ipfs
           const ipfsMetaDataResponse = await axios.get(
             viewTokenDetailsRespose[1]
@@ -82,7 +81,6 @@ export default function MyBooks() {
     }
   };
 
-  console.log("account", account);
   async function loadNFTs() {
     const nftTokens = await Moralis.Web3API.account.getNFTsForContract({
       chain: chainId,

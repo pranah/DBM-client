@@ -10,13 +10,21 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import uniqid from "uniqid";
 import { BookDetailsContext } from "../context/providers/book-details.provider";
-import { useMoralis, useMoralisQuery } from "react-moralis";
+import {
+  useMoralis,
+  useMoralisQuery,
+  useWeb3ExecuteFunction,
+} from "react-moralis";
+import { pranaAddress } from "../config";
+import Prana from "../artifacts/contracts/prana.sol/prana.json";
+import axios from "axios";
 
 export const Reader = () => {
   const { bookDetails } = useContext(BookDetailsContext);
 
   const { user, Moralis } = useMoralis();
   const BookAnnotations = Moralis.Object.extend("BookAnnotations");
+  const contractProcessor = useWeb3ExecuteFunction();
 
   let router = useRouter();
   const { url, tokenId } = router.query;
@@ -42,9 +50,12 @@ export const Reader = () => {
   const handlePageSnackBarClose = () => setShowPageBar(false);
 
   const renditionRef = useRef(null);
-  const saveBookOwnerToMoralis = async (newSelection) => {
-    const bookAnnotations = existingBookAnnotation
-      ? existingBookAnnotation
+  const saveBookOwnerToMoralis = async (
+    newSelection,
+    bookAnnotationInstance = existingBookAnnotation
+  ) => {
+    const bookAnnotations = bookAnnotationInstance
+      ? bookAnnotationInstance
       : new BookAnnotations();
     bookAnnotations.set("user", user);
     bookAnnotations.set("tokenId", tokenId);
@@ -149,6 +160,33 @@ export const Reader = () => {
     saveBookOwnerToMoralis(newSelectionObj);
   };
 
+  const getAnnotationFromChain = async () => {
+    const storedIpfsUrl = null;
+    let options = {
+      contractAddress: pranaAddress,
+      functionName: "tokenURI",
+      abi: Prana.abi.filter((fn) => fn.name === "tokenURI"),
+      params: {
+        tokenId,
+      },
+    };
+    try {
+      await contractProcessor.fetch({
+        params: options,
+        onError: (err) => {
+          console.log(err);
+          throw err;
+        },
+        onSuccess: (result) => {
+          storedIpfsUrl = result;
+        },
+      });
+      return storedIpfsUrl;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div style={{ height: "100vh", position: "relative" }}>
@@ -157,26 +195,60 @@ export const Reader = () => {
           epubInitOptions={{ openAs: "epub" }}
           locationChanged={onLocationChange}
           url={url ? url : ""}
-          getRendition={(rendition) => {
+          getRendition={async (rendition) => {
             renditionRef.current = rendition;
             renditionRef.current.themes.default({
               "::selection": {
                 background: "orange",
               },
             });
+            let annotationDataFromChain = null;
+            const ipfsUrl = await getAnnotationFromChain();
+            if (ipfsUrl) {
+              const ipfsMetaDataResponse = await axios.get(ipfsUrl);
+              if (ipfsMetaDataResponse.status !== 200) {
+                throw new Error("Something went wrong");
+              } else {
+                const metaDataFromApi = ipfsMetaDataResponse.data;
+                annotationDataFromChain = {
+                  ...metaDataFromApi,
+                };
+              }
+            }
+
             fetch({
-              onSuccess: (result) => {
+              onSuccess: async (result) => {
                 const annotationForDb = result && result[0] ? result[0] : null;
-                setExistingBookAnnotation(annotationForDb);
-                const storedSelection =
-                  annotationForDb?.attributes?.annotations || [];
-                setSelections(storedSelection);
-                storedSelection.forEach((item) => {
-                  addAnnotation(item.cfiRange);
-                });
+                const dateFromDb = annotationForDb?.attributes?.updatedAt
+                  ? new Date(annotationForDb?.attributes?.updatedAt).getTime()
+                  : null;
+
+                const shouldUpdateAnnotationInDb =
+                  annotationDataFromChain &&
+                  (dateFromDb <
+                    new Date(annotationDataFromChain?.updatedAt).getTime() ||
+                    !dateFromDb);
+                if (shouldUpdateAnnotationInDb) {
+                  await saveBookOwnerToMoralis(
+                    annotationDataFromChain.annotations,
+                    annotationForDb
+                  );
+                  setSelections(annotationDataFromChain.annotations);
+                  annotationDataFromChain.annotations.forEach((item) => {
+                    addAnnotation(item.cfiRange);
+                  });
+                } else {
+                  setExistingBookAnnotation(annotationForDb);
+                  const storedSelection =
+                    annotationForDb?.attributes?.annotations || [];
+                  setSelections(storedSelection);
+                  storedSelection.forEach((item) => {
+                    addAnnotation(item.cfiRange);
+                  });
+                }
               },
               onError: (err) => {
-                console.log("err", error);
+                console.log("err", err);
               },
             });
           }}

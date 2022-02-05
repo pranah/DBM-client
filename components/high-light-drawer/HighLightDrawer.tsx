@@ -44,8 +44,11 @@ export default function HighLightDrawer({
   const contractProcessor = useWeb3ExecuteFunction();
 
   const saveAnnotationToChain = async () => {
-    const metaDataJsonAnnotation = JSON.stringify(highLightText);
-    console.log("metaDataJsonAnnotation", metaDataJsonAnnotation);
+    const metaData = {
+      annotations: highLightText,
+      updatedAt: new Date(),
+    };
+    const metaDataJsonAnnotation = JSON.stringify(metaData);
     const annotationIpfsIResp = await saveFile(
       "annotation.json",
       {
@@ -66,7 +69,6 @@ export default function HighLightDrawer({
         tokenId,
       },
     };
-    console.log("options", options);
     try {
       await contractProcessor.fetch({
         params: options,
@@ -113,7 +115,7 @@ export default function HighLightDrawer({
             <Divider />
 
             <List component="nav" aria-label="main mailbox folders">
-              {highLightText.map(
+              {highLightText?.map(
                 ({ text, cfiRange, annotation, isEditing, id }, index) => {
                   return (
                     <>
