@@ -274,7 +274,7 @@ export default function RentedBooks() {
                   Price: {Moralis.Units.FromWei(book.rentingPrice, 18)} Matic
                 </Typography>
                 <Typography variant="subtitle2">
-                  Time retend in minutes{" "}
+                  Renting time in minutes{" "}
                   {Number(book.numberOfBlocksToRent) / 20}
                 </Typography>
               </CardContent>
