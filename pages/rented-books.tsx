@@ -46,6 +46,33 @@ export default function RentedBooks() {
     }
   }, [isInitialized, isAuthenticated]);
 
+  const findOwnerOfToken = async (tokenId) => {
+    let ownerAddress = null;
+    let options = {
+      contractAddress: pranaAddress,
+      functionName: "ownerOf",
+      abi: Prana.abi.filter((fn) => fn.name === "ownerOf"),
+      params: {
+        tokenId,
+      },
+    };
+    try {
+      await contractProcessor.fetch({
+        params: options,
+        onError: (err) => {
+          console.log(err);
+        },
+        onSuccess: (address) => {
+          ownerAddress = address;
+          console.log("Success");
+        },
+      });
+      return ownerAddress;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getViewRentingTokenDetails = async (tokenId) => {
     let tokenDetailsForTokenId = null;
 
@@ -126,27 +153,30 @@ export default function RentedBooks() {
           throw err;
         },
         onSuccess: async (result) => {
-          console.log("success", result);
           for (let index = 0; index < Number(result); index++) {
             try {
               const tokenIdForSale = await getTokenForRentingAtIndex(index);
               const tokenDetailsForTokenId = await getViewRentingTokenDetails(
                 tokenIdForSale
               );
-              const ipfsMetaDataResponse = await axios.get(
-                tokenDetailsForTokenId.cid
-              );
-              if (ipfsMetaDataResponse.status !== 200) {
-                throw new Error("Something went wrong");
-              } else {
-                const metaDataFromApi = ipfsMetaDataResponse.data;
-                const item = {
-                  ...metaDataFromApi,
-                  ...tokenDetailsForTokenId,
-                  tokenId: tokenIdForSale,
-                };
-                setBooksForRent((prevNft) => [...prevNft, item]);
-                setLoadingState(false);
+              const ownerAddress = await findOwnerOfToken(tokenIdForSale);
+
+              if (ownerAddress.toLowerCase() !== account.toLocaleLowerCase()) {
+                const ipfsMetaDataResponse = await axios.get(
+                  tokenDetailsForTokenId.cid
+                );
+                if (ipfsMetaDataResponse.status !== 200) {
+                  throw new Error("Something went wrong");
+                } else {
+                  const metaDataFromApi = ipfsMetaDataResponse.data;
+                  const item = {
+                    ...metaDataFromApi,
+                    ...tokenDetailsForTokenId,
+                    tokenId: tokenIdForSale,
+                  };
+                  setBooksForRent((prevNft) => [...prevNft, item]);
+                  setLoadingState(false);
+                }
               }
             } catch (error) {
               throw error;
@@ -160,7 +190,6 @@ export default function RentedBooks() {
   }
 
   const onRentButtonClick = async (book) => {
-    console.log("book", book);
     await authMeta();
 
     let options = {
@@ -238,7 +267,7 @@ export default function RentedBooks() {
                   Price: {Moralis.Units.FromWei(book.rentingPrice, 18)} ETH
                 </Typography>
                 <Typography variant="subtitle2">
-                  Rent Time in Minutes: {book.numberOfBlocksToRent / 60}
+                  No of blocks you can rent for {book.numberOfBlocksToRent}
                 </Typography>
               </CardContent>
 

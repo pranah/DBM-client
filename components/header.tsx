@@ -33,7 +33,7 @@ const pages = [
     url: "/used-books",
   },
   {
-    name: "Rent a Books",
+    name: "Rent a Book",
     url: "/rented-books",
   },
 ];
