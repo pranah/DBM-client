@@ -18,6 +18,7 @@ import axios from "axios";
 import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
+import Loader from "../components/loader/Loader";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
@@ -69,6 +70,8 @@ const Home: NextPage = () => {
   }
 
   async function buyNft(book) {
+    setLoadingState("not-loaded");
+
     await authMeta();
     let options = {
       contractAddress: pranaAddress,
@@ -86,6 +89,8 @@ const Home: NextPage = () => {
           console.log(err);
         },
         onSuccess: () => {
+          setLoadingState("loaded");
+
           console.log("Success");
         },
       });
@@ -94,6 +99,7 @@ const Home: NextPage = () => {
     }
     loadNFTs();
   }
+  if (loadingState !== "loaded") return <Loader />;
   if (loadingState !== "loaded" && !nfts.length)
     return (
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
@@ -102,7 +108,6 @@ const Home: NextPage = () => {
         </Typography>
       </Box>
     );
-
   return (
     <Container
       maxWidth="xl"

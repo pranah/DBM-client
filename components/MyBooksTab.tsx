@@ -21,6 +21,7 @@ import { BookDetailsContext } from "../context/providers/book-details.provider";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import { RentMyBook } from "../components/RentMyBook";
 import { ordinal_suffix_of } from "../utils";
+import Loader from "./loader/Loader";
 
 export default function MyBooksTab() {
   const {
@@ -31,11 +32,11 @@ export default function MyBooksTab() {
     chainId,
     account,
   } = useMoralis();
-
+  console.log("---------", isAuthenticated, isInitialized, chainId, account);
   const contractProcessor = useWeb3ExecuteFunction();
 
   const [nfts, setNfts] = useState([]);
-  const [loadingState, setLoadingState] = useState(true);
+  const [loadingState, setLoadingState] = useState("not-loaded");
   const { updateBookDetails } = useContext(BookDetailsContext);
 
   useEffect(async () => {
@@ -104,7 +105,7 @@ export default function MyBooksTab() {
               isUpForRenting: viewTokenDetailsRespose[4],
             };
             setNfts((prevNft) => [...prevNft, item]);
-            setLoadingState(false);
+            setLoadingState("loaded");
           }
         },
       });
@@ -124,8 +125,8 @@ export default function MyBooksTab() {
       getTokens(token.token_id);
     });
   }
-
-  if (loadingState && !nfts.length)
+  if (loadingState !== "loaded") return <Loader />;
+  if (loadingState !== "loaded" && !nfts.length)
     return (
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
         <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>
