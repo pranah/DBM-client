@@ -233,8 +233,12 @@ export const Reader = () => {
                     annotationDataFromChain.annotations,
                     annotationForDb
                   );
+                  console.log(
+                    "annotationDataFromChain",
+                    annotationDataFromChain
+                  );
                   setSelections(annotationDataFromChain.annotations);
-                  annotationDataFromChain.annotations.forEach((item) => {
+                  annotationDataFromChain?.annotations.forEach((item) => {
                     addAnnotation(item.cfiRange);
                   });
                 } else {
