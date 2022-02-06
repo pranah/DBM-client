@@ -37,8 +37,8 @@
       ]
     },
     "/home/abc/Documents/DBM-client/contracts/prana.sol": {
-      "lastModificationDate": 1642392121700,
-      "contentHash": "4b98206cfd7ac24671bebb987bd098fb",
+      "lastModificationDate": 1644124470432,
+      "contentHash": "6e10a6bf71db3e82339b7da198b5a28d",
       "sourceName": "contracts/prana.sol",
       "solcConfig": {
         "version": "0.6.2",

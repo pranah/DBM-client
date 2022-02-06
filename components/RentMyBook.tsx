@@ -16,6 +16,7 @@ import Loader from "./loader/Loader";
 export function RentMyBook({ bookName, tokenId }) {
   const [open, setOpen] = React.useState(false);
   const [myBookValueInEth, setMyBookValueInEth] = React.useState(0);
+  const [numberofBlocksToRent, setNumberOfBlocksToRent] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const { Moralis, isInitialized } = useMoralis();
@@ -31,6 +32,7 @@ export function RentMyBook({ bookName, tokenId }) {
 
   async function rentNFT() {
     const rentPrice = Moralis.Units.ETH(myBookValueInEth);
+    const _numberofBlocksToRent = numberofBlocksToRent * 60;
     setIsLoading(true);
     let options = {
       contractAddress: pranaAddress,
@@ -39,8 +41,10 @@ export function RentMyBook({ bookName, tokenId }) {
       params: {
         _newPrice: rentPrice,
         tokenId,
+        _numberofBlocksToRent,
       },
     };
+    console.log("options", options);
     try {
       await contractProcessor.fetch({
         params: options,
@@ -83,8 +87,8 @@ export function RentMyBook({ bookName, tokenId }) {
           <DialogContentText id="alert-dialog-description">
             {`Do you want to rent your copy of ${bookName}`}
           </DialogContentText>
-
           <TextField
+            fullWidth
             helperText="Enter a value greater than 0"
             sx={{ mt: 2 }}
             id="my-book-value"
@@ -93,6 +97,17 @@ export function RentMyBook({ bookName, tokenId }) {
             type="number"
             value={myBookValueInEth}
             onChange={(e) => setMyBookValueInEth(Number(e.target.value))}
+          />{" "}
+          <TextField
+            fullWidth
+            // helperText="Enter a value greater than 0"
+            sx={{ mt: 2 }}
+            id="time-in-minutes"
+            label="Enter time in minutes"
+            variant="standard"
+            type="number"
+            value={numberofBlocksToRent}
+            onChange={(e) => setNumberOfBlocksToRent(Number(e.target.value))}
           />
         </DialogContent>
         <DialogActions>

@@ -9,6 +9,7 @@ import CardActions from "@mui/material/CardActions";
 import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
 
 let rpcEndpoint = null;
 import { ethers } from "ethers";
@@ -20,6 +21,7 @@ import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import PranaHelper from "../artifacts/contracts/pranaHelper.sol/pranaHelper.json";
 
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
+import { ordinal_suffix_of } from "../utils";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
@@ -60,6 +62,7 @@ const Home: NextPage = () => {
         },
         onSuccess: async (viewTokenDetailsRespose) => {
           console.log("viewTokenDetailsRespose", viewTokenDetailsRespose);
+
           // fetch meta data from ipfs
           const ipfsMetaDataResponse = await axios.get(
             viewTokenDetailsRespose[1]
@@ -72,6 +75,8 @@ const Home: NextPage = () => {
               ...metaDataFromApi,
               tokenId,
               resalePrice: viewTokenDetailsRespose[3],
+              copyNumber: viewTokenDetailsRespose[2],
+              isUpForResale: viewTokenDetailsRespose[4],
             };
             console.log(item);
             setNfts((prevNft) => [...prevNft, item]);
@@ -115,6 +120,7 @@ const Home: NextPage = () => {
       await contractProcessor.fetch({
         params: options,
         onSuccess: (resp) => {
+          console.log("resp", resp);
           getTokenList(resp, owner);
         },
       });
@@ -181,7 +187,14 @@ const Home: NextPage = () => {
                 alt="green iguana"
               />
               <CardContent>
-                <Typography variant="h6">{book.name}</Typography>
+                <Grid container justifyContent="space-between">
+                  <Typography variant="h6">{book.name}</Typography>
+                  <Chip
+                    variant="outlined"
+                    color="info"
+                    label={`${ordinal_suffix_of(book.copyNumber)} copy`}
+                  />
+                </Grid>
                 <Typography variant="caption">by {book.author}</Typography>
                 <Typography variant="subtitle1">
                   Price: {Moralis.Units.FromWei(book.resalePrice, 18)} ETH

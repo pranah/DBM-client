@@ -20,6 +20,7 @@ import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { BookDetailsContext } from "../context/providers/book-details.provider";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import { RentMyBook } from "../components/RentMyBook";
+import { ordinal_suffix_of } from "../utils";
 
 export default function MyBooks() {
   const {
@@ -132,7 +133,7 @@ export default function MyBooks() {
                   <Chip
                     variant="outlined"
                     color="info"
-                    label={`Copy number ${book.copyNumber}`}
+                    label={`${ordinal_suffix_of(book.copyNumber)} Copy`}
                   />
                 </Grid>
 
@@ -162,8 +163,12 @@ export default function MyBooks() {
                     Read
                   </Button>
                 </Link>
-                <ResellMyBook tokenId={book.tokenId} bookName={book.name} />
-                <RentMyBook tokenId={book.tokenId} bookName={book.name} />
+                {!book.isUpForRenting && (
+                  <ResellMyBook tokenId={book.tokenId} bookName={book.name} />
+                )}
+                {!book.isUpForRenting && (
+                  <RentMyBook tokenId={book.tokenId} bookName={book.name} />
+                )}
               </CardActions>
             </Card>
           </Grid>

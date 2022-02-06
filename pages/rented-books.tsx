@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,8 +10,9 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
-
-import { pranaAddress } from "../config";
+import Chip from "@mui/material/Chip";
+import { ordinal_suffix_of } from "../utils";
+import { pranaAddress, pranaHelperAddress } from "../config";
 
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
@@ -30,6 +31,12 @@ export default function RentedBooks() {
 
   const [booksForRent, setBooksForRent] = useState([]);
   const [loadingState, setLoadingState] = useState(true);
+
+  const authMeta = useCallback(async () => {
+    if (!isAuthenticated) {
+      await authenticate();
+    }
+  }, [authenticate]);
 
   useEffect(async () => {
     if (isAuthenticated && isInitialized) {
@@ -151,7 +158,34 @@ export default function RentedBooks() {
     }
   }
 
-  const onRentButtonClick = () => {};
+  const onRentButtonClick = async (book) => {
+    console.log("book", book);
+    await authMeta();
+
+    let options = {
+      contractAddress: pranaAddress,
+      functionName: "rentToken",
+      abi: Prana.abi.filter((fn) => fn.name === "rentToken"),
+      params: {
+        tokenId: book.tokenId,
+      },
+      msgValue: book.rentingPrice,
+    };
+    try {
+      await contractProcessor.fetch({
+        params: options,
+        onError: (err) => {
+          console.log(err);
+        },
+        onSuccess: () => {
+          getBooksForRent();
+          console.log("Success");
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (loadingState && !booksForRent.length)
     return (
@@ -183,17 +217,27 @@ export default function RentedBooks() {
                 alt="green iguana"
               />
               <CardContent>
-                <Typography variant="h6">{book.name}</Typography>
+                <Grid container justifyContent="space-between">
+                  <Typography variant="h6">{book.name}</Typography>
+                  <Chip
+                    variant="outlined"
+                    color="info"
+                    label={`${ordinal_suffix_of(book.copyNumber)} Copy`}
+                  />
+                </Grid>
                 <Typography variant="caption">by {book.author}</Typography>
 
                 <Typography variant="body2" color="text.secondary">
                   {book.description.substring(0, 50) + " ..."}
                 </Typography>
+                <Typography variant="subtitle1">
+                  Price: {Moralis.Units.FromWei(book.rentingPrice, 18)} ETH
+                </Typography>
               </CardContent>
 
               <CardActions>
                 <Button
-                  onClick={onRentButtonClick}
+                  onClick={() => onRentButtonClick(book)}
                   color="primary"
                   variant="contained"
                   size="large"

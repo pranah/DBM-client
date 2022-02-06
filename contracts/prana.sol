@@ -19,14 +19,14 @@ contract prana is ERC721 {
         // edit rentedBlocks to appropriate time/number of blocks before final version
         // for a two-week rental period, the rentedBlocks would be 100800 blocks.
         // assuming the block time is 12 seconds on average.
-        rentedBlocks = 100;
+        // rentedBlocks = 100;
     }
 
     //address of the contract deployer
     address owner;
 
     //rented number of blocks, to count time
-    uint256 rentedBlocks;
+    // uint256 rentedBlocks;
 
     //address of the helper contract
     address pranaHelperAddress;
@@ -45,28 +45,18 @@ contract prana is ERC721 {
         _;
     }
 
-    // /* Returns onlyl items that a user has purchased */
-    // function fetchMyNFTs() public view returns (uint256[] memory) {
-    //     uint256 totalItemCount = _tokenIdTracker.current();
-    //     uint16 itemCount = 0;
-    //     uint16 currentIndex = 0;
+    // A nonce to ensure unique id for each new token.
+    //deprecated in favor of _tokenIdTracker
+    // uint256 public nonce;  // might need more work
 
-    //     for (uint16 i = 0; i < totalItemCount; i++) {
-    //         if (ownerOf(i) == msg.sender) {
-    //             itemCount += 1;
-    //         }
-    //     }
-    //     uint256[] memory items = new uint256[](itemCount);
-    //     for (uint16 i = 0; i < totalItemCount; i++) {
-    //         if (ownerOf(i) == msg.sender) {
-    //             TokenDetails storage currentItem = tokenData[i + 1];
-    //             items[currentIndex] = currentItem.isbn;
-    //             currentIndex += 1;
-    //         }
-    //     }
-    //     return items;
-    // }
-
+    // struct to store book details. For each new title.
+    // bytes32(encryptedBookDataHash) - the actual content of the book
+    // bytes32(unencryptedBookDetailsCID) - cid to pull book cover and other details to show the world
+    // This is where the linkage of the contract with storage mechanisms happen
+    // address(publisherAddress) -  address of the content creator/publisher
+    // uint256(bookPrice) - price of the book that the creator asks for direct purchase
+    // uint256(transactionCut) - cut of further transactions on copies
+    // that the creator lay claim to. Stored as a percentage.
     struct BookInfo {
         string encryptedBookDataHash;
         string unencryptedBookDetailsCID;
@@ -80,6 +70,16 @@ contract prana is ERC721 {
     // ISBN is the key, its corresponding details is the value
     mapping(uint256 => BookInfo) internal booksInfo;
 
+    // struct for token details and transactions
+    // uint256(isbn) binds the token to the book it points to
+    // uint256(copyNumber) to count which copy of the book the token is
+    // so that people can brag about owning the 1st copy, 100th copy etc,
+    // add sell them at a premium
+    // uint256(resalePrice) is the price that tokenOwner asks to sell the token
+    // bool(isUpForResale) is to advertise that the token is for sale
+    // uint(rentingPrice) is the price for renting that the tokenOwner sets
+    // bool (isUpForRenting) is to advertise that the token is for renting
+    // address(rentee) so that the tokenOwner doesn't change and the token comes back after a while
     struct TokenDetails {
         uint256 isbn;
         uint256 copyNumber;
@@ -91,6 +91,7 @@ contract prana is ERC721 {
         bool isUpForRenting;
         address rentee;
         uint256 rentedAtBlock;
+        uint256 numberOfBlocksToRent;
     }
 
     // tokenId to TokenDetails mapping
@@ -141,6 +142,9 @@ contract prana is ERC721 {
         pranaHelperAddress = _pranaHelperAddress;
     }
 
+    // overriding _beforeTokenTransfer()
+    // this ensure good behavior whenever a token transfer happens with money involved.
+    // various actors get their cut before ownership is transfered
     function _beforeTokenTransfer(
         address from,
         address to,
@@ -237,6 +241,7 @@ contract prana is ERC721 {
         tokenData[tokenId].copyNumber = booksInfo[_isbn].bookSales;
         tokenData[tokenId].rentee = address(0);
         tokenData[tokenId].rentedAtBlock = 0;
+        tokenData[tokenId].numberOfBlocksToRent = 0;
 
         // the money goes to the plubisher's accountBalance.
         // accountBalance[booksInfo[_isbn].publisherAddress] += msg.value;
@@ -257,7 +262,9 @@ contract prana is ERC721 {
         );
         require(salePrice >= 0, "Price can't be negative");
         require(
-            tokenData[tokenId].rentedAtBlock + rentedBlocks < block.number,
+            tokenData[tokenId].rentedAtBlock +
+                tokenData[tokenId].numberOfBlocksToRent <
+                block.number,
             "The current renting period is not over yet"
         );
         tokenData[tokenId].resalePrice = salePrice;
@@ -287,7 +294,11 @@ contract prana is ERC721 {
     }
 
     // function to put a copy for renting, ownership doesn't change.
-    function putForRent(uint256 _newPrice, uint256 tokenId) public {
+    function putForRent(
+        uint256 _newPrice,
+        uint256 tokenId,
+        uint256 _numberofBlocksToRent
+    ) public {
         require(
             msg.sender == ownerOf(tokenId),
             "You are not this token's owner"
@@ -298,13 +309,16 @@ contract prana is ERC721 {
         );
         if (tokenData[tokenId].rentee != address(0)) {
             require(
-                block.number > tokenData[tokenId].rentedAtBlock + rentedBlocks,
+                block.number >
+                    tokenData[tokenId].rentedAtBlock +
+                        tokenData[tokenId].numberOfBlocksToRent,
                 "The renting period is not over yet to put it for renting again"
             );
         }
         tokenData[tokenId].rentingPrice = _newPrice;
         tokenData[tokenId].isUpForRenting = true;
         tokenData[tokenId].rentee = address(0); //No one's rented it as of now
+        tokenData[tokenId].numberOfBlocksToRent = _numberofBlocksToRent;
         upForRentingTokens.add(tokenId);
         emit TokenForRenting(_newPrice, tokenData[tokenId].isbn, tokenId);
     }
@@ -367,19 +381,38 @@ contract prana is ERC721 {
             if (tokenData[tokenId].rentee != address(0)) {
                 require(
                     block.number >
-                        tokenData[tokenId].rentedAtBlock + rentedBlocks,
+                        tokenData[tokenId].rentedAtBlock +
+                            tokenData[tokenId].numberOfBlocksToRent,
                     "The renting period is not over yet for you to consume the content"
                 );
             }
         } else if (tokenData[tokenId].rentee == msg.sender) {
             require(
-                block.number <= tokenData[tokenId].rentedAtBlock + rentedBlocks,
+                block.number <=
+                    tokenData[tokenId].rentedAtBlock +
+                        tokenData[tokenId].numberOfBlocksToRent,
                 "Your rental period has expired"
             );
         }
         return booksInfo[tokenData[tokenId].isbn].encryptedBookDataHash;
     }
 
+    // function to get the balances stored in contract back into the respective owners' account
+    // this is to mainly to reduce the number of transactions and transaction cost associated with it.
+    // WARNING: Extensive testing required before this can be finalized!
+    // function withdrawBalance() public payable{
+    //     require(accountBalance[msg.sender] > 0, "You don't have any balance to withdraw");
+    //     (msg.sender).transfer(accountBalance[msg.sender]);
+    //     accountBalance[msg.sender] = 0;
+    // }
+
+    //function to view balance
+    // function viewBalance() public view returns(uint256){
+    //     return accountBalance[msg.sender];
+    // }
+
+    //function to get book details with the tokenId
+    //returns CID of coverpic+bookname
     function viewTokenDetails(uint256 _tokenId)
         public
         view
@@ -411,6 +444,7 @@ contract prana is ERC721 {
             uint256,
             uint256,
             uint256,
+            uint256,
             bool
         )
     {
@@ -421,6 +455,7 @@ contract prana is ERC721 {
             tokenData[_tokenId].copyNumber,
             tokenData[_tokenId].rentedAtBlock,
             tokenData[_tokenId].rentingPrice,
+            tokenData[_tokenId].numberOfBlocksToRent,
             tokenData[_tokenId].isUpForRenting
         );
     }
