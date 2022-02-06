@@ -19,7 +19,7 @@ import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import axios from "axios";
 
-export const Reader = () => {
+export const Reader = ({ url }) => {
   const { bookDetails } = useContext(BookDetailsContext);
 
   const { user, Moralis } = useMoralis();
@@ -27,7 +27,7 @@ export const Reader = () => {
   const contractProcessor = useWeb3ExecuteFunction();
 
   let router = useRouter();
-  const { url, tokenId } = router.query;
+  const { tokenId } = router.query;
 
   const { fetch, isFetching, isLoading } = useMoralisQuery(
     BookAnnotations,
@@ -238,7 +238,7 @@ export const Reader = () => {
                     annotationDataFromChain
                   );
                   setSelections(annotationDataFromChain.annotations);
-                  annotationDataFromChain?.annotations.forEach((item) => {
+                  annotationDataFromChain?.annotations?.forEach((item) => {
                     addAnnotation(item.cfiRange);
                   });
                 } else {

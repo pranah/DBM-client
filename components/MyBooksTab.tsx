@@ -74,6 +74,41 @@ export default function MyBooksTab() {
     }
   };
 
+  const getViewRentingTokenDetails = async (tokenId) => {
+    let tokenDetailsForTokenId = null;
+
+    let options = {
+      contractAddress: pranaAddress,
+      functionName: "viewRentingTokenDetails",
+      abi: Prana.abi.filter((fn) => fn.name === "viewRentingTokenDetails"),
+      params: {
+        _tokenId: tokenId,
+      },
+    };
+    try {
+      await contractProcessor.fetch({
+        params: options,
+        onError: (err) => {
+          console.log(err);
+          throw err;
+        },
+        onSuccess: (result) => {
+          tokenDetailsForTokenId = {
+            isbn: result[0],
+            isUpForRenting: result[6],
+            rentingPrice: result[4],
+            cid: result[1],
+            numberOfBlocksToRent: result[5],
+            copyNumber: result[2],
+          };
+        },
+      });
+      return tokenDetailsForTokenId;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getTokens = async (tokenId) => {
     const options = {
       contractAddress: pranaAddress,
@@ -82,6 +117,7 @@ export default function MyBooksTab() {
       params: { _tokenId: tokenId },
     };
     try {
+      const viewRentTokenDetails = await getViewRentingTokenDetails(tokenId);
       await contractProcessor.fetch({
         params: options,
         onError: (err) => {
@@ -102,7 +138,8 @@ export default function MyBooksTab() {
               ...metaDataFromApi,
               tokenId,
               copyNumber: Number(viewTokenDetailsRespose[2]),
-              isUpForRenting: viewTokenDetailsRespose[4],
+              isUpForResale: viewTokenDetailsRespose[4],
+              isUpForRenting: viewRentTokenDetails.isUpForRenting,
             };
             setNfts((prevNft) => [...prevNft, item]);
             setLoadingState("loaded");
@@ -147,13 +184,16 @@ export default function MyBooksTab() {
       </Typography>
       <Grid container spacing={{ xs: 2, md: 3 }}>
         {nfts.map((book, index) => (
-          <Grid item xs={12} sm={12} md={4} lg={4} xl={3} key={index}>
+          <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
             <Card>
               <CardMedia
                 component="img"
                 height="300"
                 image={book.image}
                 alt="green iguana"
+                sx={{
+                  objectFit: "contain",
+                }}
               />
               <CardContent>
                 <Grid container justifyContent="space-between">
@@ -173,9 +213,7 @@ export default function MyBooksTab() {
               </CardContent>
 
               <CardActions>
-                <Link
-                  href={`/reader/${book.isbn}?url=${book.file}&tokenId=${book.tokenId}`}
-                >
+                <Link href={`/reader/${book.isbn}?tokenId=${book.tokenId}`}>
                   <Button
                     onClick={() => {
                       updateBookDetails({
@@ -191,10 +229,10 @@ export default function MyBooksTab() {
                     Read
                   </Button>
                 </Link>
-                {!book.isUpForRenting && (
+                {!book.isUpForResale && (
                   <ResellMyBook tokenId={book.tokenId} bookName={book.name} />
                 )}
-                {!book.isUpForRenting && (
+                {!book.isUpForResale && (
                   <RentMyBook tokenId={book.tokenId} bookName={book.name} />
                 )}
               </CardActions>

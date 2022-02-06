@@ -21,6 +21,8 @@ import { BookDetailsContext } from "../context/providers/book-details.provider";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import { RentMyBook } from "../components/RentMyBook";
 import { ordinal_suffix_of } from "../utils";
+import { ethers } from "ethers";
+import Web3Modal from "web3modal";
 
 export default function MyRentedBooksTab() {
   const {
@@ -122,77 +124,52 @@ export default function MyRentedBooksTab() {
     }
   };
 
-  const getTokens = async (tokenId) => {
-    const options = {
-      contractAddress: pranaAddress,
-      functionName: "viewTokenDetails",
-      abi: Prana.abi.filter((fn) => fn.name === "viewTokenDetails"),
-      params: { _tokenId: tokenId },
-    };
+  async function loadNFTs() {
     try {
-      await contractProcessor.fetch({
-        params: options,
-        onError: (err) => {
-          console.log(err);
-          throw err;
-        },
-        onSuccess: async (viewTokenDetailsRespose) => {
-          console.log("viewTokenDetailsRespose", viewTokenDetailsRespose);
-          // fetch meta data from ipfs
-          const ipfsMetaDataResponse = await axios.get(
-            viewTokenDetailsRespose[1]
-          );
-          if (ipfsMetaDataResponse.status !== 200) {
-            throw new Error("Something went wrong");
-          } else {
-            const metaDataFromApi = ipfsMetaDataResponse.data;
-            const item = {
-              ...metaDataFromApi,
-              tokenId,
-              copyNumber: Number(viewTokenDetailsRespose[2]),
-              isUpForRenting: viewTokenDetailsRespose[4],
-            };
-            setNfts((prevNft) => [...prevNft, item]);
-            setLoadingState(false);
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const blockNumber = await provider.getBlockNumber();
+
+      const countOfRentedBooks = await getNumberOfRentedTokens();
+      for (let index = 0; index < countOfRentedBooks; index++) {
+        const tokenId = await getTokenOfRenteeByIndex(index);
+        const rentingTokenDetails = await getRentingTokenDetails(tokenId);
+        if (rentingTokenDetails) {
+          // setNfts((prevNft) => [...prevNft, item]);
+          const bookDetails = {
+            isbn: rentingTokenDetails[0],
+            cid: rentingTokenDetails[1],
+            copyNumber: Number(rentingTokenDetails[2]),
+            rentedAtBlock: rentingTokenDetails[3],
+            rentingPrice: rentingTokenDetails[4],
+            numberOfBlocksToRent: rentingTokenDetails[5],
+            isUpForRenting: rentingTokenDetails[6],
+          };
+          const blockDifference = blockNumber - bookDetails.rentedAtBlock;
+          const numberOfBlocksRentedFor = bookDetails.numberOfBlocksToRent;
+          const isforRentingBasedOnBlockNumber =
+            blockDifference <= numberOfBlocksRentedFor;
+          if (isforRentingBasedOnBlockNumber) {
+            const ipfsMetaDataResponse = await axios.get(bookDetails.cid);
+            if (ipfsMetaDataResponse.status !== 200) {
+              throw new Error("Something went wrong");
+            } else {
+              const metaDataFromApi = ipfsMetaDataResponse.data;
+              const item = {
+                ...metaDataFromApi,
+                tokenId,
+                ...bookDetails,
+              };
+              setNfts((prevNft) => [...prevNft, item]);
+              setLoadingState(false);
+            }
           }
-        },
-      });
+        }
+      }
     } catch (error) {
       console.log("Error", error);
     }
-  };
-
-  async function loadNFTs() {
-    const countOfRentedBooks = await getNumberOfRentedTokens();
-    for (let index = 0; index < countOfRentedBooks; index++) {
-      const tokenId = await getTokenOfRenteeByIndex(index);
-      const rentingTokenDetails = await getRentingTokenDetails(tokenId);
-
-      // setNfts((prevNft) => [...prevNft, item]);
-      const bookDetails = {
-        isbn: rentingTokenDetails[0],
-        cid: rentingTokenDetails[1],
-        copyNumber: Number(rentingTokenDetails[2]),
-        rentedAtBlock: rentingTokenDetails[3],
-        rentingPrice: rentingTokenDetails[4],
-        numberOfBlocksToRent: rentingTokenDetails[5],
-        isUpForRenting: rentingTokenDetails[6],
-      };
-      const ipfsMetaDataResponse = await axios.get(bookDetails.cid);
-      if (ipfsMetaDataResponse.status !== 200) {
-        throw new Error("Something went wrong");
-      } else {
-        const metaDataFromApi = ipfsMetaDataResponse.data;
-        const item = {
-          ...metaDataFromApi,
-          tokenId,
-          ...bookDetails,
-        };
-        setNfts((prevNft) => [...prevNft, item]);
-        setLoadingState(false);
-      }
-    }
-    console.log("countOfRentedBooks", countOfRentedBooks);
   }
 
   if (loadingState && !nfts.length)
@@ -213,13 +190,16 @@ export default function MyRentedBooksTab() {
     >
       <Grid container spacing={{ xs: 2, md: 3 }}>
         {nfts.map((book, index) => (
-          <Grid item xs={12} sm={12} md={4} lg={4} xl={3} key={index}>
+          <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
             <Card>
               <CardMedia
                 component="img"
                 height="300"
                 image={book.image}
                 alt="green iguana"
+                sx={{
+                  objectFit: "contain",
+                }}
               />
               <CardContent>
                 <Grid container justifyContent="space-between">
@@ -236,10 +216,16 @@ export default function MyRentedBooksTab() {
                 <Typography variant="body2" color="text.secondary">
                   {book.description.substring(0, 50) + " ..."}
                 </Typography>
+                <Typography variant="subtitle2">
+                  Time retend in minutes{" "}
+                  {Number(book.numberOfBlocksToRent) / 20}
+                </Typography>
               </CardContent>
 
               <CardActions>
-                <Link href={`/read-rented/${book.isbn}?url=${book.file}`}>
+                <Link
+                  href={`/read-rented/${book.isbn}?tokenId=${book.tokenId}`}
+                >
                   <Button color="primary" variant="contained" size="large">
                     Read
                   </Button>

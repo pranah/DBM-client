@@ -40,15 +40,42 @@ export default function RentedBooks() {
 
   useEffect(async () => {
     if (isAuthenticated && isInitialized) {
-      console.log("these");
       getBooksForRent();
     } else {
       await authenticate();
     }
   }, [isInitialized, isAuthenticated]);
 
+  const findOwnerOfToken = async (tokenId) => {
+    let ownerAddress = null;
+    let options = {
+      contractAddress: pranaAddress,
+      functionName: "ownerOf",
+      abi: Prana.abi.filter((fn) => fn.name === "ownerOf"),
+      params: {
+        tokenId,
+      },
+    };
+    try {
+      await contractProcessor.fetch({
+        params: options,
+        onError: (err) => {
+          console.log(err);
+        },
+        onSuccess: (address) => {
+          ownerAddress = address;
+          console.log("Success");
+        },
+      });
+      return ownerAddress;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getViewRentingTokenDetails = async (tokenId) => {
     let tokenDetailsForTokenId = null;
+
     let options = {
       contractAddress: pranaAddress,
       functionName: "viewRentingTokenDetails",
@@ -67,9 +94,10 @@ export default function RentedBooks() {
         onSuccess: (result) => {
           tokenDetailsForTokenId = {
             isbn: result[0],
-            isUpForRenting: result[5],
+            isUpForRenting: result[6],
             rentingPrice: result[4],
             cid: result[1],
+            numberOfBlocksToRent: result[5],
             copyNumber: result[2],
           };
         },
@@ -125,27 +153,30 @@ export default function RentedBooks() {
           throw err;
         },
         onSuccess: async (result) => {
-          console.log("success", result);
           for (let index = 0; index < Number(result); index++) {
             try {
               const tokenIdForSale = await getTokenForRentingAtIndex(index);
               const tokenDetailsForTokenId = await getViewRentingTokenDetails(
                 tokenIdForSale
               );
-              const ipfsMetaDataResponse = await axios.get(
-                tokenDetailsForTokenId.cid
-              );
-              if (ipfsMetaDataResponse.status !== 200) {
-                throw new Error("Something went wrong");
-              } else {
-                const metaDataFromApi = ipfsMetaDataResponse.data;
-                const item = {
-                  ...metaDataFromApi,
-                  ...tokenDetailsForTokenId,
-                  tokenId: tokenIdForSale,
-                };
-                setBooksForRent((prevNft) => [...prevNft, item]);
-                setLoadingState(false);
+              const ownerAddress = await findOwnerOfToken(tokenIdForSale);
+
+              if (ownerAddress.toLowerCase() !== account.toLocaleLowerCase()) {
+                const ipfsMetaDataResponse = await axios.get(
+                  tokenDetailsForTokenId.cid
+                );
+                if (ipfsMetaDataResponse.status !== 200) {
+                  throw new Error("Something went wrong");
+                } else {
+                  const metaDataFromApi = ipfsMetaDataResponse.data;
+                  const item = {
+                    ...metaDataFromApi,
+                    ...tokenDetailsForTokenId,
+                    tokenId: tokenIdForSale,
+                  };
+                  setBooksForRent((prevNft) => [...prevNft, item]);
+                  setLoadingState(false);
+                }
               }
             } catch (error) {
               throw error;
@@ -159,7 +190,6 @@ export default function RentedBooks() {
   }
 
   const onRentButtonClick = async (book) => {
-    console.log("book", book);
     await authMeta();
 
     let options = {
@@ -208,13 +238,16 @@ export default function RentedBooks() {
       </Typography>
       <Grid container spacing={{ xs: 2, md: 3 }}>
         {booksForRent.map((book, index) => (
-          <Grid item xs={12} sm={12} md={4} lg={4} xl={3} key={index}>
+          <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
             <Card>
               <CardMedia
                 component="img"
                 height="300"
                 image={book.image}
                 alt="green iguana"
+                sx={{
+                  objectFit: "contain",
+                }}
               />
               <CardContent>
                 <Grid container justifyContent="space-between">
@@ -232,6 +265,10 @@ export default function RentedBooks() {
                 </Typography>
                 <Typography variant="subtitle1">
                   Price: {Moralis.Units.FromWei(book.rentingPrice, 18)} ETH
+                </Typography>
+                <Typography variant="subtitle2">
+                  Time retend in minutes{" "}
+                  {Number(book.numberOfBlocksToRent) / 20}
                 </Typography>
               </CardContent>
 

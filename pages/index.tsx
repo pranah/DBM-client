@@ -125,13 +125,19 @@ const Home: NextPage = () => {
         // columns={{ xs: 4, sm: 9, md: 12 }}
       >
         {nfts.map((book, index) => (
-          <Grid item xs={12} sm={12} md={4} lg={4} xl={3} key={index}>
+          <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
             <Card>
               <CardMedia
                 component="img"
                 height="300"
                 image={book.image}
                 alt="green iguana"
+                sx={{
+                  objectFit: "contain",
+                }}
+                sx={{
+                  objectFit: "contain",
+                }}
               />
               <CardContent>
                 <Typography variant="h6">{book.name}</Typography>
@@ -141,7 +147,7 @@ const Home: NextPage = () => {
                 </Typography>
 
                 <Typography variant="body2" color="text.secondary">
-                  {book.description.substring(0, 50) + " ..."}
+                  {book.description.substring(0, 25) + " ..."}
                 </Typography>
               </CardContent>
 
