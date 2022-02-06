@@ -6,6 +6,7 @@ import Web3Modal from "web3modal";
 
 import { pranaAddress } from "../../config";
 import Prana from "../../artifacts/contracts/prana.sol/prana.json";
+import Alert from "@mui/material/Alert";
 
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 function ReadPage() {
@@ -17,15 +18,22 @@ function ReadPage() {
 
   const consumeBookContent = useCallback(async () => {
     const web3Modal = new Web3Modal();
+    try {
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
 
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-
-    const pranaContract = new ethers.Contract(pranaAddress, Prana.abi, signer);
-    const url = await pranaContract.consumeContent(tokenId);
-    setUrl(url);
-    console.log("url", url);
+      const pranaContract = new ethers.Contract(
+        pranaAddress,
+        Prana.abi,
+        signer
+      );
+      const url = await pranaContract.consumeContent(tokenId);
+      setUrl(url);
+    } catch (error) {
+      console.log("error", error);
+      setError(error);
+    }
   }, [tokenId]);
 
   // const consumeBookContent = async () => {
@@ -59,7 +67,11 @@ function ReadPage() {
   return (
     <>
       {url && <Reader url={url} />}
-      {error && <span>Something went wrong</span>}
+      {error && (
+        <Alert sx={{ textTransform: "capitalize" }} severity="error">
+          {error.data.message || "Something went wrong contact the admin"}
+        </Alert>
+      )}
     </>
   );
 }

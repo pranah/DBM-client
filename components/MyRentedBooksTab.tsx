@@ -170,50 +170,52 @@ export default function MyRentedBooksTab() {
       maxWidth="xl"
     >
       <Grid container spacing={{ xs: 2, md: 3 }}>
-        {nfts.map((book, index) => (
-          <Grid item xs={12} sm={12} md={4} lg={4} xl={3} key={index}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="300"
-                image={book.image}
-                alt="green iguana"
-                sx={{
-                  objectFit: "contain",
-                }}
-              />
-              <CardContent>
-                <Grid container justifyContent="space-between">
-                  <Typography variant="h6">{book.name}</Typography>
-                  <Chip
-                    variant="outlined"
-                    color="info"
-                    label={`${ordinal_suffix_of(book.copyNumber)} Copy`}
-                  />
-                </Grid>
+        {nfts
+          .filter((book) => book.isUpForRenting)
+          .map((book, index) => (
+            <Grid item xs={12} sm={12} md={4} lg={4} xl={3} key={index}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  height="300"
+                  image={book.image}
+                  alt="green iguana"
+                  sx={{
+                    objectFit: "contain",
+                  }}
+                />
+                <CardContent>
+                  <Grid container justifyContent="space-between">
+                    <Typography variant="h6">{book.name}</Typography>
+                    <Chip
+                      variant="outlined"
+                      color="info"
+                      label={`${ordinal_suffix_of(book.copyNumber)} Copy`}
+                    />
+                  </Grid>
 
-                <Typography variant="caption">by {book.author}</Typography>
+                  <Typography variant="caption">by {book.author}</Typography>
 
-                <Typography variant="body2" color="text.secondary">
-                  {book.description.substring(0, 50) + " ..."}
-                </Typography>
-                <Typography variant="subtitle2">
-                  Rent Time in Minutes: {book.numberOfBlocksToRent / 60}
-                </Typography>
-              </CardContent>
+                  <Typography variant="body2" color="text.secondary">
+                    {book.description.substring(0, 50) + " ..."}
+                  </Typography>
+                  <Typography variant="subtitle2">
+                    Rent Time in Minutes: {book.numberOfBlocksToRent / 60}
+                  </Typography>
+                </CardContent>
 
-              <CardActions>
-                <Link
-                  href={`/read-rented/${book.isbn}?tokenId=${book.tokenId}`}
-                >
-                  <Button color="primary" variant="contained" size="large">
-                    Read
-                  </Button>
-                </Link>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
+                <CardActions>
+                  <Link
+                    href={`/read-rented/${book.isbn}?tokenId=${book.tokenId}`}
+                  >
+                    <Button color="primary" variant="contained" size="large">
+                      Read
+                    </Button>
+                  </Link>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
       </Grid>
     </Container>
   );
