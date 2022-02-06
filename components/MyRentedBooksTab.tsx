@@ -23,6 +23,7 @@ import { RentMyBook } from "../components/RentMyBook";
 import { ordinal_suffix_of } from "../utils";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
+import Loader from "./loader/Loader";
 
 export default function MyRentedBooksTab() {
   const {
@@ -37,7 +38,7 @@ export default function MyRentedBooksTab() {
   const contractProcessor = useWeb3ExecuteFunction();
 
   const [nfts, setNfts] = useState([]);
-  const [loadingState, setLoadingState] = useState(true);
+  const [loadingState, setLoadingState] = useState("not-loaded");
 
   useEffect(async () => {
     if (isAuthenticated && isInitialized) {
@@ -162,17 +163,19 @@ export default function MyRentedBooksTab() {
                 ...bookDetails,
               };
               setNfts((prevNft) => [...prevNft, item]);
-              setLoadingState(false);
             }
           }
         }
       }
     } catch (error) {
       console.log("Error", error);
+    } finally {
+      setLoadingState("loaded");
     }
   }
+  if (loadingState !== "loaded") return <Loader />;
 
-  if (loadingState && !nfts.length)
+  if (loadingState === "loaded" && !nfts.length)
     return (
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
         <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>

@@ -100,7 +100,7 @@ const Home: NextPage = () => {
     loadNFTs();
   }
   if (loadingState !== "loaded") return <Loader />;
-  if (loadingState !== "loaded" && !nfts.length)
+  if (loadingState === "loaded" && !nfts.length)
     return (
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
         <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>

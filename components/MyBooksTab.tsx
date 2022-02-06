@@ -163,7 +163,7 @@ export default function MyBooksTab() {
     });
   }
   if (loadingState !== "loaded") return <Loader />;
-  if (loadingState !== "loaded" && !nfts.length)
+  if (loadingState === "loaded" && !nfts.length)
     return (
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
         <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>
@@ -230,10 +230,18 @@ export default function MyBooksTab() {
                   </Button>
                 </Link>
                 {!book.isUpForResale && (
-                  <ResellMyBook tokenId={book.tokenId} bookName={book.name} />
+                  <ResellMyBook
+                    tokenId={book.tokenId}
+                    bookName={book.name}
+                    setLoadingState={setLoadingState}
+                  />
                 )}
                 {!book.isUpForResale && (
-                  <RentMyBook tokenId={book.tokenId} bookName={book.name} />
+                  <RentMyBook
+                    tokenId={book.tokenId}
+                    bookName={book.name}
+                    loadNFTs={loadNFTs}
+                  />
                 )}
               </CardActions>
             </Card>

@@ -16,6 +16,7 @@ import { pranaAddress, pranaHelperAddress } from "../config";
 
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
+import Loader from "../components/loader/Loader";
 
 export default function RentedBooks() {
   const {
@@ -30,7 +31,7 @@ export default function RentedBooks() {
   const contractProcessor = useWeb3ExecuteFunction();
 
   const [booksForRent, setBooksForRent] = useState([]);
-  const [loadingState, setLoadingState] = useState(true);
+  const [loadingState, setLoadingState] = useState("not-loaded");
 
   const authMeta = useCallback(async () => {
     if (!isAuthenticated) {
@@ -175,7 +176,7 @@ export default function RentedBooks() {
                     tokenId: tokenIdForSale,
                   };
                   setBooksForRent((prevNft) => [...prevNft, item]);
-                  setLoadingState(false);
+                  setLoadingState("loaded");
                 }
               }
             } catch (error) {
@@ -190,6 +191,8 @@ export default function RentedBooks() {
   }
 
   const onRentButtonClick = async (book) => {
+    setLoadingState("not-loaded");
+
     await authMeta();
 
     let options = {
@@ -214,10 +217,13 @@ export default function RentedBooks() {
       });
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingState("loaded");
     }
   };
+  if (loadingState !== "loaded") return <Loader />;
 
-  if (loadingState && !booksForRent.length)
+  if (loadingState === "loaded" && !booksForRent.length)
     return (
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
         <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>

@@ -22,6 +22,7 @@ import PranaHelper from "../artifacts/contracts/pranaHelper.sol/pranaHelper.json
 
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import { ordinal_suffix_of } from "../utils";
+import Loader from "../components/loader/Loader";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
@@ -127,6 +128,8 @@ const Home: NextPage = () => {
   }
 
   async function buyNft(book) {
+    setLoadingState("not-loaded");
+
     await authMeta();
     let options = {
       contractAddress: pranaHelperAddress,
@@ -150,9 +153,13 @@ const Home: NextPage = () => {
       });
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingState("loaded");
     }
   }
-  if (loadingState !== "loaded" && !nfts.length)
+  if (loadingState !== "loaded") return <Loader />;
+
+  if (loadingState === "loaded" && !nfts.length)
     return (
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
         <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>

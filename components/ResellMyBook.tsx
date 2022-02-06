@@ -11,7 +11,7 @@ import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 
-export function ResellMyBook({ bookName, tokenId }) {
+export function ResellMyBook({ bookName, tokenId, setLoadingState }) {
   const [open, setOpen] = React.useState(false);
   const [myBookValueInEth, setMyBookValueInEth] = React.useState(0);
 
@@ -27,6 +27,7 @@ export function ResellMyBook({ bookName, tokenId }) {
   };
 
   async function resellNFT() {
+    setLoadingState("not-loaded");
     const resalePrice = Moralis.Units.ETH(myBookValueInEth);
     let options = {
       contractAddress: pranaAddress,
@@ -51,6 +52,8 @@ export function ResellMyBook({ bookName, tokenId }) {
       });
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingState("loaded");
     }
   }
 

@@ -13,7 +13,7 @@ import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { FormLabel, TextField } from "@mui/material";
 import Loader from "./loader/Loader";
 
-export function RentMyBook({ bookName, tokenId }) {
+export function RentMyBook({ bookName, tokenId, loadNFTs }) {
   const [open, setOpen] = React.useState(false);
   const [myBookValueInEth, setMyBookValueInEth] = React.useState(0);
   const [numberofBlocksToRent, setNumberOfBlocksToRent] = React.useState(0);
@@ -61,6 +61,8 @@ export function RentMyBook({ bookName, tokenId }) {
     } catch (error) {
       setIsLoading(false);
       console.log(error);
+    } finally {
+      loadNFTs();
     }
   }
 
