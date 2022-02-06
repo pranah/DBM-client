@@ -40,7 +40,6 @@ export default function RentedBooks() {
 
   useEffect(async () => {
     if (isAuthenticated && isInitialized) {
-      console.log("these");
       getBooksForRent();
     } else {
       await authenticate();
@@ -49,6 +48,7 @@ export default function RentedBooks() {
 
   const getViewRentingTokenDetails = async (tokenId) => {
     let tokenDetailsForTokenId = null;
+
     let options = {
       contractAddress: pranaAddress,
       functionName: "viewRentingTokenDetails",
@@ -67,9 +67,10 @@ export default function RentedBooks() {
         onSuccess: (result) => {
           tokenDetailsForTokenId = {
             isbn: result[0],
-            isUpForRenting: result[5],
+            isUpForRenting: result[6],
             rentingPrice: result[4],
             cid: result[1],
+            numberOfBlocksToRent: result[5],
             copyNumber: result[2],
           };
         },
@@ -215,6 +216,9 @@ export default function RentedBooks() {
                 height="300"
                 image={book.image}
                 alt="green iguana"
+                sx={{
+                  objectFit: "contain",
+                }}
               />
               <CardContent>
                 <Grid container justifyContent="space-between">
@@ -232,6 +236,9 @@ export default function RentedBooks() {
                 </Typography>
                 <Typography variant="subtitle1">
                   Price: {Moralis.Units.FromWei(book.rentingPrice, 18)} ETH
+                </Typography>
+                <Typography variant="subtitle2">
+                  Rent Time in Minutes: {book.numberOfBlocksToRent / 60}
                 </Typography>
               </CardContent>
 

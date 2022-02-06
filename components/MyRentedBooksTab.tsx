@@ -122,52 +122,11 @@ export default function MyRentedBooksTab() {
     }
   };
 
-  const getTokens = async (tokenId) => {
-    const options = {
-      contractAddress: pranaAddress,
-      functionName: "viewTokenDetails",
-      abi: Prana.abi.filter((fn) => fn.name === "viewTokenDetails"),
-      params: { _tokenId: tokenId },
-    };
-    try {
-      await contractProcessor.fetch({
-        params: options,
-        onError: (err) => {
-          console.log(err);
-          throw err;
-        },
-        onSuccess: async (viewTokenDetailsRespose) => {
-          console.log("viewTokenDetailsRespose", viewTokenDetailsRespose);
-          // fetch meta data from ipfs
-          const ipfsMetaDataResponse = await axios.get(
-            viewTokenDetailsRespose[1]
-          );
-          if (ipfsMetaDataResponse.status !== 200) {
-            throw new Error("Something went wrong");
-          } else {
-            const metaDataFromApi = ipfsMetaDataResponse.data;
-            const item = {
-              ...metaDataFromApi,
-              tokenId,
-              copyNumber: Number(viewTokenDetailsRespose[2]),
-              isUpForRenting: viewTokenDetailsRespose[4],
-            };
-            setNfts((prevNft) => [...prevNft, item]);
-            setLoadingState(false);
-          }
-        },
-      });
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
-
   async function loadNFTs() {
     const countOfRentedBooks = await getNumberOfRentedTokens();
     for (let index = 0; index < countOfRentedBooks; index++) {
       const tokenId = await getTokenOfRenteeByIndex(index);
       const rentingTokenDetails = await getRentingTokenDetails(tokenId);
-
       // setNfts((prevNft) => [...prevNft, item]);
       const bookDetails = {
         isbn: rentingTokenDetails[0],
@@ -192,7 +151,6 @@ export default function MyRentedBooksTab() {
         setLoadingState(false);
       }
     }
-    console.log("countOfRentedBooks", countOfRentedBooks);
   }
 
   if (loadingState && !nfts.length)
@@ -220,6 +178,9 @@ export default function MyRentedBooksTab() {
                 height="300"
                 image={book.image}
                 alt="green iguana"
+                sx={{
+                  objectFit: "contain",
+                }}
               />
               <CardContent>
                 <Grid container justifyContent="space-between">
@@ -236,10 +197,15 @@ export default function MyRentedBooksTab() {
                 <Typography variant="body2" color="text.secondary">
                   {book.description.substring(0, 50) + " ..."}
                 </Typography>
+                <Typography variant="subtitle2">
+                  Rent Time in Minutes: {book.numberOfBlocksToRent / 60}
+                </Typography>
               </CardContent>
 
               <CardActions>
-                <Link href={`/read-rented/${book.isbn}?url=${book.file}`}>
+                <Link
+                  href={`/read-rented/${book.isbn}?tokenId=${book.tokenId}`}
+                >
                   <Button color="primary" variant="contained" size="large">
                     Read
                   </Button>

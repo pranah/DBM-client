@@ -127,6 +127,12 @@ const Home: NextPage = () => {
                 height="300"
                 image={book.image}
                 alt="green iguana"
+                sx={{
+                  objectFit: "contain",
+                }}
+                sx={{
+                  objectFit: "contain",
+                }}
               />
               <CardContent>
                 <Typography variant="h6">{book.name}</Typography>
