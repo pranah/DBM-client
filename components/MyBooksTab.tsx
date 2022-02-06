@@ -183,7 +183,7 @@ export default function MyBooksTab() {
       </Typography>
       <Grid container spacing={{ xs: 2, md: 3 }}>
         {nfts.map((book, index) => (
-          <Grid item xs={12} sm={12} md={4} lg={4} xl={3} key={index}>
+          <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
             <Card>
               <CardMedia
                 component="img"

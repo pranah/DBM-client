@@ -32,7 +32,7 @@ export function RentMyBook({ bookName, tokenId }) {
 
   async function rentNFT() {
     const rentPrice = Moralis.Units.ETH(myBookValueInEth);
-    const _numberofBlocksToRent = numberofBlocksToRent;
+    const _numberofBlocksToRent = numberofBlocksToRent * 20;
     setIsLoading(true);
     let options = {
       contractAddress: pranaAddress,
@@ -101,8 +101,8 @@ export function RentMyBook({ bookName, tokenId }) {
             fullWidth
             // helperText="Enter a value greater than 0"
             sx={{ mt: 2 }}
-            id="number-of-blocks"
-            label="Number of blocks"
+            id="time-in-minutes"
+            label="Time in minutes"
             variant="standard"
             type="number"
             value={numberofBlocksToRent}
