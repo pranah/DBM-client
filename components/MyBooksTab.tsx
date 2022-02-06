@@ -142,7 +142,6 @@ export default function MyBooksTab() {
               isUpForRenting: viewRentTokenDetails.isUpForRenting,
             };
             setNfts((prevNft) => [...prevNft, item]);
-            setLoadingState("loaded");
           }
         },
       });
@@ -161,6 +160,7 @@ export default function MyBooksTab() {
     tokens.forEach((token) => {
       getTokens(token.token_id);
     });
+    setLoadingState("loaded");
   }
   if (loadingState !== "loaded") return <Loader />;
   if (loadingState === "loaded" && !nfts.length)

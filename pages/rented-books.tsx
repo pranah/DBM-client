@@ -176,7 +176,6 @@ export default function RentedBooks() {
                     tokenId: tokenIdForSale,
                   };
                   setBooksForRent((prevNft) => [...prevNft, item]);
-                  setLoadingState("loaded");
                 }
               }
             } catch (error) {
@@ -185,6 +184,8 @@ export default function RentedBooks() {
           }
         },
       });
+
+      setLoadingState("loaded");
     } catch (error) {
       console.log(error);
     }

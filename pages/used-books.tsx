@@ -81,7 +81,6 @@ const Home: NextPage = () => {
             };
             console.log(item);
             setNfts((prevNft) => [...prevNft, item]);
-            setLoadingState("loaded");
           }
         },
       });
@@ -125,6 +124,8 @@ const Home: NextPage = () => {
           getTokenList(resp, owner);
         },
       });
+
+    setLoadingState("loaded");
   }
 
   async function buyNft(book) {
@@ -153,9 +154,8 @@ const Home: NextPage = () => {
       });
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoadingState("loaded");
     }
+    setLoadingState("loaded");
   }
   if (loadingState !== "loaded") return <Loader />;
 
