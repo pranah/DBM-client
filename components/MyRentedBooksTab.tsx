@@ -217,7 +217,8 @@ export default function MyRentedBooksTab() {
                   {book.description.substring(0, 50) + " ..."}
                 </Typography>
                 <Typography variant="subtitle2">
-                  No of blocks you can rent for {book.numberOfBlocksToRent}
+                  Time retend in minutes{" "}
+                  {Number(book.numberOfBlocksToRent) / 20}
                 </Typography>
               </CardContent>
 
