@@ -101,7 +101,9 @@ const Publish: NextPage = () => {
       const metaDataJsonString = JSON.stringify(metaDataForIpfs);
       const metaDataIpfsIResp = await saveFile(
         "data.json",
-        { base64: window.btoa(metaDataJsonString) },
+        {
+          base64: window.btoa(unescape(encodeURIComponent(metaDataJsonString))),
+        },
         { saveIPFS: true }
       );
       const url = metaDataIpfsIResp._ipfs;
