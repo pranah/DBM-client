@@ -25,7 +25,7 @@ const inputFeilds = [
   { name: "author", label: "Author Name", type: "text" },
   { name: "publisher", label: "Publisher Name", type: "text" },
   { name: "isbn", label: "ISBN or Prana Identifier Number", type: "number" },
-  { name: "price", label: "Price of the book in Eth", type: "number" },
+  { name: "price", label: "Price of the book in Matic", type: "number" },
   {
     name: "royalty",
     label: "Royalty for the Author/Publisher",
