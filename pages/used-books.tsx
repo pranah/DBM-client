@@ -207,7 +207,7 @@ const Home: NextPage = () => {
                 </Grid>
                 <Typography variant="caption">by {book.author}</Typography>
                 <Typography variant="subtitle1">
-                  Price: {Moralis.Units.FromWei(book.resalePrice, 18)} ETH
+                  Price: {Moralis.Units.FromWei(book.resalePrice, 18)} Matic
                 </Typography>
 
                 <Typography variant="body2" color="text.secondary">

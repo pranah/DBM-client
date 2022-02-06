@@ -143,7 +143,7 @@ const Home: NextPage = () => {
                 <Typography variant="h6">{book.name}</Typography>
                 <Typography variant="caption">by {book.author}</Typography>
                 <Typography variant="subtitle1">
-                  Price: {book.price} ETH
+                  Price: {book.price} Matic
                 </Typography>
 
                 <Typography variant="body2" color="text.secondary">

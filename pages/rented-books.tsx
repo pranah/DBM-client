@@ -270,7 +270,7 @@ export default function RentedBooks() {
                   {book.description.substring(0, 50) + " ..."}
                 </Typography>
                 <Typography variant="subtitle1">
-                  Price: {Moralis.Units.FromWei(book.rentingPrice, 18)} ETH
+                  Price: {Moralis.Units.FromWei(book.rentingPrice, 18)} Matic
                 </Typography>
                 <Typography variant="subtitle2">
                   Time retend in minutes{" "}
