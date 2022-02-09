@@ -2,31 +2,19 @@ import { useEffect, useState, useContext, useCallback } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import CardMedia from "@mui/material/CardMedia";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Link from "next/link";
 import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
-import { ordinal_suffix_of } from "../utils";
-import { pranaAddress, pranaHelperAddress } from "../config";
+import { pranaAddress } from "../config";
 
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import Loader from "../components/loader/Loader";
+import { BookCard } from "../components/BookCard";
 
 export default function RentedBooks() {
-  const {
-    Moralis,
-    isAuthenticated,
-    authenticate,
-    isInitialized,
-    chainId,
-    account,
-  } = useMoralis();
+  const { isAuthenticated, authenticate, isInitialized, account } =
+    useMoralis();
 
   const contractProcessor = useWeb3ExecuteFunction();
 
@@ -97,6 +85,7 @@ export default function RentedBooks() {
             isbn: result[0],
             isUpForRenting: result[6],
             rentingPrice: result[4],
+            displayPrice: result[4],
             cid: result[1],
             numberOfBlocksToRent: result[5],
             copyNumber: result[2],
@@ -246,40 +235,9 @@ export default function RentedBooks() {
       <Grid container spacing={{ xs: 2, md: 3 }}>
         {booksForRent.map((book, index) => (
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="300"
-                image={book.image}
-                alt="green iguana"
-                sx={{
-                  objectFit: "contain",
-                }}
-              />
-              <CardContent>
-                <Grid container justifyContent="space-between">
-                  <Typography variant="h6">{book.name}</Typography>
-                  <Chip
-                    variant="outlined"
-                    color="info"
-                    label={`${ordinal_suffix_of(book.copyNumber)} Copy`}
-                  />
-                </Grid>
-                <Typography variant="caption">by {book.author}</Typography>
-
-                <Typography variant="body2" color="text.secondary">
-                  {book.description.substring(0, 50) + " ..."}
-                </Typography>
-                <Typography variant="subtitle1">
-                  Price: {Moralis.Units.FromWei(book.rentingPrice, 18)} Matic
-                </Typography>
-                <Typography variant="subtitle2">
-                  Renting time in minutes{" "}
-                  {Number(book.numberOfBlocksToRent) / 20}
-                </Typography>
-              </CardContent>
-
-              <CardActions>
+            <BookCard
+              book={book}
+              actionButtons={() => (
                 <Button
                   onClick={() => onRentButtonClick(book)}
                   color="primary"
@@ -288,8 +246,9 @@ export default function RentedBooks() {
                 >
                   Rent
                 </Button>
-              </CardActions>
-            </Card>
+              )}
+              isPriceInWei
+            />
           </Grid>
         ))}
       </Grid>

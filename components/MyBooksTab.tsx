@@ -2,15 +2,10 @@ import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import CardMedia from "@mui/material/CardMedia";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
 
 import { ResellMyBook } from "../components/ResellMyBook";
 
@@ -20,8 +15,8 @@ import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { BookDetailsContext } from "../context/providers/book-details.provider";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import { RentMyBook } from "../components/RentMyBook";
-import { ordinal_suffix_of } from "../utils";
 import Loader from "./loader/Loader";
+import { BookCard } from "./BookCard";
 
 export default function MyBooksTab() {
   const {
@@ -32,7 +27,7 @@ export default function MyBooksTab() {
     chainId,
     account,
   } = useMoralis();
-  console.log("---------", isAuthenticated, isInitialized, chainId, account);
+
   const contractProcessor = useWeb3ExecuteFunction();
 
   const [nfts, setNfts] = useState([]);
@@ -41,7 +36,6 @@ export default function MyBooksTab() {
 
   useEffect(async () => {
     if (isAuthenticated && isInitialized) {
-      setNfts([]);
       loadNFTs();
     } else {
       await authenticate();
@@ -151,6 +145,8 @@ export default function MyBooksTab() {
   };
 
   async function loadNFTs() {
+    setLoadingState("not-loaded");
+    setNfts([]);
     const nftTokens = await Moralis.Web3API.account.getNFTsForContract({
       chain: chainId,
       address: account,
@@ -185,66 +181,47 @@ export default function MyBooksTab() {
       <Grid container spacing={{ xs: 2, md: 3 }}>
         {nfts.map((book, index) => (
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="300"
-                image={book.image}
-                alt="green iguana"
-                sx={{
-                  objectFit: "contain",
-                }}
-              />
-              <CardContent>
-                <Grid container justifyContent="space-between">
-                  <Typography variant="h6">{book.name}</Typography>
-                  <Chip
-                    variant="outlined"
-                    color="info"
-                    label={`${ordinal_suffix_of(book.copyNumber)} Copy`}
-                  />
-                </Grid>
-
-                <Typography variant="caption">by {book.author}</Typography>
-
-                <Typography variant="body2" color="text.secondary">
-                  {book.description.substring(0, 50) + " ..."}
-                </Typography>
-              </CardContent>
-
-              <CardActions>
-                <Link href={`/reader/${book.isbn}?tokenId=${book.tokenId}`}>
-                  <Button
-                    onClick={() => {
-                      updateBookDetails({
-                        isbn: book.isbn,
-                        tokenId: book.tokenId,
-                        bookUrl: book.file,
-                      });
-                    }}
-                    color="primary"
-                    variant="contained"
-                    size="large"
-                  >
-                    Read
-                  </Button>
-                </Link>
-                {!book.isUpForResale && (
-                  <ResellMyBook
-                    tokenId={book.tokenId}
-                    bookName={book.name}
-                    setLoadingState={setLoadingState}
-                  />
-                )}
-                {!book.isUpForResale && (
-                  <RentMyBook
-                    tokenId={book.tokenId}
-                    bookName={book.name}
-                    loadNFTs={loadNFTs}
-                  />
-                )}
-              </CardActions>
-            </Card>
+            <BookCard
+              book={book}
+              actionButtons={() => {
+                return (
+                  <>
+                    {" "}
+                    <Link href={`/reader/${book.isbn}?tokenId=${book.tokenId}`}>
+                      <Button
+                        onClick={() => {
+                          updateBookDetails({
+                            isbn: book.isbn,
+                            tokenId: book.tokenId,
+                            bookUrl: book.file,
+                          });
+                        }}
+                        color="primary"
+                        variant="contained"
+                        size="large"
+                      >
+                        Read
+                      </Button>
+                    </Link>
+                    {!book.isUpForResale && !book.isUpForRenting && (
+                      <ResellMyBook
+                        tokenId={book.tokenId}
+                        bookName={book.name}
+                        setLoadingState={setLoadingState}
+                        loadNFTs={loadNFTs}
+                      />
+                    )}
+                    {!book.isUpForResale && !book.isUpForRenting && (
+                      <RentMyBook
+                        tokenId={book.tokenId}
+                        bookName={book.name}
+                        loadNFTs={loadNFTs}
+                      />
+                    )}
+                  </>
+                );
+              }}
+            />
           </Grid>
         ))}
       </Grid>
