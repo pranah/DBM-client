@@ -2,28 +2,19 @@ import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import CardMedia from "@mui/material/CardMedia";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
-
-import { ResellMyBook } from "../components/ResellMyBook";
 
 import { pranaAddress } from "../config";
 
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
-import { BookDetailsContext } from "../context/providers/book-details.provider";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
-import { RentMyBook } from "../components/RentMyBook";
-import { ordinal_suffix_of } from "../utils";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import Loader from "./loader/Loader";
+import { BookCard } from "./BookCard";
 
 export default function MyRentedBooksTab() {
   const {
@@ -194,38 +185,9 @@ export default function MyRentedBooksTab() {
       <Grid container spacing={{ xs: 2, md: 3 }}>
         {nfts.map((book, index) => (
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="300"
-                image={book.image}
-                alt="green iguana"
-                sx={{
-                  objectFit: "contain",
-                }}
-              />
-              <CardContent>
-                <Grid container justifyContent="space-between">
-                  <Typography variant="h6">{book.name}</Typography>
-                  <Chip
-                    variant="outlined"
-                    color="info"
-                    label={`${ordinal_suffix_of(book.copyNumber)} Copy`}
-                  />
-                </Grid>
-
-                <Typography variant="caption">by {book.author}</Typography>
-
-                <Typography variant="body2" color="text.secondary">
-                  {book.description.substring(0, 50) + " ..."}
-                </Typography>
-                <Typography variant="subtitle2">
-                  Renting time in minutes
-                  {Number(book.numberOfBlocksToRent) / 20}
-                </Typography>
-              </CardContent>
-
-              <CardActions>
+            <BookCard
+              book={book}
+              actionButtons={() => (
                 <Link
                   href={`/read-rented/${book.isbn}?tokenId=${book.tokenId}`}
                 >
@@ -233,8 +195,8 @@ export default function MyRentedBooksTab() {
                     Read
                   </Button>
                 </Link>
-              </CardActions>
-            </Card>
+              )}
+            />
           </Grid>
         ))}
       </Grid>

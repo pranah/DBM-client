@@ -12,7 +12,7 @@ import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { TextField } from "@mui/material";
 
-export function ResellMyBook({ bookName, tokenId, setLoadingState }) {
+export function ResellMyBook({ bookName, tokenId, setLoadingState, loadNFTs }) {
   const [open, setOpen] = React.useState(false);
   const [myBookValueInEth, setMyBookValueInEth] = React.useState(0);
 
@@ -55,6 +55,7 @@ export function ResellMyBook({ bookName, tokenId, setLoadingState }) {
       console.log(error);
     } finally {
       setLoadingState("loaded");
+      loadNFTs();
     }
   }
 
