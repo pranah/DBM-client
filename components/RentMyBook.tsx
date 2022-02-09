@@ -69,12 +69,7 @@ export function RentMyBook({ bookName, tokenId, loadNFTs }) {
   return (
     <div>
       {isLoading && <Loader />}
-      <Button
-        size="large"
-        sx={{ ml: 1 }}
-        variant="outlined"
-        onClick={handleClickOpen}
-      >
+      <Button size="large" variant="outlined" onClick={handleClickOpen}>
         Rent{" "}
       </Button>
       <Dialog
