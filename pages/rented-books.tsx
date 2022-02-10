@@ -12,9 +12,18 @@ import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import Loader from "../components/loader/Loader";
 import { BookCard } from "../components/BookCard";
 
+import useMoralisInit from "../hooks/useMoralisInit";
+
 export default function RentedBooks() {
-  const { isAuthenticated, authenticate, isInitialized, account } =
-    useMoralis();
+  const {
+    Moralis,
+    isAuthenticated,
+    authenticate,
+    isInitialized,
+    chainId,
+    account,
+    isWeb3Enabled,
+  } = useMoralisInit();
 
   const contractProcessor = useWeb3ExecuteFunction();
 
@@ -23,17 +32,20 @@ export default function RentedBooks() {
 
   const authMeta = useCallback(async () => {
     if (!isAuthenticated) {
+      console.log("rented------authenticate");
       await authenticate();
     }
   }, [authenticate]);
 
-  useEffect(async () => {
-    if (isAuthenticated && isInitialized) {
+  useEffect(() => {
+    if (isAuthenticated && isInitialized && isWeb3Enabled) {
       getBooksForRent();
     } else {
-      await authenticate();
+      console.log("rented2------authenticate");
+
+      authenticate();
     }
-  }, [isInitialized, isAuthenticated]);
+  }, [isInitialized, isAuthenticated, isWeb3Enabled]);
 
   const findOwnerOfToken = async (tokenId) => {
     let ownerAddress = null;

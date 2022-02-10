@@ -14,18 +14,20 @@ import { pranaAddress } from "../../config";
 import Prana from "../../artifacts/contracts/prana.sol/prana.json";
 import { Publish as PublishForm } from "../../components/PublishForm";
 import Loader from "../../components/loader/Loader";
+import useMoralisInit from "../../hooks/useMoralisInit";
 
 const Publish: NextPage = () => {
   const [fileUrl, setFileUrl] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
   const { saveFile, isUploading } = useMoralisFile();
-  const { Moralis, isAuthenticated, authenticate } = useMoralis();
+  const { Moralis, isAuthenticated, authenticate } = useMoralisInit();
   const contractProcessor = useWeb3ExecuteFunction();
 
   const authMeta = async () => {
     if (!isAuthenticated) {
-      await authenticate({ provider: "metamask" });
+      console.log("publish------authenticate");
+      await authenticate();
     }
   };
 

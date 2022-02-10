@@ -17,13 +17,19 @@ import PranaHelper from "../artifacts/contracts/pranaHelper.sol/pranaHelper.json
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import Loader from "../components/loader/Loader";
 import { BookCard } from "../components/BookCard";
+import useMoralisInit from "../hooks/useMoralisInit";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
 }
 const UsedBooks: NextPage = () => {
-  const { Moralis, isAuthenticated, authenticate, isInitialized } =
-    useMoralis();
+  const {
+    Moralis,
+    isAuthenticated,
+    authenticate,
+    isInitialized,
+    isWeb3Enabled,
+  } = useMoralisInit();
   const contractProcessor = useWeb3ExecuteFunction();
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
@@ -35,12 +41,12 @@ const UsedBooks: NextPage = () => {
   }, [authenticate]);
 
   useEffect(() => {
-    if (isAuthenticated && isInitialized) {
+    if (isAuthenticated && isInitialized && isWeb3Enabled) {
       loadNFTs();
     } else {
       authMeta();
     }
-  }, [isInitialized, isAuthenticated]);
+  }, [isInitialized, isAuthenticated, isWeb3Enabled]);
   const getTokens = async (tokenId) => {
     const options = {
       contractAddress: pranaAddress,
@@ -84,6 +90,8 @@ const UsedBooks: NextPage = () => {
     }
   };
   const getTokenList = async (tokenCount, owner) => {
+    console.log("getTokenList", tokenCount);
+
     for (let index = 0; index < tokenCount; index++) {
       const options = {
         contractAddress: pranaAddress,
@@ -110,15 +118,14 @@ const UsedBooks: NextPage = () => {
       abi: Prana.abi.filter((fn) => fn.name === "numberofTokensForResale"),
       params: { owner },
     };
-    if (isAuthenticated)
-      await contractProcessor.fetch({
-        params: options,
-        onSuccess: (resp) => {
-          console.log("resp", resp);
-          getTokenList(resp, owner);
-        },
-      });
-
+    console.log("isAuthenticatedloadNFTs", isAuthenticated);
+    await contractProcessor.fetch({
+      params: options,
+      onSuccess: (resp) => {
+        console.log("resp", resp);
+        getTokenList(resp, owner);
+      },
+    });
     setLoadingState("loaded");
   }
 

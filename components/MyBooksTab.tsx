@@ -10,10 +10,10 @@ import Typography from "@mui/material/Typography";
 import { ResellMyBook } from "../components/ResellMyBook";
 
 import { pranaAddress } from "../config";
-
+import useMoralisInit from "../hooks/useMoralisInit";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { BookDetailsContext } from "../context/providers/book-details.provider";
-import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
+import { useWeb3ExecuteFunction } from "react-moralis";
 import { RentMyBook } from "../components/RentMyBook";
 import Loader from "./loader/Loader";
 import { BookCard } from "./BookCard";
@@ -26,21 +26,26 @@ export default function MyBooksTab() {
     isInitialized,
     chainId,
     account,
-  } = useMoralis();
-
+    isWeb3Enabled,
+  } = useMoralisInit();
   const contractProcessor = useWeb3ExecuteFunction();
 
   const [nfts, setNfts] = useState([]);
-  const [loadingState, setLoadingState] = useState("not-loaded");
+  const [loadingState, setLoadingState] = useState("loaded");
   const { updateBookDetails } = useContext(BookDetailsContext);
 
-  useEffect(async () => {
-    if (isAuthenticated && isInitialized) {
+  useEffect(() => {
+    if (isAuthenticated && isInitialized && isWeb3Enabled) {
+      console.log("mybooks------loadNFTs");
+
+      setNfts([]);
       loadNFTs();
     } else {
-      await authenticate();
+      console.log("mybooks------authenticate");
+
+      authenticate();
     }
-  }, [isInitialized, isAuthenticated]);
+  }, [isInitialized, isAuthenticated, account, isWeb3Enabled]);
 
   const getNumberOfRentedTokens = async () => {
     let rentedTokenCount = null;
@@ -79,83 +84,86 @@ export default function MyBooksTab() {
         _tokenId: tokenId,
       },
     };
-    try {
-      await contractProcessor.fetch({
-        params: options,
-        onError: (err) => {
-          console.log(err);
-          throw err;
-        },
-        onSuccess: (result) => {
-          tokenDetailsForTokenId = {
-            isbn: result[0],
-            isUpForRenting: result[6],
-            rentingPrice: result[4],
-            cid: result[1],
-            numberOfBlocksToRent: result[5],
-            copyNumber: result[2],
-          };
-        },
-      });
-      return tokenDetailsForTokenId;
-    } catch (error) {
-      console.log(error);
-    }
+    await contractProcessor.fetch({
+      params: options,
+      onError: (err) => {
+        console.log(err);
+        throw err;
+      },
+      onSuccess: (result) => {
+        tokenDetailsForTokenId = {
+          isbn: result[0],
+          isUpForRenting: result[6],
+          rentingPrice: result[4],
+          cid: result[1],
+          numberOfBlocksToRent: result[5],
+          copyNumber: result[2],
+        };
+      },
+    });
+    return tokenDetailsForTokenId;
   };
 
   const getTokens = async (tokenId) => {
+    console.log("tokenId", tokenId);
+
     const options = {
       contractAddress: pranaAddress,
       functionName: "viewTokenDetails",
       abi: Prana.abi.filter((fn) => fn.name === "viewTokenDetails"),
       params: { _tokenId: tokenId },
     };
-    try {
-      const viewRentTokenDetails = await getViewRentingTokenDetails(tokenId);
-      await contractProcessor.fetch({
-        params: options,
-        onError: (err) => {
-          console.log(err);
-          throw err;
-        },
-        onSuccess: async (viewTokenDetailsRespose) => {
-          console.log("viewTokenDetailsRespose", viewTokenDetailsRespose);
-          // fetch meta data from ipfs
-          const ipfsMetaDataResponse = await axios.get(
-            viewTokenDetailsRespose[1]
+    await contractProcessor.fetch({
+      params: options,
+      onError: (err) => {
+        console.log(err);
+        throw err;
+      },
+      onSuccess: async (viewTokenDetailsRespose) => {
+        console.log("viewTokenDetailsRespose", viewTokenDetailsRespose);
+        // fetch meta data from ipfs
+        const ipfsMetaDataResponse = await axios.get(
+          viewTokenDetailsRespose[1]
+        );
+        if (ipfsMetaDataResponse.status !== 200) {
+          throw new Error("Something went wrong");
+        } else {
+          console.log("viewRentTokenDetails", viewRentTokenDetails);
+
+          const viewRentTokenDetails = await getViewRentingTokenDetails(
+            tokenId
           );
-          if (ipfsMetaDataResponse.status !== 200) {
-            throw new Error("Something went wrong");
-          } else {
-            const metaDataFromApi = ipfsMetaDataResponse.data;
-            const item = {
-              ...metaDataFromApi,
-              tokenId,
-              copyNumber: Number(viewTokenDetailsRespose[2]),
-              isUpForResale: viewTokenDetailsRespose[4],
-              isUpForRenting: viewRentTokenDetails.isUpForRenting,
-            };
-            setNfts((prevNft) => [...prevNft, item]);
-          }
-        },
-      });
-    } catch (error) {
-      console.log("Error", error);
-    }
+
+          const metaDataFromApi = ipfsMetaDataResponse.data;
+          const item = {
+            ...metaDataFromApi,
+            tokenId,
+            copyNumber: Number(viewTokenDetailsRespose[2]),
+            isUpForResale: viewTokenDetailsRespose[4],
+            isUpForRenting: viewRentTokenDetails.isUpForRenting,
+          };
+          setNfts((prevNft) => [...prevNft, item]);
+        }
+      },
+    });
   };
 
   async function loadNFTs() {
-    setLoadingState("not-loaded");
-    setNfts([]);
+    console.log("chainId", chainId);
     const nftTokens = await Moralis.Web3API.account.getNFTsForContract({
       chain: chainId,
       address: account,
       token_address: pranaAddress,
     });
     const tokens = nftTokens?.result;
-    tokens.forEach((token) => {
-      getTokens(token.token_id);
-    });
+    console.log("getTokens");
+    await Promise.all(
+      tokens.map((token) => {
+        console.log("token", token);
+
+        return getTokens(token.token_id);
+      })
+    );
     setLoadingState("loaded");
   }
   if (loadingState !== "loaded") return <Loader />;

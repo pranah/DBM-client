@@ -1,7 +1,21 @@
 export const pranaAddress = "0xff97bC38Be807cffA640F75B859A930983851053";
 export const pranaHelperAddress = "0xA50ba7F0829dFA906855A683C85f6513253EF70f";
-
-
-// testing contract address
-// export const pranaAddress = "0xdc0c57B43f211de3324B5b5BBe9118a5bFA689a2";
-// export const pranaHelperAddress = "0xEC199767A676dcD1FF6Cf4b883E447b8C23d4048";
+export const chain = {
+  name: "Mumbai",
+  title: "Polygon Testnet Mumbai",
+  chain: "Polygon",
+  rpc: ["https://rpc-mumbai.matic.today/"],
+  faucets: ["https://faucet.polygon.technology/"],
+  nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
+  infoURL: "https://polygon.technology/",
+  shortName: "maticmum",
+  chainId: 80001,
+  networkId: 80001,
+  explorers: [
+    {
+      name: "polygonscan",
+      url: "https://mumbai.polygonscan.com",
+      standard: "EIP3091",
+    },
+  ],
+};

@@ -16,20 +16,23 @@ import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import Loader from "../components/loader/Loader";
 import { BookCard } from "../components/BookCard";
+import useMoralisInit from "../hooks/useMoralisInit";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
 }
 const Home: NextPage = () => {
   const { Moralis, isAuthenticated, authenticate, isInitialized } =
-    useMoralis();
+    useMoralisInit();
   const contractProcessor = useWeb3ExecuteFunction();
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
 
-  const authMeta = async () => {
+  const authMeta = () => {
     if (!isAuthenticated) {
-      await authenticate();
+      console.log("index------authenticate");
+
+      authenticate();
     }
   };
 

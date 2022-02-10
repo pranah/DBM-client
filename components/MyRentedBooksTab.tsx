@@ -14,7 +14,7 @@ import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import Loader from "./loader/Loader";
-import { BookCard } from "./BookCard";
+import useMoralisInit from "../hooks/useMoralisInit";
 
 export default function MyRentedBooksTab() {
   const {
@@ -22,23 +22,23 @@ export default function MyRentedBooksTab() {
     isAuthenticated,
     authenticate,
     isInitialized,
-    chainId,
     account,
-  } = useMoralis();
+    isWeb3Enabled,
+  } = useMoralisInit();
 
   const contractProcessor = useWeb3ExecuteFunction();
 
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState("not-loaded");
 
-  useEffect(async () => {
-    if (isAuthenticated && isInitialized) {
+  useEffect(() => {
+    if (isAuthenticated && isInitialized && isWeb3Enabled) {
       setNfts([]);
       loadNFTs();
     } else {
-      await authenticate();
+      authenticate();
     }
-  }, [isInitialized, isAuthenticated]);
+  }, [isInitialized, isAuthenticated, isWeb3Enabled]);
 
   const getNumberOfRentedTokens = async () => {
     let rentedTokenCount = null;
