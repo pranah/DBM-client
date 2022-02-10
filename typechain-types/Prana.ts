@@ -35,7 +35,7 @@ export interface PranaInterface extends utils.Interface {
     "numberofTokensForResale()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "publishBook(string,uint256,uint256,string,uint256)": FunctionFragment;
-    "putForRent(uint256,uint256)": FunctionFragment;
+    "putForRent(uint256,uint256,uint256)": FunctionFragment;
     "putTokenForSale(uint256,uint256)": FunctionFragment;
     "rentToken(uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
@@ -107,7 +107,7 @@ export interface PranaInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "putForRent",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "putTokenForSale",
@@ -465,6 +465,7 @@ export interface Prana extends BaseContract {
     putForRent(
       _newPrice: BigNumberish,
       tokenId: BigNumberish,
+      _numberofBlocksToRent: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -572,7 +573,9 @@ export interface Prana extends BaseContract {
     viewRentingTokenDetails(
       _tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber, string, BigNumber, BigNumber, BigNumber, boolean]>;
+    ): Promise<
+      [BigNumber, string, BigNumber, BigNumber, BigNumber, BigNumber, boolean]
+    >;
 
     viewTokenDetails(
       _tokenId: BigNumberish,
@@ -642,6 +645,7 @@ export interface Prana extends BaseContract {
   putForRent(
     _newPrice: BigNumberish,
     tokenId: BigNumberish,
+    _numberofBlocksToRent: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -746,7 +750,9 @@ export interface Prana extends BaseContract {
   viewRentingTokenDetails(
     _tokenId: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<[BigNumber, string, BigNumber, BigNumber, BigNumber, boolean]>;
+  ): Promise<
+    [BigNumber, string, BigNumber, BigNumber, BigNumber, BigNumber, boolean]
+  >;
 
   viewTokenDetails(
     _tokenId: BigNumberish,
@@ -816,6 +822,7 @@ export interface Prana extends BaseContract {
     putForRent(
       _newPrice: BigNumberish,
       tokenId: BigNumberish,
+      _numberofBlocksToRent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -917,7 +924,9 @@ export interface Prana extends BaseContract {
     viewRentingTokenDetails(
       _tokenId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber, string, BigNumber, BigNumber, BigNumber, boolean]>;
+    ): Promise<
+      [BigNumber, string, BigNumber, BigNumber, BigNumber, BigNumber, boolean]
+    >;
 
     viewTokenDetails(
       _tokenId: BigNumberish,
@@ -1074,6 +1083,7 @@ export interface Prana extends BaseContract {
     putForRent(
       _newPrice: BigNumberish,
       tokenId: BigNumberish,
+      _numberofBlocksToRent: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1262,6 +1272,7 @@ export interface Prana extends BaseContract {
     putForRent(
       _newPrice: BigNumberish,
       tokenId: BigNumberish,
+      _numberofBlocksToRent: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

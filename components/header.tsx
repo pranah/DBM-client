@@ -12,15 +12,17 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/router";
+import { useMoralis } from "react-moralis";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Logout"];
 const pages = [
   {
     name: "Home",
     url: "/",
   },
   {
-    name: "Sell Books",
+    name: "Publish",
     url: "/publish",
   },
   {
@@ -31,10 +33,16 @@ const pages = [
     name: "Used Books",
     url: "/used-books",
   },
+  {
+    name: "Rent a Book",
+    url: "/rented-books",
+  },
 ];
 
 const Header = () => {
   const router = useRouter();
+  const { authenticate, isAuthenticated, logout, user } = useMoralis();
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -47,13 +55,25 @@ const Header = () => {
 
   const handleCloseNavMenu = (url) => {
     setAnchorElNav(null);
+
     if (url) {
       router.push(url);
     }
   };
 
-  const handleCloseUserMenu = () => {
+  const handleNavigation = (url) => {
+    if (url) {
+      router.push(url);
+    }
+  };
+
+  const handleCloseUserMenu = (url) => {
     setAnchorElUser(null);
+    if (url === "Login") {
+      authenticate();
+    } else if (url === "Logout") {
+      logout();
+    }
   };
   return (
     <AppBar position="static">
@@ -82,7 +102,7 @@ const Header = () => {
             component="div"
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
           >
-            Pranah
+            Prana:
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -120,6 +140,7 @@ const Header = () => {
                   onClick={async () => {
                     handleCloseNavMenu(page.url);
                   }}
+                  selected={router.pathname === page.url}
                 >
                   <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
@@ -134,49 +155,71 @@ const Header = () => {
           >
             LOGO
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ ml: 2, flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page.name}
                 onClick={async () => {
-                  handleCloseNavMenu(page.url);
+                  handleNavigation(page.url);
                 }}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  borderRadius: 0,
+                  borderBottom:
+                    router.pathname === page.url
+                      ? "1px solid white"
+                      : undefined,
+                }}
               >
                 {page.name}
               </Button>
             ))}
           </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          {!isAuthenticated && (
+            <Button onClick={() => authenticate()} color="inherit">
+              Login
+            </Button>
+          )}
+          {isAuthenticated && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton
+                  color="inherit"
+                  onClick={handleOpenUserMenu}
+                  sx={{ p: 0 }}
+                >
+                  <AccountCircle />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem
+                    key={setting}
+                    onClick={() => handleCloseUserMenu(setting)}
+                  >
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
