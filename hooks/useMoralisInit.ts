@@ -1,6 +1,6 @@
 declare var window: any;
 
-import { useRouter } from "next/router";
+import router from "next/router";
 import { useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import { chain } from "../config";
@@ -18,8 +18,6 @@ export default function useMoralisInit() {
     enableWeb3,
     user,
   } = useMoralis();
-  const router = useRouter();
-
   useEffect(() => {
     if (!isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
     addToNetwork();
@@ -68,7 +66,7 @@ export default function useMoralisInit() {
       !isAuthenticated &&
       isWeb3Enabled &&
       chainId &&
-      chainId !== toHex(chain.chainId)
+      chainId === toHex(chain.chainId)
     ) {
       authenticate();
     } else if (!isWeb3EnableLoading && isInitialized) {
