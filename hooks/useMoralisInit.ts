@@ -19,14 +19,13 @@ export default function useMoralisInit() {
   } = useMoralis();
   useEffect(() => {
     if (!isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
+    addToNetwork();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, isWeb3Enabled]);
+  }, [isAuthenticated, isWeb3Enabled, chainId]);
   const toHex = (num: number) => {
     return "0x" + num.toString(16);
   };
-  const authenticateUser = () => {
-    console.log("authenticateUser", chainId, isAuthenticated, isWeb3Enabled);
-
+  const addToNetwork = () => {
     if (chainId && chainId !== toHex(chain.chainId)) {
       const params = {
         chainId: toHex(chain.chainId), // A 0x-prefixed hexadecimal string
@@ -57,10 +56,13 @@ export default function useMoralisInit() {
         .catch((error: any) => {
           console.log(error);
         });
-    } else {
-      if (!isAuthenticated && isWeb3Enabled) {
-        authenticate();
-      }
+    }
+  };
+  const authenticateUser = () => {
+    console.log("authenticateUser", chainId, isAuthenticated, isWeb3Enabled);
+
+    if (!isAuthenticated && isWeb3Enabled) {
+      authenticate();
     }
   };
 

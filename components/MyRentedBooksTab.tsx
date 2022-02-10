@@ -15,6 +15,7 @@ import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import Loader from "./loader/Loader";
 import useMoralisInit from "../hooks/useMoralisInit";
+import { BookCard } from "./BookCard";
 
 export default function MyRentedBooksTab() {
   const {
