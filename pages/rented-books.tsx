@@ -13,6 +13,7 @@ import Loader from "../components/loader/Loader";
 import { BookCard } from "../components/BookCard";
 
 import useMoralisInit from "../hooks/useMoralisInit";
+import Layout from "../components/layout";
 
 export default function RentedBooks() {
   const {
@@ -234,36 +235,38 @@ export default function RentedBooks() {
       </Box>
     );
   return (
-    <Container
-      sx={{
-        pt: 4,
-        pb: 4,
-      }}
-      maxWidth="xl"
-    >
-      <Typography variant="h4" sx={{ mb: 5 }}>
-        Books for rent
-      </Typography>
-      <Grid container spacing={{ xs: 2, md: 3 }}>
-        {booksForRent.map((book, index) => (
-          <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
-            <BookCard
-              book={book}
-              actionButtons={() => (
-                <Button
-                  onClick={() => onRentButtonClick(book)}
-                  color="primary"
-                  variant="contained"
-                  size="large"
-                >
-                  Rent
-                </Button>
-              )}
-              isPriceInWei
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+    <Layout>
+      <Container
+        sx={{
+          pt: 4,
+          pb: 4,
+        }}
+        maxWidth="xl"
+      >
+        <Typography variant="h4" sx={{ mb: 5 }}>
+          Books for rent
+        </Typography>
+        <Grid container spacing={{ xs: 2, md: 3 }}>
+          {booksForRent.map((book, index) => (
+            <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
+              <BookCard
+                book={book}
+                actionButtons={() => (
+                  <Button
+                    onClick={() => onRentButtonClick(book)}
+                    color="primary"
+                    variant="contained"
+                    size="large"
+                  >
+                    Rent
+                  </Button>
+                )}
+                isPriceInWei
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Layout>
   );
 }

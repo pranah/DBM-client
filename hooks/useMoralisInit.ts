@@ -1,5 +1,6 @@
 declare var window: any;
 
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import { chain } from "../config";
@@ -17,6 +18,8 @@ export default function useMoralisInit() {
     enableWeb3,
     user,
   } = useMoralis();
+  const router = useRouter();
+
   useEffect(() => {
     if (!isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
     addToNetwork();
@@ -26,7 +29,7 @@ export default function useMoralisInit() {
     return "0x" + num.toString(16);
   };
   const addToNetwork = () => {
-    if (chainId && chainId !== toHex(chain.chainId)) {
+    if (isWeb3Enabled && chainId && chainId !== toHex(chain.chainId)) {
       const params = {
         chainId: toHex(chain.chainId), // A 0x-prefixed hexadecimal string
         chainName: chain.name,
@@ -61,8 +64,15 @@ export default function useMoralisInit() {
   const authenticateUser = () => {
     console.log("authenticateUser", chainId, isAuthenticated, isWeb3Enabled);
 
-    if (!isAuthenticated && isWeb3Enabled) {
+    if (
+      !isAuthenticated &&
+      isWeb3Enabled &&
+      chainId &&
+      chainId !== toHex(chain.chainId)
+    ) {
       authenticate();
+    } else if (!isWeb3EnableLoading && isInitialized) {
+      router.push("/login");
     }
   };
 

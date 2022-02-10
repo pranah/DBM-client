@@ -31,7 +31,7 @@ export default function MyBooksTab() {
   const contractProcessor = useWeb3ExecuteFunction();
 
   const [nfts, setNfts] = useState([]);
-  const [loadingState, setLoadingState] = useState("not-loaded");
+  const [loadingState, setLoadingState] = useState("loaded");
   const { updateBookDetails } = useContext(BookDetailsContext);
 
   useEffect(() => {
@@ -128,8 +128,6 @@ export default function MyBooksTab() {
         if (ipfsMetaDataResponse.status !== 200) {
           throw new Error("Something went wrong");
         } else {
-          console.log("viewRentTokenDetails", viewRentTokenDetails);
-
           const viewRentTokenDetails = await getViewRentingTokenDetails(
             tokenId
           );

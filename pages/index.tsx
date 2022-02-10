@@ -17,6 +17,7 @@ import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import Loader from "../components/loader/Loader";
 import { BookCard } from "../components/BookCard";
 import useMoralisInit from "../hooks/useMoralisInit";
+import Layout from "../components/layout";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
@@ -109,41 +110,43 @@ const Home: NextPage = () => {
       </Box>
     );
   return (
-    <Container
-      maxWidth="xl"
-      sx={{
-        pt: 4,
-        pb: 4,
-      }}
-    >
-      <Typography variant="h4" sx={{ mb: 5 }}>
-        Books
-      </Typography>
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        // columns={{ xs: 4, sm: 9, md: 12 }}
+    <Layout>
+      <Container
+        maxWidth="xl"
+        sx={{
+          pt: 4,
+          pb: 4,
+        }}
       >
-        {nfts.map((book, index) => (
-          <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
-            <BookCard
-              book={book}
-              actionButtons={() => (
-                <Button
-                  fullWidth
-                  color="primary"
-                  size="large"
-                  onClick={() => buyNft(book)}
-                  variant="contained"
-                >
-                  Buy
-                </Button>
-              )}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+        <Typography variant="h4" sx={{ mb: 5 }}>
+          Books
+        </Typography>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          // columns={{ xs: 4, sm: 9, md: 12 }}
+        >
+          {nfts.map((book, index) => (
+            <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
+              <BookCard
+                book={book}
+                actionButtons={() => (
+                  <Button
+                    fullWidth
+                    color="primary"
+                    size="large"
+                    onClick={() => buyNft(book)}
+                    variant="contained"
+                  >
+                    Buy
+                  </Button>
+                )}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Layout>
   );
 };
 
