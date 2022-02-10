@@ -69,7 +69,7 @@ export default function useMoralisInit() {
       chainId === toHex(chain.chainId)
     ) {
       authenticate();
-    } else if (!isWeb3EnableLoading && isInitialized) {
+    } else if (!isWeb3Enabled && !isWeb3EnableLoading && isInitialized) {
       router.push("/login");
     }
   };
