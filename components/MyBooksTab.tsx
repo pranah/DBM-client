@@ -31,7 +31,7 @@ export default function MyBooksTab() {
   const contractProcessor = useWeb3ExecuteFunction();
 
   const [nfts, setNfts] = useState([]);
-  const [loadingState, setLoadingState] = useState("loaded");
+  const [loadingState, setLoadingState] = useState("not-loaded");
   const { updateBookDetails } = useContext(BookDetailsContext);
 
   useEffect(() => {

@@ -15,6 +15,7 @@ import Prana from "../../artifacts/contracts/prana.sol/prana.json";
 import { Publish as PublishForm } from "../../components/PublishForm";
 import Loader from "../../components/loader/Loader";
 import useMoralisInit from "../../hooks/useMoralisInit";
+import Layout from "../../components/layout";
 
 const Publish: NextPage = () => {
   const [fileUrl, setFileUrl] = useState(null);
@@ -118,10 +119,12 @@ const Publish: NextPage = () => {
   };
 
   return (
-    <Container sx={{ pt: 2 }}>
-      {isUploading && <Loader />}
-      <PublishForm handleSubmit={handleSubmit} />
-    </Container>
+    <Layout>
+      <Container sx={{ pt: 2 }}>
+        {isUploading && <Loader />}
+        <PublishForm handleSubmit={handleSubmit} />
+      </Container>
+    </Layout>
   );
 };
 

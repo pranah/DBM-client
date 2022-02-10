@@ -125,9 +125,12 @@ const UsedBooks: NextPage = () => {
       onSuccess: (resp) => {
         console.log("resp", resp);
         getTokenList(resp, owner);
+        setLoadingState("loaded");
+      },
+      onError: () => {
+        setLoadingState("loaded");
       },
     });
-    setLoadingState("loaded");
   }
 
   async function buyNft(book) {
@@ -163,11 +166,15 @@ const UsedBooks: NextPage = () => {
 
   if (loadingState === "loaded" && !nfts.length)
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
-        <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>
-          No items in marketplace
-        </Typography>
-      </Box>
+      <Layout>
+        <Box
+          sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}
+        >
+          <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>
+            No items in marketplace
+          </Typography>
+        </Box>
+      </Layout>
     );
 
   return (

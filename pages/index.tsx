@@ -103,11 +103,15 @@ const Home: NextPage = () => {
   if (loadingState !== "loaded") return <Loader />;
   if (loadingState === "loaded" && !nfts.length)
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
-        <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>
-          No items in marketplace
-        </Typography>
-      </Box>
+      <Layout>
+        <Box
+          sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}
+        >
+          <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>
+            No items in marketplace
+          </Typography>
+        </Box>
+      </Layout>
     );
   return (
     <Layout>

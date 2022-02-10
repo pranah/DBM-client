@@ -228,11 +228,15 @@ export default function RentedBooks() {
 
   if (loadingState === "loaded" && !booksForRent.length)
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
-        <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>
-          No Books found
-        </Typography>
-      </Box>
+      <Layout>
+        <Box
+          sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}
+        >
+          <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>
+            No Books found
+          </Typography>
+        </Box>
+      </Layout>
     );
   return (
     <Layout>

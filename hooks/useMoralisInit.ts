@@ -19,7 +19,12 @@ export default function useMoralisInit() {
     user,
   } = useMoralis();
   useEffect(() => {
-    if (!isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
+    if (!isWeb3Enabled && !isWeb3EnableLoading)
+      try {
+        enableWeb3();
+      } catch (e) {
+        console.log(e);
+      }
     addToNetwork();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isWeb3Enabled, chainId]);
@@ -60,7 +65,15 @@ export default function useMoralisInit() {
     }
   };
   const authenticateUser = () => {
-    console.log("authenticateUser", chainId, isAuthenticated, isWeb3Enabled);
+    console.log(
+      "authenticateUser",
+      chainId,
+      isAuthenticated,
+      isWeb3Enabled,
+      isInitialized,
+      isWeb3EnableLoading,
+      !window.ethereum
+    );
 
     if (
       !isAuthenticated &&
@@ -69,7 +82,7 @@ export default function useMoralisInit() {
       chainId === toHex(chain.chainId)
     ) {
       authenticate();
-    } else if (!isWeb3Enabled && !isWeb3EnableLoading && isInitialized) {
+    } else if (!window.ethereum) {
       router.push("/login");
     }
   };
