@@ -69,12 +69,7 @@ export function RentMyBook({ bookName, tokenId, loadNFTs }) {
   return (
     <div>
       {isLoading && <Loader />}
-      <Button
-        size="large"
-        sx={{ ml: 1 }}
-        variant="outlined"
-        onClick={handleClickOpen}
-      >
+      <Button size="large" variant="outlined" onClick={handleClickOpen}>
         Rent{" "}
       </Button>
       <Dialog
@@ -93,7 +88,7 @@ export function RentMyBook({ bookName, tokenId, loadNFTs }) {
             helperText="Enter a value greater than 0"
             sx={{ mt: 2 }}
             id="my-book-value"
-            label="Value in Eth"
+            label="Value in matic"
             variant="standard"
             type="number"
             value={myBookValueInEth}
@@ -104,7 +99,7 @@ export function RentMyBook({ bookName, tokenId, loadNFTs }) {
             // helperText="Enter a value greater than 0"
             sx={{ mt: 2 }}
             id="time-in-minutes"
-            label="Time in minutes"
+            label="Renting time in minutes"
             variant="standard"
             type="number"
             value={numberofBlocksToRent}

@@ -3,16 +3,10 @@ import type { NextPage } from "next";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
 
 let rpcEndpoint = null;
-import { ethers } from "ethers";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 
@@ -21,13 +15,13 @@ import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import PranaHelper from "../artifacts/contracts/pranaHelper.sol/pranaHelper.json";
 
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
-import { ordinal_suffix_of } from "../utils";
 import Loader from "../components/loader/Loader";
+import { BookCard } from "../components/BookCard";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
 }
-const Home: NextPage = () => {
+const UsedBooks: NextPage = () => {
   const { Moralis, isAuthenticated, authenticate, isInitialized } =
     useMoralis();
   const contractProcessor = useWeb3ExecuteFunction();
@@ -76,12 +70,12 @@ const Home: NextPage = () => {
               ...metaDataFromApi,
               tokenId,
               resalePrice: viewTokenDetailsRespose[3],
+              displayPrice: viewTokenDetailsRespose[3],
               copyNumber: viewTokenDetailsRespose[2],
               isUpForResale: viewTokenDetailsRespose[4],
             };
             console.log(item);
             setNfts((prevNft) => [...prevNft, item]);
-            setLoadingState("loaded");
           }
         },
       });
@@ -116,7 +110,6 @@ const Home: NextPage = () => {
       abi: Prana.abi.filter((fn) => fn.name === "numberofTokensForResale"),
       params: { owner },
     };
-    console.log("isAuthenticatedloadNFTs", isAuthenticated);
     if (isAuthenticated)
       await contractProcessor.fetch({
         params: options,
@@ -125,6 +118,8 @@ const Home: NextPage = () => {
           getTokenList(resp, owner);
         },
       });
+
+    setLoadingState("loaded");
   }
 
   async function buyNft(book) {
@@ -153,9 +148,8 @@ const Home: NextPage = () => {
       });
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoadingState("loaded");
     }
+    setLoadingState("loaded");
   }
   if (loadingState !== "loaded") return <Loader />;
 
@@ -186,36 +180,10 @@ const Home: NextPage = () => {
       >
         {nfts.map((book, index) => (
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="300"
-                image={book.image}
-                alt="green iguana"
-                sx={{
-                  objectFit: "contain",
-                }}
-              />
-              <CardContent>
-                <Grid container justifyContent="space-between">
-                  <Typography variant="h6">{book.name}</Typography>
-                  <Chip
-                    variant="outlined"
-                    color="info"
-                    label={`${ordinal_suffix_of(book.copyNumber)} copy`}
-                  />
-                </Grid>
-                <Typography variant="caption">by {book.author}</Typography>
-                <Typography variant="subtitle1">
-                  Price: {Moralis.Units.FromWei(book.resalePrice, 18)} ETH
-                </Typography>
-
-                <Typography variant="body2" color="text.secondary">
-                  {book.description.substring(0, 50) + " ..."}
-                </Typography>
-              </CardContent>
-
-              <CardActions>
+            <BookCard
+              book={book}
+              isPriceInWei
+              actionButtons={() => (
                 <Button
                   fullWidth
                   color="primary"
@@ -225,8 +193,8 @@ const Home: NextPage = () => {
                 >
                   Buy
                 </Button>
-              </CardActions>
-            </Card>{" "}
+              )}
+            />
           </Grid>
         ))}
       </Grid>
@@ -234,4 +202,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default UsedBooks;

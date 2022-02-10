@@ -3,10 +3,6 @@ import type { NextPage } from "next";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
@@ -19,6 +15,7 @@ import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import Loader from "../components/loader/Loader";
+import { BookCard } from "../components/BookCard";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
@@ -32,12 +29,11 @@ const Home: NextPage = () => {
 
   const authMeta = async () => {
     if (!isAuthenticated) {
-      await authenticate({ provider: "metamask" });
+      await authenticate();
     }
   };
 
   useEffect(() => {
-    console.log("bookyes dep");
     if (isInitialized) loadNFTs();
   }, [isInitialized]);
 
@@ -52,6 +48,7 @@ const Home: NextPage = () => {
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
         let item = {
           price,
+          displayPrice: price,
           image: meta.data.image,
           file: meta.data.file,
           name: meta.data.name,
@@ -126,32 +123,9 @@ const Home: NextPage = () => {
       >
         {nfts.map((book, index) => (
           <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="300"
-                image={book.image}
-                alt="green iguana"
-                sx={{
-                  objectFit: "contain",
-                }}
-                sx={{
-                  objectFit: "contain",
-                }}
-              />
-              <CardContent>
-                <Typography variant="h6">{book.name}</Typography>
-                <Typography variant="caption">by {book.author}</Typography>
-                <Typography variant="subtitle1">
-                  Price: {book.price} ETH
-                </Typography>
-
-                <Typography variant="body2" color="text.secondary">
-                  {book.description.substring(0, 25) + " ..."}
-                </Typography>
-              </CardContent>
-
-              <CardActions>
+            <BookCard
+              book={book}
+              actionButtons={() => (
                 <Button
                   fullWidth
                   color="primary"
@@ -161,8 +135,8 @@ const Home: NextPage = () => {
                 >
                   Buy
                 </Button>
-              </CardActions>
-            </Card>{" "}
+              )}
+            />
           </Grid>
         ))}
       </Grid>

@@ -10,8 +10,9 @@ import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 
 import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
+import { TextField } from "@mui/material";
 
-export function ResellMyBook({ bookName, tokenId, setLoadingState }) {
+export function ResellMyBook({ bookName, tokenId, setLoadingState, loadNFTs }) {
   const [open, setOpen] = React.useState(false);
   const [myBookValueInEth, setMyBookValueInEth] = React.useState(0);
 
@@ -54,6 +55,7 @@ export function ResellMyBook({ bookName, tokenId, setLoadingState }) {
       console.log(error);
     } finally {
       setLoadingState("loaded");
+      loadNFTs();
     }
   }
 
@@ -76,9 +78,14 @@ export function ResellMyBook({ bookName, tokenId, setLoadingState }) {
         <DialogTitle id="alert-dialog-title">Sell you copy</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {`Do you want to sell you copy of ${bookName}`}
+            {`Do you want to sell your copy of ${bookName}`}
           </DialogContentText>
-          <Input
+          <TextField
+            fullWidth
+            variant="standard"
+            label="Value in matic"
+            helperText="Enter a value greater than 0"
+            sx={{ mt: 2 }}
             value={myBookValueInEth}
             onChange={(e) => setMyBookValueInEth(Number(e.target.value))}
             id="resalePrice"
@@ -87,7 +94,7 @@ export function ResellMyBook({ bookName, tokenId, setLoadingState }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
-          <Button onClick={resellNFT} autoFocus>
+          <Button disabled={!myBookValueInEth} onClick={resellNFT} autoFocus>
             Sell
           </Button>
         </DialogActions>
