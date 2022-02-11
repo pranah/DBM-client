@@ -17,6 +17,7 @@
     "@emotion/server": "latest",
     "@emotion/styled": "latest",
     "@material-ui/pickers": "^3.3.10",
+    "@metamask/onboarding": "^1.0.1",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "@mui/styles": "^5.2.3",

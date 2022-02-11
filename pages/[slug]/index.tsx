@@ -82,47 +82,49 @@ const Book: NextPage = () => {
   }
 
   return (
-    <Container
-      sx={{
-        pt: 9,
-      }}
-      maxWidth="xl"
-    >
-      <Grid container spacing={2}>
-        <Grid xs={12} md={4} item>
-          <Box>
-            <img style={{ width: "100%" }} src={book.image} alt="book1" />
-          </Box>
-        </Grid>
-        <Grid xs={12} md={8} item>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-around",
-              height: "100%",
-            }}
-          >
-            <Typography variant="h2">{book.name}</Typography>
-            <Typography variant="subtitle1">by {book.author}</Typography>
-            <br />
-            <Typography>{book.description}</Typography>
-            <div>
-              Price: <span>{book.price} Eth</span>
-            </div>
-            <br />
-            <Button
-              sx={{ width: "fit-content" }}
-              variant="contained"
-              size="large"
-              onClick={() => buyNft(book)}
+    <Layout>
+      <Container
+        sx={{
+          pt: 9,
+        }}
+        maxWidth="xl"
+      >
+        <Grid container spacing={2}>
+          <Grid xs={12} md={4} item>
+            <Box>
+              <img style={{ width: "100%" }} src={book.image} alt="book1" />
+            </Box>
+          </Grid>
+          <Grid xs={12} md={8} item>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-around",
+                height: "100%",
+              }}
             >
-              Buy
-            </Button>{" "}
-          </Box>
+              <Typography variant="h2">{book.name}</Typography>
+              <Typography variant="subtitle1">by {book.author}</Typography>
+              <br />
+              <Typography>{book.description}</Typography>
+              <div>
+                Price: <span>{book.price} Eth</span>
+              </div>
+              <br />
+              <Button
+                sx={{ width: "fit-content" }}
+                variant="contained"
+                size="large"
+                onClick={() => buyNft(book)}
+              >
+                Buy
+              </Button>{" "}
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </Layout>
   );
 };
 

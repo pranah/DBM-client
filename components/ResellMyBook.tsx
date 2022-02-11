@@ -11,12 +11,13 @@ import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { TextField } from "@mui/material";
+import useMoralisInit from "../hooks/useMoralisInit";
 
 export function ResellMyBook({ bookName, tokenId, setLoadingState, loadNFTs }) {
   const [open, setOpen] = React.useState(false);
   const [myBookValueInEth, setMyBookValueInEth] = React.useState(0);
 
-  const { Moralis, isInitialized } = useMoralis();
+  const { Moralis, isInitialized } = useMoralisInit();
   const contractProcessor = useWeb3ExecuteFunction();
 
   const handleClickOpen = () => {

@@ -12,6 +12,7 @@ import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { FormLabel, TextField } from "@mui/material";
 import Loader from "./loader/Loader";
+import useMoralisInit from "../hooks/useMoralisInit";
 
 export function RentMyBook({ bookName, tokenId, loadNFTs }) {
   const [open, setOpen] = React.useState(false);
@@ -19,7 +20,7 @@ export function RentMyBook({ bookName, tokenId, loadNFTs }) {
   const [numberofBlocksToRent, setNumberOfBlocksToRent] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const { Moralis, isInitialized } = useMoralis();
+  const { Moralis, isInitialized } = useMoralisInit();
   const contractProcessor = useWeb3ExecuteFunction();
 
   const handleClickOpen = () => {

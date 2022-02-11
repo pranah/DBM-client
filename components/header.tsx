@@ -70,6 +70,7 @@ const Header = () => {
   const handleCloseUserMenu = (url) => {
     setAnchorElUser(null);
     if (url === "Login") {
+      console.log("header------authenticate");
       authenticate();
     } else if (url === "Logout") {
       logout();
