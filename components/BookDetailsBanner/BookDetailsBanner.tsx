@@ -1,4 +1,4 @@
-import { Grid, Divider } from "@mui/material";
+import { Grid, Divider, Box } from "@mui/material";
 import CategoryIcon from "@mui/icons-material/Category";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -9,9 +9,9 @@ import { Typography } from "@mui/material";
 export const BookDetailsBanner = () => {
   return (
     <>
-      <div style={{ paddingLeft: "1.5rem" }}>
+      <Box style={{ paddingLeft: "1.5rem" }}>
         <Grid
-          sx={{ backgroundColor: "#f2f2f2" }}
+          sx={{ backgroundColor: "#f2f2f2", py: 1 }}
           container
           columnSpacing={3}
           justifyContent="space-around"
@@ -24,9 +24,11 @@ export const BookDetailsBanner = () => {
               alignItems: "center",
             }}
           >
-            <Typography>Genre</Typography>
-            <CategoryIcon />
-            <Typography>Home Stories</Typography>
+            <Typography variant="caption" color="text.secondary">
+              Genre
+            </Typography>
+            <CategoryIcon sx={{ my: 1 }} />
+            <Typography variant="body2">Home Stories</Typography>
           </Grid>
           <Grid
             item
@@ -36,9 +38,11 @@ export const BookDetailsBanner = () => {
               alignItems: "center",
             }}
           >
-            <Typography>Length</Typography>
-            <MenuBookIcon />
-            <Typography>300 pages</Typography>
+            <Typography variant="caption" color="text.secondary">
+              Length
+            </Typography>
+            <MenuBookIcon sx={{ my: 1 }} />
+            <Typography variant="body2">300 pages</Typography>
           </Grid>
           <Grid
             item
@@ -48,9 +52,11 @@ export const BookDetailsBanner = () => {
               alignItems: "center",
             }}
           >
-            <Typography>Language</Typography>
-            <LanguageIcon />
-            <Typography>English</Typography>
+            <Typography variant="caption" color="text.secondary">
+              Language
+            </Typography>
+            <LanguageIcon sx={{ my: 1 }} />
+            <Typography variant="body2">English</Typography>
           </Grid>
           <Grid
             item
@@ -60,9 +66,11 @@ export const BookDetailsBanner = () => {
               alignItems: "center",
             }}
           >
-            <Typography>Publish Date</Typography>
-            <CalendarTodayIcon />
-            <Typography>02-01-2022</Typography>
+            <Typography variant="caption" color="text.secondary">
+              Publish Date
+            </Typography>
+            <CalendarTodayIcon sx={{ my: 1 }} />
+            <Typography variant="body2">02-01-2022</Typography>
           </Grid>
           <Grid
             item
@@ -70,14 +78,17 @@ export const BookDetailsBanner = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              pr: 3,
             }}
           >
-            <Typography>Age</Typography>
-            <PersonIcon />
-            <Typography>18</Typography>
+            <Typography variant="caption" color="text.secondary">
+              Age
+            </Typography>
+            <PersonIcon sx={{ my: 1 }} />
+            <Typography variant="body2">18</Typography>
           </Grid>
         </Grid>
-      </div>
+      </Box>
       <Divider sx={{ mb: 1 }} />
     </>
   );
