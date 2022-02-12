@@ -13,7 +13,7 @@ import { StaticRatingFilled } from "../StaticRatingFilled/StaticRatingFilled";
 export const ReviewCard = () => {
   return (
     <>
-      <Card>
+      <Card elevation={0} sx={{ backgroundColor: "#f5f5f5" }}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">

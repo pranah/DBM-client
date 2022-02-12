@@ -14,7 +14,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     <Card
       elevation={0}
       sx={{
-        maxWidth: 200,
+        maxWidth: 180,
         borderRadius: "0.5rem",
         border: "1px solid #e2e2e2",
       }}

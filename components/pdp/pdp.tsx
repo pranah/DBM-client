@@ -1,10 +1,10 @@
 import { Container, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import StarRateIcon from "@mui/icons-material/StarRate";
-import Image from "next/image";
 import { BookDetailsBanner } from "../BookDetailsBanner/BookDetailsBanner";
 import { NavigationDrawer } from "../NavigationDrawer/NavigationDrawer";
 import { ProductDetailButtonSetion } from "../ProductDetailButtonSetion/ProductDetailButtonSetion";
+import { ProductImage } from "../ProductImage/ProductImage";
 import { ActivityTable } from "../ActivityTable/ActivityTable";
 import { Box } from "@mui/system";
 import { ProductReviewSection } from "../ProductReviewSection/ProductReviewSection";
@@ -14,23 +14,14 @@ import { productsArray } from "../../utils";
 import { MoreLikeThisProducts } from "../MoreLikeThisProducts/MoreLikeThisProducts";
 
 export const PDP = () => {
-  const src =
-    "https://ipfs.moralis.io:2053/ipfs/QmckUFY6PLYvkx1esnXNkfmy3atW8PWGcwPGGAx7Yp7tLk";
   return (
-    <Container maxWidth={false}>
+    <Container sx={{ backgroundColor: "#f5f5f5" }} maxWidth="lg">
       <Box sx={{ display: "flex" }}>
         <NavigationDrawer />
         <Box sx={{ width: "calc(100% - 240px)", py: 4 }}>
           <Grid container>
             <Grid item xs={12} sm={12} md={4} lg={4}>
-              <Image
-                alt="some tes"
-                loader={() => src}
-                src={src}
-                layout="responsive"
-                width={428}
-                height={608}
-              />
+              <ProductImage />
             </Grid>
             <Grid sx={{ px: 8 }} item xs={12} sm={12} md={8} lg={8}>
               <Typography
