@@ -8,6 +8,10 @@ import { ProductDetailButtonSetion } from "../ProductDetailButtonSetion/ProductD
 import { ActivityTable } from "../ActivityTable/ActivityTable";
 import { Box } from "@mui/system";
 import { ProductReviewSection } from "../ProductReviewSection/ProductReviewSection";
+import { ProductCarousel } from "../ProductCarousel/ProductCarousel";
+import ProductCard from "../ProductCard/ProductCard";
+import { productsArray } from "../../utils";
+import { MoreLikeThisProducts } from "../MoreLikeThisProducts/MoreLikeThisProducts";
 
 export const PDP = () => {
   const src =
@@ -74,6 +78,9 @@ export const PDP = () => {
           </Grid>
           <Box sx={{ mt: 4 }}>
             <ActivityTable />
+          </Box>
+          <Box sx={{ mt: 4 }}>
+            <MoreLikeThisProducts />
           </Box>
           <Box sx={{ mt: 4 }}>
             <ProductReviewSection />
