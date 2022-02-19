@@ -12,9 +12,19 @@ import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import Loader from "../components/loader/Loader";
 import { BookCard } from "../components/BookCard";
 
+import useMoralisInit from "../hooks/useMoralisInit";
+import Layout from "../components/layout";
+
 export default function RentedBooks() {
-  const { isAuthenticated, authenticate, isInitialized, account } =
-    useMoralis();
+  const {
+    Moralis,
+    isAuthenticated,
+    authenticate,
+    isInitialized,
+    chainId,
+    account,
+    isWeb3Enabled,
+  } = useMoralisInit();
 
   const contractProcessor = useWeb3ExecuteFunction();
 
@@ -23,17 +33,20 @@ export default function RentedBooks() {
 
   const authMeta = useCallback(async () => {
     if (!isAuthenticated) {
+      console.log("rented------authenticate");
       await authenticate();
     }
   }, [authenticate]);
 
-  useEffect(async () => {
-    if (isAuthenticated && isInitialized) {
+  useEffect(() => {
+    if (isAuthenticated && isInitialized && isWeb3Enabled) {
       getBooksForRent();
     } else {
-      await authenticate();
+      console.log("rented2------authenticate");
+
+      authenticate();
     }
-  }, [isInitialized, isAuthenticated]);
+  }, [isInitialized, isAuthenticated, isWeb3Enabled]);
 
   const findOwnerOfToken = async (tokenId) => {
     let ownerAddress = null;
@@ -215,43 +228,49 @@ export default function RentedBooks() {
 
   if (loadingState === "loaded" && !booksForRent.length)
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}>
-        <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>
-          No Books found
-        </Typography>
-      </Box>
+      <Layout>
+        <Box
+          sx={{ display: "flex", justifyContent: "center", marginTop: "20%" }}
+        >
+          <Typography justifyContent={"center"} variant="h4" sx={{ mb: 5 }}>
+            No Books found
+          </Typography>
+        </Box>
+      </Layout>
     );
   return (
-    <Container
-      sx={{
-        pt: 4,
-        pb: 4,
-      }}
-      maxWidth="xl"
-    >
-      <Typography variant="h4" sx={{ mb: 5 }}>
-        Books for rent
-      </Typography>
-      <Grid container spacing={{ xs: 2, md: 3 }}>
-        {booksForRent.map((book, index) => (
-          <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
-            <BookCard
-              book={book}
-              actionButtons={() => (
-                <Button
-                  onClick={() => onRentButtonClick(book)}
-                  color="primary"
-                  variant="contained"
-                  size="large"
-                >
-                  Rent
-                </Button>
-              )}
-              isPriceInWei
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+    <Layout>
+      <Container
+        sx={{
+          pt: 4,
+          pb: 4,
+        }}
+        maxWidth="xl"
+      >
+        <Typography variant="h4" sx={{ mb: 5 }}>
+          Books for rent
+        </Typography>
+        <Grid container spacing={{ xs: 2, md: 3 }}>
+          {booksForRent.map((book, index) => (
+            <Grid item xs={12} sm={12} md={3} lg={3} xl={3} key={index}>
+              <BookCard
+                book={book}
+                actionButtons={() => (
+                  <Button
+                    onClick={() => onRentButtonClick(book)}
+                    color="primary"
+                    variant="contained"
+                    size="large"
+                  >
+                    Rent
+                  </Button>
+                )}
+                isPriceInWei
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Layout>
   );
 }

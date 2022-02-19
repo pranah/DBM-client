@@ -5,6 +5,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import MyBooksTab from "../components/MyBooksTab";
 import MyRentedBooksTab from "../components/MyRentedBooksTab";
+import Layout from "../components/layout";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -41,24 +42,26 @@ export default function MyBooks() {
   };
 
   return (
-    <Box sx={{ width: "100%", mt: 4, px: 2 }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="Owned Books" {...a11yProps(0)} />
-          <Tab label="Rented Books" {...a11yProps(1)} />
-        </Tabs>
+    <Layout>
+      <Box sx={{ width: "100%", mt: 4, px: 2 }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="Owned Books" {...a11yProps(0)} />
+            <Tab label="Rented Books" {...a11yProps(1)} />
+          </Tabs>
+        </Box>
+        <TabPanel value={value} index={0}>
+          <MyBooksTab />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <MyRentedBooksTab />
+        </TabPanel>
       </Box>
-      <TabPanel value={value} index={0}>
-        <MyBooksTab />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <MyRentedBooksTab />
-      </TabPanel>
-    </Box>
+    </Layout>
   );
 }
 

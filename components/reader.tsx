@@ -18,11 +18,12 @@ import {
 import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import axios from "axios";
+import useMoralisInit from "../hooks/useMoralisInit";
 
 export const Reader = ({ url }) => {
   const { bookDetails } = useContext(BookDetailsContext);
 
-  const { user, Moralis } = useMoralis();
+  const { user, Moralis } = useMoralisInit();
   const BookAnnotations = Moralis.Object.extend("BookAnnotations");
   const contractProcessor = useWeb3ExecuteFunction();
 

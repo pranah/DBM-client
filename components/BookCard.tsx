@@ -40,7 +40,7 @@ export const BookCard = ({ book, actionButtons, isPriceInWei = false }) => {
           component="img"
           height="300"
           image={book.image}
-          alt="green iguana"
+          alt={book.name}
           sx={{
             objectFit: "contain",
           }}
@@ -50,15 +50,17 @@ export const BookCard = ({ book, actionButtons, isPriceInWei = false }) => {
             <Typography variant="h6">{book.name}</Typography>
           </Grid>
           <Typography variant="caption">by {book.author}</Typography>
-          {book.displayPrice && isPriceInWei ? (
-            <Typography variant="subtitle1">
-              Price: {Moralis.Units.FromWei(book.displayPrice, 18)} Matic
-            </Typography>
-          ) : (
-            <Typography variant="subtitle1">
-              Price: {book.displayPrice} Matic
-            </Typography>
-          )}
+          {book.displayPrice ? (
+            isPriceInWei ? (
+              <Typography variant="subtitle1">
+                Price: {Moralis.Units.FromWei(book.displayPrice, 18)} Matic
+              </Typography>
+            ) : (
+              <Typography variant="subtitle1">
+                Price: {book.displayPrice} Matic
+              </Typography>
+            )
+          ) : null}
           <Typography variant="body2" color="text.secondary">
             {book.description.substring(0, 25) + " ..."}
           </Typography>
