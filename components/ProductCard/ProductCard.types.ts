@@ -9,4 +9,6 @@ export type Product = {
 
 export interface ProductCardProps {
   product: Product;
+  hoverEffect: boolean;
+  showBuyButton: boolean;
 }

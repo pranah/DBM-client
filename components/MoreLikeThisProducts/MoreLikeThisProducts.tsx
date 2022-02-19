@@ -28,8 +28,8 @@ export const MoreLikeThisProducts = () => {
       </Grid>
       <Box sx={{ p: 2 }}>
         <ProductCarousel>
-          {productsArray.map((product) => (
-            <ProductCard product={product} />
+          {productsArray.map((product, index) => (
+            <ProductCard key={index} product={product} />
           ))}
         </ProductCarousel>
       </Box>

@@ -18,7 +18,7 @@ export const PDP = () => {
     <Container sx={{ backgroundColor: "#f5f5f5" }} maxWidth="lg">
       <Box sx={{ display: "flex" }}>
         <NavigationDrawer />
-        <Box sx={{ width: "calc(100% - 240px)", py: 4 }}>
+        <Box sx={{ width: "calc(100% - 19vw)", py: 4 }}>
           <Grid container>
             <Grid item xs={12} sm={12} md={4} lg={4}>
               <ProductImage />
@@ -58,10 +58,10 @@ export const PDP = () => {
                 Owned By Arjun
               </Typography>
               <Typography sx={{ mb: 3 }} variant="body1">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Distinctio molestiae natus consectetur quidem autem aliquam vel
-                inventore? Rerum neque quas voluptatem velit corrupti culpa ,
-                impedit sint molestias!
+                Clap When You Land, written by Elizabeth Acevedo, is a young
+                adult novel published by HarperTeen on May 5, 2020. The
+                audiobook, produced by Harper Audio and narrated by
+                Melania-Luisa Marte and Elizabeth More..
               </Typography>
               <BookDetailsBanner />
               <ProductDetailButtonSetion />

@@ -5,11 +5,30 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Grid } from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import { ProductCardProps } from "./ProductCard.types";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-export default function ProductCard({ product }: ProductCardProps) {
+const cardHoverStyles = {
+  "&:hover .MuiCardActions-root": {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  "&:hover .price-rating": {
+    display: "none",
+  },
+  "&:hover": {
+    transform: "scale(1.05)",
+  },
+};
+
+export default function ProductCard({
+  product,
+  hoverEffect,
+  showBuyButton,
+}: ProductCardProps) {
   return (
     <Card
       elevation={0}
@@ -17,6 +36,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         maxWidth: 180,
         borderRadius: "0.5rem",
         border: "1px solid #e2e2e2",
+        ...(hoverEffect ? cardHoverStyles : {}),
       }}
     >
       <CardMedia
@@ -37,6 +57,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           container
           justifyContent="space-between"
           alignItems="center"
+          className="price-rating"
           // sx={{ mt: 1 }}
         >
           <Typography variant="caption" color="text.primary">
@@ -54,10 +75,28 @@ export default function ProductCard({ product }: ProductCardProps) {
           </Typography>
         </Grid>
       </CardContent>
-      {/* <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
-      </CardActions> */}
+      {/* update this take prop component */}
+      {showBuyButton && (
+        <CardActions
+          sx={{
+            justifyContent: "space-between",
+            display: "none",
+            paddingTop: 0,
+          }}
+        >
+          <Button variant="contained" size="small">
+            Buy Now
+          </Button>
+          <IconButton aria-label="favorites">
+            <FavoriteBorderIcon />
+          </IconButton>
+        </CardActions>
+      )}
     </Card>
   );
 }
+
+ProductCard.defaultProps = {
+  hoverEffect: false,
+  showBuyButton: false,
+};
