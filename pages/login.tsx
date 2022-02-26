@@ -15,7 +15,7 @@ const Login: NextPage = () => {
   const handleSubmit = () => {
     if (isWeb3Enabled) {
       authenticate();
-      router.push("/");
+      router.push("/signUp");
     }
     // eslint-disable-next-line no-console
   };
