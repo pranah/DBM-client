@@ -27,6 +27,7 @@ export default function MyBooksTab() {
     chainId,
     account,
     isWeb3Enabled,
+    user,
   } = useMoralisInit();
   const contractProcessor = useWeb3ExecuteFunction();
 
@@ -36,13 +37,9 @@ export default function MyBooksTab() {
 
   useEffect(() => {
     if (isAuthenticated && isInitialized && isWeb3Enabled) {
-      console.log("mybooks------loadNFTs");
-
       setNfts([]);
       loadNFTs();
     } else {
-      console.log("mybooks------authenticate");
-
       authenticate();
     }
   }, [isInitialized, isAuthenticated, account, isWeb3Enabled]);
