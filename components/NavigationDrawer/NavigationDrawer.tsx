@@ -12,6 +12,7 @@ import StoreOutlinedIcon from "@mui/icons-material/StoreOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import Image from "next/image";
+import Link from "next/link";
 
 const drawerWidth = "19vw";
 
@@ -19,18 +20,22 @@ const listItems = [
   {
     name: "Library",
     icon: <HomeOutlinedIcon />,
+    url: "",
   },
   {
     name: "Marketplace",
     icon: <StoreOutlinedIcon />,
+    url: "market-place",
   },
   {
     name: "Profile",
     icon: <AccountCircleOutlinedIcon />,
+    url: "",
   },
   {
     name: "Transactions",
     icon: <ReceiptLongOutlinedIcon />,
+    url: "",
   },
 ];
 
@@ -69,13 +74,15 @@ export const NavigationDrawer = () => {
           />
         </Typography>
         <List>
-          {listItems.map(({ name, icon }, index) => (
-            <ListItem button disableGutters key={name}>
-              <ListItemIcon sx={{ minWidth: "auto", mr: 1 }}>
-                {icon}
-              </ListItemIcon>
-              <ListItemText primary={name} />
-            </ListItem>
+          {listItems.map(({ name, icon, url }, index) => (
+            <Link href={url}>
+              <ListItem button disableGutters key={name}>
+                <ListItemIcon sx={{ minWidth: "auto", mr: 1 }}>
+                  {icon}
+                </ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItem>
+            </Link>
           ))}
         </List>
       </Drawer>
