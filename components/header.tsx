@@ -15,7 +15,6 @@ import { useRouter } from "next/router";
 import { useMoralis } from "react-moralis";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
-const settings = ["Logout"];
 const pages = [
   {
     name: "Home",
@@ -184,42 +183,51 @@ const Header = () => {
             </Button>
           )}
           {isAuthenticated && (
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton
-                  color="inherit"
-                  onClick={handleOpenUserMenu}
-                  sx={{ p: 0 }}
-                >
-                  <AccountCircle />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem
-                    key={setting}
-                    onClick={() => handleCloseUserMenu(setting)}
+            <>
+              <Typography pr={"1rem"} textAlign="center">
+                {user.getUsername()}
+              </Typography>{" "}
+              <Box sx={{ flexGrow: 0 }}>
+                <Tooltip title="Open settings">
+                  <IconButton
+                    color="inherit"
+                    onClick={handleOpenUserMenu}
+                    sx={{ p: 0 }}
                   >
-                    <Typography textAlign="center">{setting}</Typography>
+                    <AccountCircle />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem
+                    key={"Logout"}
+                    onClick={() => handleCloseUserMenu("Logout")}
+                  >
+                    <Typography textAlign="center">Logout</Typography>
                   </MenuItem>
-                ))}
-              </Menu>
-            </Box>
+                  <MenuItem
+                    key={"profile"}
+                    onClick={() => handleNavigation("/profile")}
+                  >
+                    <Typography textAlign="center">Profile</Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
+            </>
           )}
         </Toolbar>
       </Container>
