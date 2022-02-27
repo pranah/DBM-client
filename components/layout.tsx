@@ -8,7 +8,13 @@ export default function Layout({ children }) {
   return (
     <>
       <Header />
-      <main>{children}</main>
+      <main
+        style={{
+          backgroundColor: "#f5f5f5",
+        }}
+      >
+        {children}
+      </main>
     </>
   );
 }
