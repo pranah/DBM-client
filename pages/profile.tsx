@@ -53,7 +53,7 @@ export default function Profile() {
       user.set("age", values.age);
       user.set("gender", values.gender);
       user.set("about", values.about);
-      user.save();
+      await user.save();
     } catch (error) {
       console.log(error);
     }

@@ -26,9 +26,10 @@ const SignUp: NextPage = () => {
   const { isAuthenticated, isWeb3Enabled, authenticate, user } =
     useMoralisInit();
   let router = useRouter();
+  const { redirects } = router.query;
   useEffect(() => {
     if (isWeb3Enabled && isAuthenticated && user.get("initialized")) {
-      router.push("/");
+      router.replace(`${redirects}`);
       // do stuff with the user
     } else {
       authenticate();
@@ -50,6 +51,8 @@ const SignUp: NextPage = () => {
     } catch (error) {
       console.log(error);
     }
+    router.replace(`${redirects}`);
+
     user.get("initialized");
     console.log(user.get("initialized"));
   };
