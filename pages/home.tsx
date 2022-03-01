@@ -7,6 +7,7 @@ import { Footer } from "../components/Footer/Footer";
 import { HowItWorks } from "../components/HowItWorks/HowItWorks";
 import { MainHeader } from "../components/MainHeader/MainHeader";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { LayersOfPranah } from "../components/LayersOfPranah/LayersOfPranah";
 
 type ImageProps = {
   left?: string;
@@ -90,6 +91,7 @@ const Home = () => {
           </Grid>
         </Grid>
         <HowItWorks />
+        <LayersOfPranah />
         <Features />
         <Feedback />
         <Footer />
