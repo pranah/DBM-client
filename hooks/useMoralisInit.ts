@@ -25,9 +25,14 @@ export default function useMoralisInit() {
       } catch (e) {
         console.log(e);
       }
+    if (isWeb3Enabled && isAuthenticated && !user?.get("initialized")) {
+      if (router.pathname !== "/signUp")
+        router.push(`/signUp?redirects=${router.pathname}`);
+      // do stuff with the user
+    }
     addToNetwork();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, isWeb3Enabled, chainId]);
+  }, [isAuthenticated, isWeb3Enabled]);
   const toHex = (num: number) => {
     return "0x" + num.toString(16);
   };
