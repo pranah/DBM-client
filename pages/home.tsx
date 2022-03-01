@@ -25,9 +25,22 @@ const ImageComponent = styled("img")<ImageProps>`
 const Home = () => {
   return (
     <>
-      <MainHeader />
+      <MainHeader
+        rightSideComponents={() => (
+          <>
+            <Button variant="outlined" color="secondary" size="medium">
+              Explore
+            </Button>
+
+            <Button sx={{ ml: 2 }} variant="contained" size="medium">
+              {" "}
+              Login
+            </Button>
+          </>
+        )}
+      />
       <Box sx={{ pt: 2 }}>
-        <Grid sx={{ px: 10 }} container>
+        <Grid sx={{ px: 12 }} spacing={1} container>
           <Grid item md={6} xl={6} lg={6}>
             <Typography
               sx={{

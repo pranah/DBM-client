@@ -5,8 +5,10 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Image from "next/image";
-import { Button, Grid } from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
+import { HeaderTabs } from "../Tabs/Tabs";
 
+const drawerWidth = "19vw";
 function ElevationScroll(props) {
   const { children, window } = props;
   // Note that you normally won't need to set the window ref as useScrollTrigger
@@ -32,34 +34,37 @@ ElevationScroll.propTypes = {
   window: PropTypes.func,
 };
 
-type MainHeaderProps = {
-  rightSideComponents?: () => JSX.Element | undefined;
+type SecondaryHeaderProps = {
+  tabSection?: () => JSX.Element | undefined;
 };
 
-export const MainHeader = ({ rightSideComponents }: MainHeaderProps) => {
+export const SecondaryHeader = ({ tabSection }: SecondaryHeaderProps) => {
   return (
     <>
       <ElevationScroll>
         <AppBar
           sx={{
-            background:
-              "linear-gradient(180deg, #C4C4C4 0%, rgba(219, 219, 219, 0) 100%)",
-            px: 10,
+            width: `calc(100% - ${drawerWidth})`,
+            backgroundColor: "rgba(255,255,255,0.7)",
           }}
         >
           <Toolbar>
-            <Grid container justifyContent="space-between" alignItems="center">
-              <Typography variant="h6" component="h1">
-                <Image
-                  alt="pranah"
-                  src="/static/images/logo.svg"
-                  width={121}
-                  height={41}
-                />
-              </Typography>
-              {rightSideComponents && <Grid item>{rightSideComponents()}</Grid>}
+            <Grid
+              sx={{ width: "100%" }}
+              container
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <TextField
+                label="Search"
+                id="search"
+                type="search"
+                size="small"
+              />
             </Grid>
           </Toolbar>
+
+          {tabSection && <Box sx={{ px: 3 }}>{tabSection()}</Box>}
         </AppBar>
       </ElevationScroll>
       <Toolbar />
