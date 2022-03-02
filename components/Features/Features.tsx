@@ -6,9 +6,23 @@ export const Features = () => {
       <Grid container alignItems="center" direction="row" sx={{ mb: 8 }}>
         <Grid item md={6} xl={6} lg={6}>
           <Typography
-            sx={{ fontSize: "4.5rem", lineHeight: "4.5rem" }}
+            sx={{
+              fontSize: "4.5rem",
+              lineHeight: "4.5rem",
+              backgroundColor: "#fff",
+              ml: -10,
+              pl: 10,
+              py: 3,
+              mb: 2,
+              width: "min-content",
+              paddingRight: "3rem",
+              borderRadius: "0px 2rem 2rem 0px",
+              textShadow: "2px 2px 0px #76ebf2",
+              fontWeight: 600,
+            }}
             component="h2"
             variant="h4"
+            color="tertiary.main"
           >
             Read & Annotate
           </Typography>
@@ -43,9 +57,22 @@ export const Features = () => {
       >
         <Grid item md={6} xl={6} lg={6}>
           <Typography
-            sx={{ fontSize: "4.5rem", lineHeight: "4.5rem" }}
+            sx={{
+              fontSize: "4.5rem",
+              lineHeight: "4.5rem",
+              backgroundColor: "#fff",
+              mr: -10,
+              pr: 10,
+              py: 3,
+              mb: 2,
+              paddingLeft: "3rem",
+              borderRadius: "2rem 0px 0px 2rem",
+              textShadow: "2px 2px 0px #76ebf2",
+              fontWeight: 600,
+            }}
             component="h2"
             variant="h4"
+            color="tertiary.main"
           >
             Resell{" "}
           </Typography>
@@ -63,9 +90,23 @@ export const Features = () => {
       <Grid container alignItems="center">
         <Grid item md={6} xl={6} lg={6}>
           <Typography
-            sx={{ fontSize: "4.5rem", lineHeight: "4.5rem" }}
+            sx={{
+              fontSize: "4.5rem",
+              lineHeight: "4.5rem",
+              backgroundColor: "#fff",
+              ml: -10,
+              pl: 10,
+              py: 3,
+              mb: 2,
+              width: "min-content",
+              paddingRight: "3rem",
+              borderRadius: "0px 2rem 2rem 0px",
+              textShadow: "2px 2px 0px #76ebf2",
+              fontWeight: 600,
+            }}
             component="h2"
             variant="h4"
+            color="tertiary.main"
           >
             Rent{" "}
           </Typography>
@@ -83,9 +124,22 @@ export const Features = () => {
       <Grid container alignItems="center" direction="row-reverse">
         <Grid item md={6} xl={6} lg={6}>
           <Typography
-            sx={{ fontSize: "4.5rem", lineHeight: "4.5rem" }}
+            sx={{
+              fontSize: "4.5rem",
+              lineHeight: "4.5rem",
+              backgroundColor: "#fff",
+              mr: -10,
+              pr: 10,
+              py: 3,
+              mb: 2,
+              paddingLeft: "3rem",
+              borderRadius: "2rem 0px 0px 2rem",
+              textShadow: "2px 2px 0px #76ebf2",
+              fontWeight: 600,
+            }}
             component="h2"
             variant="h4"
+            color="tertiary.main"
           >
             Publish{" "}
           </Typography>
