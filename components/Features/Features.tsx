@@ -1,8 +1,42 @@
 import { Box, Grid, Typography } from "@mui/material";
+import styles from "./Features.module.css";
 
 export const Features = () => {
   return (
     <Box sx={{ px: 10, backgroundColor: "#E5E5E5", py: 15 }}>
+      <Typography
+        color="tertiary.main"
+        sx={{
+          width: "100%",
+          textAlign: "center",
+          borderBottom: "1px dashed",
+          borderColor: "tertiary.main",
+          lineHeight: "0.1em",
+          margin: "10px 0 20px",
+          position: "relative",
+          "&>span": {
+            background: "#E5E5E5",
+            padding: "0 10px",
+            paddingLeft: "50px",
+          },
+        }}
+        component="h2"
+      >
+        <span style={{ postion: "relative" }}>
+          {" "}
+          {/* <span className={styles.telescope}></span> */}
+          <img
+            style={{
+              position: "absolute",
+              display: "inline-block",
+              top: "-15px",
+              left: "0",
+            }}
+            src="static/images/telescope.svg"
+          />
+          Explore All Other Features
+        </span>
+      </Typography>
       <Grid container alignItems="center" direction="row" sx={{ mb: 8 }}>
         <Grid item md={6} xl={6} lg={6}>
           <Typography
@@ -36,6 +70,7 @@ export const Features = () => {
           </Typography>
         </Grid>
         <Grid
+          className={styles.imageContainer}
           sx={{
             display: "flex",
             alignItems: "center",
@@ -82,7 +117,7 @@ export const Features = () => {
             of the value goes to the author/publisher, as content creators.
           </Typography>
         </Grid>
-        <Grid item md={6} xl={6} lg={6}>
+        <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
           <img style={{ width: "100%" }} src="static/images/man-nft.svg" />
         </Grid>
       </Grid>
@@ -117,7 +152,7 @@ export const Features = () => {
             make you money before coming back to you.
           </Typography>
         </Grid>
-        <Grid item md={6} xl={6} lg={6}>
+        <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
           <img style={{ width: "100%" }} src="static/images/rent.svg" />
         </Grid>
       </Grid>
@@ -150,7 +185,7 @@ export const Features = () => {
             for the publishing community.
           </Typography>
         </Grid>
-        <Grid item md={6} xl={6} lg={6}>
+        <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
           <img
             style={{ width: "100%" }}
             src="static/images/online-shopping-for-books.svg"

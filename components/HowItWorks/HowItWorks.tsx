@@ -5,12 +5,26 @@ export const HowItWorks = () => {
   return (
     <>
       <Grid
-        sx={{ px: 10, py: 15, backgroundColor: "tertiary.main" }}
+        sx={{
+          px: 10,
+          py: 15,
+          mt: 40,
+          backgroundColor: "tertiary.main",
+          position: "relative",
+        }}
         container
         wrap="nowrap"
       >
+        <Box
+          sx={{ position: "absolute", left: "calc(50% - 390px)", top: "-50%" }}
+        >
+          <video width="794" height="436" controls>
+            <source src="static/how-it-works.mp4" type="video/mp4" />
+          </video>
+        </Box>
+
         {/* <img style={{ width: "20rem" }} src="static/images/book-image.png" /> */}
-        <Box sx={{ py: 2 }}>
+        <Box sx={{ py: 2, mt: 10 }}>
           <Box
             sx={{
               p: 4,

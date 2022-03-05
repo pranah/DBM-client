@@ -29,11 +29,34 @@ const Home = () => {
       <MainHeader
         rightSideComponents={() => (
           <>
-            <Button variant="outlined" color="secondary" size="medium">
+            <Button
+              sx={{
+                borderRadius: "0.625rem",
+                textTransform: "none",
+                paddingRight: "2rem",
+                paddingLeft: "2rem",
+              }}
+              variant="outlined"
+              color="tertiary"
+              size="medium"
+            >
               Explore
             </Button>
 
-            <Button sx={{ ml: 2 }} variant="contained" size="medium">
+            <Button
+              sx={{
+                ml: 2,
+                color: "tertiary.main",
+                border: "1px solid",
+                borderColor: "tertiary.main",
+                borderRadius: "0.625rem",
+                textTransform: "none",
+                paddingRight: "2rem",
+                paddingLeft: "2rem",
+              }}
+              variant="contained"
+              size="medium"
+            >
               {" "}
               Login
             </Button>

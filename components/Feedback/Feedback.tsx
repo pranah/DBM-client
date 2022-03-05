@@ -28,7 +28,17 @@ export const Feedback = () => {
           interested in becoming an early adopter of the platform.
         </Typography>
         <TextField
-          sx={{ my: 2, color: "#fff" }}
+          sx={{
+            my: 2,
+            color: "#fff",
+            borderColor: "#fff",
+            "& label": {
+              color: "#fff",
+            },
+            "& fieldset": {
+              borderColor: "#fff",
+            },
+          }}
           size="small"
           id="outlined-email"
           label="Enter you email"
