@@ -8,6 +8,7 @@ import { HowItWorks } from "../components/HowItWorks/HowItWorks";
 import { MainHeader } from "../components/MainHeader/MainHeader";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { LayersOfPranah } from "../components/LayersOfPranah/LayersOfPranah";
+import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 
 type ImageProps = {
   left?: string;
@@ -29,47 +30,66 @@ const Home = () => {
       <MainHeader
         rightSideComponents={() => (
           <>
-            <Button
-              sx={{
-                borderRadius: "0.625rem",
-                textTransform: "none",
-                paddingRight: "2rem",
-                paddingLeft: "2rem",
-              }}
-              variant="outlined"
-              color="tertiary"
-              size="medium"
-            >
-              Explore
-            </Button>
+            <Box sx={{ display: { xs: "none", lg: "block" } }}>
+              <Button
+                sx={{
+                  borderRadius: "0.625rem",
+                  textTransform: "none",
+                  paddingRight: "2rem",
+                  paddingLeft: "2rem",
+                }}
+                variant="outlined"
+                color="tertiary"
+                size="medium"
+              >
+                Explore
+              </Button>
 
-            <Button
-              sx={{
-                ml: 2,
-                color: "tertiary.main",
-                border: "1px solid",
-                borderColor: "tertiary.main",
-                borderRadius: "0.625rem",
-                textTransform: "none",
-                paddingRight: "2rem",
-                paddingLeft: "2rem",
-              }}
-              variant="contained"
-              size="medium"
-            >
-              {" "}
-              Login
-            </Button>
+              <Button
+                sx={{
+                  ml: 2,
+                  color: "tertiary.main",
+                  border: "1px solid",
+                  borderColor: "tertiary.main",
+                  borderRadius: "0.625rem",
+                  textTransform: "none",
+                  paddingRight: "2rem",
+                  paddingLeft: "2rem",
+                }}
+                variant="contained"
+                size="medium"
+              >
+                {" "}
+                Login
+              </Button>
+            </Box>
+            <Box sx={{ display: { xs: "block", lg: "none" } }}>
+              <Grid container alignItems="center">
+                <Typography
+                  color="tertiary.main"
+                  variant="span"
+                  component="span"
+                >
+                  Login
+                </Typography>
+                <ArrowCircleRightOutlinedIcon color="tertiary" />
+              </Grid>
+            </Box>
           </>
         )}
       />
       <Box sx={{ pt: 2 }}>
-        <Grid sx={{ px: 12 }} spacing={1} container>
-          <Grid item md={6} xl={6} lg={6}>
+        <Grid
+          sx={{
+            px: { sm: 4, xs: 4, md: 12 },
+          }}
+          spacing={1}
+          container
+        >
+          <Grid item xs={12} sm={12} md={12} xl={6} lg={6}>
             <Typography
               sx={{
-                lineHeight: "78px",
-
+                lineHeight: { sm: "110%", lg: "78px" },
                 fontWeight: 600,
               }}
               component="h2"
@@ -89,6 +109,7 @@ const Home = () => {
             <Button
               sx={{
                 padding: "0.5rem 3rem",
+                color: "tertiary.main",
               }}
               color="primary"
               variant="contained"
@@ -98,7 +119,12 @@ const Home = () => {
             </Button>
           </Grid>
           <Grid item md={6} xl={6} lg={6}>
-            <Box display="flex" alignItems="center" justifyContent="center">
+            <Box
+              sx={{ px: { xs: 4, sm: 4, md: 0 }, mt: { xs: 4, sm: 4, md: 0 } }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
               <ImageComponent
                 left="15%"
                 zIndex={0}

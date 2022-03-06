@@ -44,10 +44,11 @@ export const MainHeader = ({ rightSideComponents }: MainHeaderProps) => {
           sx={{
             background:
               "linear-gradient(180deg, #C4C4C4 0%, rgba(219, 219, 219, 0) 100%)",
-            px: 10,
+            px: { xs: 1, lg: 10 },
+            backdropFilter: "blur(20px)",
           }}
         >
-          <Toolbar>
+          <Toolbar sx={{ px: { xs: 0 } }}>
             <Grid container justifyContent="space-between" alignItems="center">
               <Typography variant="h6" component="h1">
                 <Image
