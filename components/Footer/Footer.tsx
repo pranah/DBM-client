@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 
 export const Footer = () => {
@@ -65,20 +65,22 @@ export const Footer = () => {
             </Typography>
           </Link>
         </Grid>
-        <Grid sx={{ display: "flex", alignItems: "center" }} item>
-          <img
-            style={{ marginRight: "1rem", display: "inline-block" }}
-            src="static/images/linkedin.svg"
-          />
-          <img
-            style={{ marginRight: "1rem", display: "inline-block" }}
-            src="static/images/twitter.svg"
-          />
-          <img
-            style={{ marginRight: "1rem", display: "inline-block" }}
-            src="static/images/discord.svg"
-          />
-        </Grid>
+        <Box display={{ xs: "none", lg: "block" }}>
+          <Grid sx={{ display: "flex", alignItems: "center" }} item>
+            <img
+              style={{ marginRight: "1rem", display: "inline-block" }}
+              src="static/images/linkedin.svg"
+            />
+            <img
+              style={{ marginRight: "1rem", display: "inline-block" }}
+              src="static/images/twitter.svg"
+            />
+            <img
+              style={{ marginRight: "1rem", display: "inline-block" }}
+              src="static/images/discord.svg"
+            />
+          </Grid>
+        </Box>
       </Grid>
     </>
   );

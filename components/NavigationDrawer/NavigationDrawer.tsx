@@ -13,6 +13,7 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const drawerWidth = "19vw";
 
@@ -40,6 +41,8 @@ const listItems = [
 ];
 
 export const NavigationDrawer = () => {
+  const router = useRouter();
+  console.log("router.pathname.includes");
   return (
     <>
       <Drawer
@@ -80,7 +83,13 @@ export const NavigationDrawer = () => {
                 <ListItemIcon sx={{ minWidth: "auto", mr: 1 }}>
                   {icon}
                 </ListItemIcon>
-                <ListItemText primary={name} />
+                <ListItemText
+                  sx={{
+                    fontWeight:
+                      router.pathname === `/${url}` ? "bold" : undefined,
+                  }}
+                  primary={name}
+                />
               </ListItem>
             </Link>
           ))}

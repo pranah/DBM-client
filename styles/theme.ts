@@ -28,10 +28,38 @@ const theme = createTheme({
     secondary: {
       main: "#373737",
     },
+    tertiary: {
+      main: "#9771E9",
+      text: "#fff",
+    },
+    homeText: {
+      main: "#fff",
+    },
     error: {
       main: red.A400,
     },
   },
 });
+declare module "@mui/material/styles" {
+  interface Palette {
+    tertiary: {
+      main: string;
+      text: string;
+    };
+    homeText: {
+      main: string;
+    };
+  }
+  // allow configuration using `createTheme`
+  interface PaletteOptions {
+    tertiary?: {
+      main?: string;
+      text?: string;
+    };
+    homeText: {
+      main: string;
+    };
+  }
+}
 
 export default theme;

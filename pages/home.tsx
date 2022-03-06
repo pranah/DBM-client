@@ -7,6 +7,7 @@ import { Footer } from "../components/Footer/Footer";
 import { HowItWorks } from "../components/HowItWorks/HowItWorks";
 import { MainHeader } from "../components/MainHeader/MainHeader";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { LayersOfPranah } from "../components/LayersOfPranah/LayersOfPranah";
 
 type ImageProps = {
   left?: string;
@@ -25,9 +26,45 @@ const ImageComponent = styled("img")<ImageProps>`
 const Home = () => {
   return (
     <>
-      <MainHeader />
+      <MainHeader
+        rightSideComponents={() => (
+          <>
+            <Button
+              sx={{
+                borderRadius: "0.625rem",
+                textTransform: "none",
+                paddingRight: "2rem",
+                paddingLeft: "2rem",
+              }}
+              variant="outlined"
+              color="tertiary"
+              size="medium"
+            >
+              Explore
+            </Button>
+
+            <Button
+              sx={{
+                ml: 2,
+                color: "tertiary.main",
+                border: "1px solid",
+                borderColor: "tertiary.main",
+                borderRadius: "0.625rem",
+                textTransform: "none",
+                paddingRight: "2rem",
+                paddingLeft: "2rem",
+              }}
+              variant="contained"
+              size="medium"
+            >
+              {" "}
+              Login
+            </Button>
+          </>
+        )}
+      />
       <Box sx={{ pt: 2 }}>
-        <Grid sx={{ px: 10 }} container>
+        <Grid sx={{ px: 12 }} spacing={1} container>
           <Grid item md={6} xl={6} lg={6}>
             <Typography
               sx={{
@@ -77,6 +114,7 @@ const Home = () => {
           </Grid>
         </Grid>
         <HowItWorks />
+        <LayersOfPranah />
         <Features />
         <Feedback />
         <Footer />

@@ -32,7 +32,11 @@ ElevationScroll.propTypes = {
   window: PropTypes.func,
 };
 
-export const MainHeader = () => {
+type MainHeaderProps = {
+  rightSideComponents?: () => JSX.Element | undefined;
+};
+
+export const MainHeader = ({ rightSideComponents }: MainHeaderProps) => {
   return (
     <>
       <ElevationScroll>
@@ -53,16 +57,7 @@ export const MainHeader = () => {
                   height={41}
                 />
               </Typography>
-              <Grid item>
-                <Button variant="outlined" color="secondary" size="medium">
-                  Explore
-                </Button>
-
-                <Button sx={{ ml: 2 }} variant="contained" size="medium">
-                  {" "}
-                  Login
-                </Button>
-              </Grid>
+              {rightSideComponents && <Grid item>{rightSideComponents()}</Grid>}
             </Grid>
           </Toolbar>
         </AppBar>
