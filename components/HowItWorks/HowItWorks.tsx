@@ -1,14 +1,17 @@
 import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export const HowItWorks = () => {
+  const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
+
   return (
     <>
       <Grid
         sx={{
-          px: 10,
-          py: 15,
-          mt: 40,
+          px: { xs: 4, sm: 4, md: 10 },
+          py: { xs: 7, sm: 7, md: 15 },
+          mt: { xs: 20, sm: 20, md: 40 },
           backgroundColor: "tertiary.main",
           position: "relative",
         }}
@@ -16,9 +19,18 @@ export const HowItWorks = () => {
         wrap="nowrap"
       >
         <Box
-          sx={{ position: "absolute", left: "calc(50% - 390px)", top: "-50%" }}
+          sx={{
+            position: "absolute",
+            left: { md: "calc(50% - 390px)" },
+            top: { xs: "-10%", sm: "-10%", md: "-50%" },
+            // display: { xs: "none", md: "block" },
+          }}
         >
-          <video width="794" height="436" controls>
+          <video
+            width={matches ? "340" : "794"}
+            height={matches ? "186" : "436"}
+            controls
+          >
             <source src="static/how-it-works.mp4" type="video/mp4" />
           </video>
         </Box>
@@ -30,7 +42,7 @@ export const HowItWorks = () => {
               p: 4,
               height: "100%",
               color: "tertiary.text",
-              textAlign: "center",
+              textAlign: { md: "center" },
             }}
           >
             <Typography

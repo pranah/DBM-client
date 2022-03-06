@@ -6,20 +6,56 @@ import Link from "next/link";
 export const Footer = () => {
   return (
     <>
+      <Box
+        display={{ xs: "block", lg: "none" }}
+        sx={{ textAlign: "center", backgroundColor: "#E2E2E2", py: 8 }}
+      >
+        <Typography color="tertiary.main" variant="body">
+          Join the Community{" "}
+        </Typography>
+        <Grid
+          container
+          alignItems="center"
+          justifyContent="center"
+          sx={{ mt: 2 }}
+        >
+          <img
+            style={{ marginRight: "1rem", display: "inline-block" }}
+            src="static/images/linkedin.svg"
+          />
+          <img
+            style={{ marginRight: "1rem", display: "inline-block" }}
+            src="static/images/twitter.svg"
+          />
+          <img
+            style={{ marginRight: "1rem", display: "inline-block" }}
+            src="static/images/discord.svg"
+          />
+        </Grid>
+      </Box>
       <Grid
-        sx={{ px: 10, py: 4, backgroundColor: "#E2E2E2" }}
+        sx={{ px: 10, py: 4, backgroundColor: { md: "#E2E2E2" } }}
         container
         alignItems="center"
         justifyContent="space-between"
       >
-        <Grid sx={{ display: "flex", alignItems: "center" }} item>
+        <Grid
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: { sm: "column", xs: "column", md: "row" },
+            width: { sm: "100%", xs: "100%", md: "auto" },
+          }}
+          item
+        >
           <img src="static/images/logo.svg" />
 
           <Link href="#">
             <Typography
               sx={{
-                mr: 2,
-                ml: 2,
+                mr: { md: 2 },
+                ml: { md: 2 },
+                mt: { sm: 2, xs: 2, md: 0 },
                 cursor: "pointer",
                 "&:hover": { textDecoration: "underline" },
               }}
@@ -31,7 +67,8 @@ export const Footer = () => {
           <Link href="#">
             <Typography
               sx={{
-                mr: 2,
+                mr: { md: 2 },
+                mt: { sm: 2, xs: 2, md: 0 },
                 cursor: "pointer",
                 "&:hover": { textDecoration: "underline" },
               }}
@@ -43,7 +80,8 @@ export const Footer = () => {
           <Link href="#">
             <Typography
               sx={{
-                mr: 2,
+                mr: { md: 2 },
+                mt: { sm: 2, xs: 2, md: 0 },
                 cursor: "pointer",
                 "&:hover": { textDecoration: "underline" },
               }}
@@ -55,7 +93,8 @@ export const Footer = () => {
           <Link href="#">
             <Typography
               sx={{
-                mr: 2,
+                mr: { md: 2 },
+                mt: { sm: 2, xs: 2, md: 0 },
                 cursor: "pointer",
                 "&:hover": { textDecoration: "underline" },
               }}

@@ -1,9 +1,18 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Theme, Typography } from "@mui/material";
 import styles from "./Features.module.css";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export const Features = () => {
+  const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
+
   return (
-    <Box sx={{ px: 10, backgroundColor: "#E5E5E5", py: 15 }}>
+    <Box
+      sx={{
+        px: { sm: 4, xs: 4, md: 10 },
+        backgroundColor: "#E5E5E5",
+        py: { sm: 4, xs: 4, md: 15 },
+      }}
+    >
       <Typography
         color="tertiary.main"
         sx={{
@@ -12,8 +21,9 @@ export const Features = () => {
           borderBottom: "1px dashed",
           borderColor: "tertiary.main",
           lineHeight: "0.1em",
-          margin: "10px 0 20px",
+          margin: "10px 0",
           position: "relative",
+          mb: { sm: 5, xs: 5, md: 3 },
           "&>span": {
             background: "#E5E5E5",
             padding: "0 10px",
@@ -22,7 +32,7 @@ export const Features = () => {
         }}
         component="h2"
       >
-        <span style={{ postion: "relative" }}>
+        <span style={{ position: "relative" }}>
           {" "}
           {/* <span className={styles.telescope}></span> */}
           <img
@@ -41,10 +51,10 @@ export const Features = () => {
         <Grid item md={6} xl={6} lg={6}>
           <Typography
             sx={{
-              fontSize: "4.5rem",
-              lineHeight: "4.5rem",
+              fontSize: { md: "4.5rem" },
+              lineHeight: { md: "4.5rem" },
               backgroundColor: "#fff",
-              ml: -10,
+              ml: { xs: -4, sm: -4, md: -10 },
               pl: 10,
               py: 3,
               mb: 2,
@@ -81,7 +91,12 @@ export const Features = () => {
           xl={6}
           lg={6}
         >
-          <img src="static/images/writing-women.svg" />
+          <img
+            style={{
+              width: matches ? "100%" : undefined,
+            }}
+            src="static/images/writing-women.svg"
+          />
         </Grid>
       </Grid>
       <Grid
@@ -93,10 +108,10 @@ export const Features = () => {
         <Grid item md={6} xl={6} lg={6}>
           <Typography
             sx={{
-              fontSize: "4.5rem",
-              lineHeight: "4.5rem",
+              fontSize: { md: "4.5rem" },
+              lineHeight: { md: "4.5rem" },
               backgroundColor: "#fff",
-              mr: -10,
+              mr: { xs: -4, sm: -4, md: -10 },
               pr: 10,
               py: 3,
               mb: 2,
@@ -126,10 +141,10 @@ export const Features = () => {
         <Grid item md={6} xl={6} lg={6}>
           <Typography
             sx={{
-              fontSize: "4.5rem",
-              lineHeight: "4.5rem",
+              fontSize: { md: "4.5rem" },
+              lineHeight: { md: "4.5rem" },
               backgroundColor: "#fff",
-              ml: -10,
+              ml: { xs: -4, sm: -4, md: -10 },
               pl: 10,
               py: 3,
               mb: 2,
@@ -160,10 +175,10 @@ export const Features = () => {
         <Grid item md={6} xl={6} lg={6}>
           <Typography
             sx={{
-              fontSize: "4.5rem",
-              lineHeight: "4.5rem",
+              fontSize: { md: "4.5rem" },
+              lineHeight: { md: "4.5rem" },
               backgroundColor: "#fff",
-              mr: -10,
+              mr: { xs: -4, sm: -4, md: -10 },
               pr: 10,
               py: 3,
               mb: 2,

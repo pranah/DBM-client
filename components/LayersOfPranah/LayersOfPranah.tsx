@@ -22,7 +22,15 @@ export const LayersOfPranah = () => {
           As unique entities, your ebooks would have additional layers on our
           platform
         </Typography>
-        <Grid container spacing={4} alignItems="center">
+        <Grid
+          container
+          spacing={4}
+          alignItems="center"
+          sx={{
+            width: { sm: "100%", xs: "100%", md: "auto" },
+            justifyContent: { sm: "center", xs: "center" },
+          }}
+        >
           <Grid item>
             <Grid container flexDirection="column" alignItems="center">
               <img
