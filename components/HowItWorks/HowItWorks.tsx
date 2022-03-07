@@ -9,7 +9,7 @@ export const HowItWorks = () => {
     <>
       <Grid
         sx={{
-          px: { xs: 4, sm: 4, md: 10 },
+          px: { xs: 2, sm: 2, md: 10 },
           py: { xs: 7, sm: 7, md: 15 },
           mt: { xs: 20, sm: 20, md: 40 },
           backgroundColor: "tertiary.main",
@@ -21,7 +21,11 @@ export const HowItWorks = () => {
         <Box
           sx={{
             position: "absolute",
-            left: { md: "calc(50% - 390px)" },
+            marginLeft: "auto",
+            marginRight: "auto",
+            left: "0",
+            right: "0",
+            textAlign: "center",
             top: { xs: "-10%", sm: "-10%", md: "-50%" },
             // display: { xs: "none", md: "block" },
           }}
@@ -30,6 +34,7 @@ export const HowItWorks = () => {
             width={matches ? "340" : "794"}
             height={matches ? "186" : "436"}
             controls
+            poster="static/images/video-thumbnail.png"
           >
             <source src="static/how-it-works.mp4" type="video/mp4" />
           </video>
@@ -50,7 +55,7 @@ export const HowItWorks = () => {
               variant="h5"
               sx={{ lineHeight: "36.92px" }}
             >
-              When Ebook As NFT’s{" "}
+              When Ebook As NFTs{" "}
             </Typography>
             {/* <Typography
               component="h3"

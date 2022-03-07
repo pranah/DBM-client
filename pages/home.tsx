@@ -89,7 +89,7 @@ const Home = () => {
       <Box sx={{ pt: 2 }}>
         <Grid
           sx={{
-            px: { sm: 4, xs: 4, md: 12 },
+            px: { sm: 2, xs: 2, md: 12 },
           }}
           spacing={1}
           container
@@ -99,6 +99,11 @@ const Home = () => {
               sx={{
                 lineHeight: { sm: "110%", lg: "78px" },
                 fontWeight: 600,
+                backgroundImage:
+                  "radial-gradient(86.81% 906.07% at 3.08% 50%, #9977E1 0%, #76EBF2 97.32%)",
+                color: "transparent",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
               }}
               component="h2"
               variant="h3"
