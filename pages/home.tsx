@@ -16,14 +16,21 @@ type ImageProps = {
   zIndex?: number;
 };
 
-const ImageComponent = styled("img")<ImageProps>`
-  width: 50%;
-  position: relative;
-  left: ${(props) => props.left};
-  right: ${(props) => props.right};
-  z-index: ${(props) => props.zIndex};
-`;
+// const ImageComponent = styled("img")<ImageProps>`
+//   width: 50%;
+//   position: relative;
+//   left: ${(props) => props.left};
+//   right: ${(props) => props.right};
+//   z-index: ${(props) => props.zIndex};
+// `;
 
+const ImageComponent = styled("img")<ImageProps>`
+  width: 100%;
+  margin-right: 0.5rem;
+  @media (max-width: 768px) {
+    width: 30%;
+  }
+`;
 const Home = () => {
   return (
     <>
@@ -69,6 +76,7 @@ const Home = () => {
                   color="tertiary.main"
                   variant="span"
                   component="span"
+                  sx={{ mr: 1 }}
                 >
                   Login
                 </Typography>
@@ -110,6 +118,8 @@ const Home = () => {
               sx={{
                 padding: "0.5rem 3rem",
                 color: "tertiary.main",
+                textTransform: "none",
+                boxShadow: "5px 5px 0px #9977e1, inset 0px 4px 0px #76ebf2",
               }}
               color="primary"
               variant="contained"
@@ -118,9 +128,32 @@ const Home = () => {
               Explore <ArrowForwardIcon />
             </Button>
           </Grid>
-          <Grid item md={6} xl={6} lg={6}>
+          <Grid
+            sx={{ position: "relative" }}
+            item
+            xs={12}
+            sm={12}
+            md={12}
+            xl={6}
+            lg={6}
+          >
             <Box
-              sx={{ px: { xs: 4, sm: 4, md: 0 }, mt: { xs: 4, sm: 4, md: 0 } }}
+              sx={{
+                height: "100%",
+                width: "50%",
+                background:
+                  "linear-gradient(89.85deg, #F5F5F5 0.14%, rgba(245, 245, 245, 0.95) 45.61%, rgba(245, 245, 245, 0.44) 74.6%, rgba(245, 245, 245, 0) 99.45%, rgba(245, 245, 245, 0) 113.74%)",
+                position: "absolute",
+                left: 0,
+              }}
+            ></Box>
+            <Box
+              sx={{
+                px: { xs: 4, sm: 4, md: 0 },
+                mt: { xs: 4, sm: 4, md: 0 },
+                overflow: "hidden",
+                width: "100%",
+              }}
               display="flex"
               alignItems="center"
               justifyContent="center"
@@ -128,13 +161,61 @@ const Home = () => {
               <ImageComponent
                 left="15%"
                 zIndex={0}
-                src="static/images/cover-1.png"
+                src="static/images/image-7.png"
               />
-              <ImageComponent src="static/images/cover-3.png" />
+              <ImageComponent
+                left="15%"
+                zIndex={0}
+                src="static/images/image-2.png"
+              />
+              <ImageComponent src="static/images/image-3.png" />
               <ImageComponent
                 right="15%"
                 zIndex={-1}
-                src="static/images/cover-2.png"
+                src="static/images/image-4.png"
+              />
+              <ImageComponent
+                right="15%"
+                zIndex={-1}
+                src="static/images/image-5.png"
+              />
+              <ImageComponent
+                right="15%"
+                zIndex={-1}
+                src="static/images/image-6.png"
+              />
+            </Box>
+            <Box
+              sx={{
+                px: { xs: 4, sm: 4, md: 0 },
+                mt: { xs: 4, sm: 4, md: 0 },
+                overflow: "hidden",
+                width: "100%",
+              }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <ImageComponent
+                left="15%"
+                zIndex={0}
+                src="static/images/image-2.png"
+              />
+              <ImageComponent src="static/images/image-3.png" />
+              <ImageComponent
+                right="15%"
+                zIndex={-1}
+                src="static/images/image-4.png"
+              />
+              <ImageComponent
+                right="15%"
+                zIndex={-1}
+                src="static/images/image-5.png"
+              />
+              <ImageComponent
+                right="15%"
+                zIndex={-1}
+                src="static/images/image-6.png"
               />
             </Box>
           </Grid>
