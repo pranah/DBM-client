@@ -44,7 +44,7 @@ export const MainHeader = ({ rightSideComponents }: MainHeaderProps) => {
           sx={{
             background:
               "linear-gradient(180deg, #C4C4C4 0%, rgba(219, 219, 219, 0) 100%)",
-            px: { xs: 1, lg: 10 },
+            px: { xs: 2, lg: 10 },
             backdropFilter: "blur(20px)",
           }}
         >

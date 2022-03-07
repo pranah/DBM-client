@@ -1,8 +1,11 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Theme, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export const Feedback = () => {
+  const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
+
   return (
     <Box
       display="flex"
@@ -57,7 +60,14 @@ export const Feedback = () => {
         <Button
           variant="contained"
           size="large"
-          sx={{ mt: 2, px: 8, color: "tertiary.main" }}
+          fullWidth={matches}
+          sx={{
+            mt: 2,
+            px: 8,
+            color: "tertiary.main",
+            textTransform: "none",
+            borderRadius: "10px",
+          }}
         >
           Submit
         </Button>
