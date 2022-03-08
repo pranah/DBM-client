@@ -33,10 +33,7 @@ export const LayersOfPranah = () => {
         >
           <Grid item>
             <Grid container flexDirection="column" alignItems="center">
-              <img
-                style={{ width: "5.5rem" }}
-                src="static/images/popular-man.svg"
-              />
+              <img style={{ width: "5.5rem" }} src="images/popular-man.svg" />
               <Typography
                 sx={{
                   width: "8rem",
@@ -53,10 +50,7 @@ export const LayersOfPranah = () => {
           </Grid>{" "}
           <Grid item>
             <Grid container flexDirection="column" alignItems="center">
-              <img
-                style={{ width: "5rem" }}
-                src="static/images/first-copy.svg"
-              />
+              <img style={{ width: "5rem" }} src="images/first-copy.svg" />
               <Typography
                 sx={{
                   width: "8rem",
@@ -73,10 +67,7 @@ export const LayersOfPranah = () => {
           </Grid>{" "}
           <Grid item>
             <Grid container flexDirection="column" alignItems="center">
-              <img
-                style={{ width: "5rem" }}
-                src="static/images/star-filled.svg"
-              />
+              <img style={{ width: "5rem" }} src="images/star-filled.svg" />
               <Typography
                 sx={{
                   width: "8rem",
@@ -93,10 +84,7 @@ export const LayersOfPranah = () => {
           </Grid>
           <Grid item>
             <Grid container flexDirection="column" alignItems="center">
-              <img
-                style={{ width: "5rem" }}
-                src="static/images/autograph.svg"
-              />
+              <img style={{ width: "5rem" }} src="images/autograph.svg" />
               <Typography
                 sx={{
                   width: "8rem",

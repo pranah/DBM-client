@@ -163,31 +163,23 @@ const Home = () => {
               alignItems="center"
               justifyContent="center"
             >
-              <ImageComponent
-                left="15%"
-                zIndex={0}
-                src="static/images/image-7.png"
-              />
-              <ImageComponent
-                left="15%"
-                zIndex={0}
-                src="static/images/image-2.png"
-              />
-              <ImageComponent src="static/images/image-3.png" />
+              <ImageComponent left="15%" zIndex={0} src="images/image-7.png" />
+              <ImageComponent left="15%" zIndex={0} src="images/image-2.png" />
+              <ImageComponent src="images/image-3.png" />
               <ImageComponent
                 right="15%"
                 zIndex={-1}
-                src="static/images/image-4.png"
+                src="images/image-4.png"
               />
               <ImageComponent
                 right="15%"
                 zIndex={-1}
-                src="static/images/image-5.png"
+                src="images/image-5.png"
               />
               <ImageComponent
                 right="15%"
                 zIndex={-1}
-                src="static/images/image-6.png"
+                src="images/image-6.png"
               />
             </Box>
             <Box
@@ -201,26 +193,22 @@ const Home = () => {
               alignItems="center"
               justifyContent="center"
             >
-              <ImageComponent
-                left="15%"
-                zIndex={0}
-                src="static/images/image-2.png"
-              />
-              <ImageComponent src="static/images/image-3.png" />
+              <ImageComponent left="15%" zIndex={0} src="images/image-2.png" />
+              <ImageComponent src="images/image-3.png" />
               <ImageComponent
                 right="15%"
                 zIndex={-1}
-                src="static/images/image-4.png"
+                src="images/image-4.png"
               />
               <ImageComponent
                 right="15%"
                 zIndex={-1}
-                src="static/images/image-5.png"
+                src="images/image-5.png"
               />
               <ImageComponent
                 right="15%"
                 zIndex={-1}
-                src="static/images/image-6.png"
+                src="images/image-6.png"
               />
             </Box>
           </Grid>

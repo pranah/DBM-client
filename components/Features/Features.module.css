@@ -1,5 +1,5 @@
 .imageContainer {
-  background-image: url("/static/images/bg-features.png");
+  background-image: url("/images/bg-features.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 85% 85%;
@@ -7,5 +7,5 @@
 }
 
 .telescope {
-  background-image: url("/static/images/telescope.svg");
+  background-image: url("/images/telescope.svg");
 }

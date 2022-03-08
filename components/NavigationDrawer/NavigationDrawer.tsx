@@ -69,12 +69,7 @@ export const NavigationDrawer = () => {
         anchor="left"
       >
         <Typography variant="h4" component="h1">
-          <Image
-            alt="pranah"
-            src="/static/images/logo.svg"
-            width={121}
-            height={41}
-          />
+          <Image alt="pranah" src="/images/logo.svg" width={121} height={41} />
         </Typography>
         <List>
           {listItems.map(({ name, icon, url }, index) => (

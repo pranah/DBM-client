@@ -42,7 +42,7 @@ export const Features = () => {
               top: "-15px",
               left: "0",
             }}
-            src="static/images/telescope.svg"
+            src="images/telescope.svg"
           />
           Explore All Other Features
         </span>
@@ -95,7 +95,7 @@ export const Features = () => {
             style={{
               width: matches ? "100%" : undefined,
             }}
-            src="static/images/writing-women.svg"
+            src="images/writing-women.svg"
           />
         </Grid>
       </Grid>
@@ -133,7 +133,7 @@ export const Features = () => {
           </Typography>
         </Grid>
         <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
-          <img style={{ width: "100%" }} src="static/images/man-nft.svg" />
+          <img style={{ width: "100%" }} src="images/man-nft.svg" />
         </Grid>
       </Grid>
 
@@ -168,7 +168,7 @@ export const Features = () => {
           </Typography>
         </Grid>
         <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
-          <img style={{ width: "100%" }} src="static/images/rent.svg" />
+          <img style={{ width: "100%" }} src="images/rent.svg" />
         </Grid>
       </Grid>
       <Grid container alignItems="center" direction="row-reverse">
@@ -203,7 +203,7 @@ export const Features = () => {
         <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
           <img
             style={{ width: "100%" }}
-            src="static/images/online-shopping-for-books.svg"
+            src="images/online-shopping-for-books.svg"
           />
         </Grid>
       </Grid>
