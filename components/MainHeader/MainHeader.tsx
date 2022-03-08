@@ -53,7 +53,7 @@ export const MainHeader = ({ rightSideComponents }: MainHeaderProps) => {
               <Typography variant="h6" component="h1">
                 <Image
                   alt="pranah"
-                  src="/static/images/logo.svg"
+                  src="/images/logo.svg"
                   width={121}
                   height={41}
                 />

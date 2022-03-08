@@ -21,15 +21,15 @@ export const Footer = () => {
         >
           <img
             style={{ marginRight: "1rem", display: "inline-block" }}
-            src="static/images/linkedin.svg"
+            src="images/linkedin.svg"
           />
           <img
             style={{ marginRight: "1rem", display: "inline-block" }}
-            src="static/images/twitter.svg"
+            src="images/twitter.svg"
           />
           <img
             style={{ marginRight: "1rem", display: "inline-block" }}
-            src="static/images/discord.svg"
+            src="images/discord.svg"
           />
         </Grid>
       </Box>
@@ -48,7 +48,7 @@ export const Footer = () => {
           }}
           item
         >
-          <img src="static/images/logo.svg" />
+          <img src="images/logo.svg" />
 
           <Link href="#">
             <Typography
@@ -108,15 +108,15 @@ export const Footer = () => {
           <Grid sx={{ display: "flex", alignItems: "center" }} item>
             <img
               style={{ marginRight: "1rem", display: "inline-block" }}
-              src="static/images/linkedin.svg"
+              src="images/linkedin.svg"
             />
             <img
               style={{ marginRight: "1rem", display: "inline-block" }}
-              src="static/images/twitter.svg"
+              src="images/twitter.svg"
             />
             <img
               style={{ marginRight: "1rem", display: "inline-block" }}
-              src="static/images/discord.svg"
+              src="images/discord.svg"
             />
           </Grid>
         </Box>

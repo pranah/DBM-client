@@ -34,13 +34,13 @@ export const HowItWorks = () => {
             width={matches ? "340" : "794"}
             height={matches ? "186" : "436"}
             controls
-            poster="static/images/video-thumbnail.png"
+            poster="images/video-thumbnail.png"
           >
-            <source src="static/how-it-works.mp4" type="video/mp4" />
+            <source src="/how-it-works.mp4" type="video/mp4" />
           </video>
         </Box>
 
-        {/* <img style={{ width: "20rem" }} src="static/images/book-image.png" /> */}
+        {/* <img style={{ width: "20rem" }} src="images/book-image.png" /> */}
         <Box sx={{ py: 2, mt: 10 }}>
           <Box
             sx={{
