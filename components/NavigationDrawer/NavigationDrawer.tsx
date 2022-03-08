@@ -78,8 +78,8 @@ export const NavigationDrawer = () => {
         </Typography>
         <List>
           {listItems.map(({ name, icon, url }, index) => (
-            <Link href={url}>
-              <ListItem button disableGutters key={name}>
+            <Link href={url} key={name}>
+              <ListItem button disableGutters>
                 <ListItemIcon sx={{ minWidth: "auto", mr: 1 }}>
                   {icon}
                 </ListItemIcon>

@@ -110,6 +110,7 @@ export default function Profile() {
                   {inputFields.map((field) => (
                     <TextField
                       fullWidth
+                      key={field.name}
                       id={field.name}
                       {...field}
                       value={values[field.name]}

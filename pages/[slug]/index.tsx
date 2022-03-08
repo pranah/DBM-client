@@ -7,9 +7,7 @@ import { ethers } from "ethers";
 import axios from "axios";
 import Web3Modal from "web3modal";
 
-import { nftaddress, nftmarketaddress } from "../../config";
-// import NFT from "../../artifacts/contracts/NFT.sol/NFT.json";
-// import Market from "../../artifacts/contracts/Market.sol/NFTMarket.json";
+import Layout from "../../components/layout";
 
 let rpcEndpoint = null;
 
@@ -35,41 +33,36 @@ const Book: NextPage = () => {
     loadBook();
   }, []);
   async function loadBook() {
-    const provider = new ethers.providers.JsonRpcProvider(rpcEndpoint);
-    const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider);
-    const tokenUri = await tokenContract.tokenURI(slug);
-    const meta = await axios.get(tokenUri);
-    let item = {
-      price: meta.data.price,
-      image: meta.data.image,
-      name: meta.data.name,
-      description: meta.data.description,
-      author: meta.data.author,
-      isbn: meta.data.isbn,
-      publisher: meta.data.publisher,
-      royalty: meta.data.royalty,
-      genre: meta.data.genre,
-    };
+    // const provider = new ethers.providers.JsonRpcProvider(rpcEndpoint);
+    // const tokenContract = new ethers.Contract("nftaddress", NFT.abi, provider);
+    // const tokenUri = await tokenContract.tokenURI(slug);
+    // const meta = await axios.get(tokenUri);
+    // let item = {
+    //   price: meta.data.price,
+    //   image: meta.data.image,
+    //   name: meta.data.name,
+    //   description: meta.data.description,
+    //   author: meta.data.author,
+    //   isbn: meta.data.isbn,
+    //   publisher: meta.data.publisher,
+    //   royalty: meta.data.royalty,
+    //   genre: meta.data.genre,
+    // };
 
-    setBook(item);
+    // setBook(item);
     setLoadingState("loaded");
   }
   async function buyNft(nft) {
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(nftmarketaddress, Market.abi, signer);
-
-    const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
-    const transaction = await contract.createMarketSale(
-      nftaddress,
-      nft.itemId,
-      {
-        value: price,
-      }
-    );
-    await transaction.wait();
+    // const web3Modal = new Web3Modal();
+    // const connection = await web3Modal.connect();
+    // const provider = new ethers.providers.Web3Provider(connection);
+    // const signer = provider.getSigner();
+    // const contract = new ethers.Contract("sas", Market.abi, signer);
+    // const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
+    // const transaction = await contract.createMarketSale("saas", nft.itemId, {
+    //   value: price,
+    // });
+    // await transaction.wait();
   }
   if (loadingState !== "loaded") {
     return (

@@ -58,6 +58,7 @@ export function HeaderTabs({ tabNames, tabComponents }) {
         >
           {tabNames.map((tab) => (
             <Tab
+              key={tab}
               color="secondary"
               sx={{
                 paddingRight: 0,
@@ -75,7 +76,7 @@ export function HeaderTabs({ tabNames, tabComponents }) {
         </Tabs>
       </Box>
       {tabComponents.map((tabComponent, i) => (
-        <TabPanel value={value} index={i}>
+        <TabPanel value={value} index={i} key={i}>
           {tabComponent()}
         </TabPanel>
       ))}
