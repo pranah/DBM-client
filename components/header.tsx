@@ -18,7 +18,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 const pages = [
   {
     name: "Home",
-    url: "/",
+    url: "/listing",
   },
   {
     name: "Publish",
