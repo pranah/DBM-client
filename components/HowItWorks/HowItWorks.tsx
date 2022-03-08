@@ -55,7 +55,7 @@ export const HowItWorks = () => {
               variant="h5"
               sx={{ lineHeight: "36.92px" }}
             >
-              When Ebook As NFTs{" "}
+              When Ebook become NFTs{" "}
             </Typography>
             {/* <Typography
               component="h3"
