@@ -125,6 +125,7 @@ export const Publish = ({ handleSubmit }) => {
                 <Grid item xs={12} sm={12} md={12}>
                   {inputFeilds.map((feild) => (
                     <Field
+                      key={feild.name}
                       sx={{
                         marginBottom: "1rem",
                       }}

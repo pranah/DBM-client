@@ -103,6 +103,7 @@ const SignUp: NextPage = () => {
               <Grid item xs={12} sm={12} md={12}>
                 {inputFields.map((feild) => (
                   <Field
+                    key={feild.name}
                     sx={{
                       marginBottom: "1rem",
                     }}
