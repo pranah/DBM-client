@@ -51,6 +51,7 @@ export const Feedback = () => {
 
   return (
     <Box
+      id="sign-up"
       display="flex"
       justifyContent="center"
       sx={{ py: 15, backgroundColor: "tertiary.main" }}
