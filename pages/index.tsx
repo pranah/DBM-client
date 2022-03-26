@@ -36,7 +36,17 @@ const Home = () => {
   const router = useRouter();
 
   return (
-    <>
+    <Box
+      sx={{
+        overflowY: "auto",
+        height: "100%",
+        msOverflowStyle: "none",
+        scrollbarWidth: "none",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}
+    >
       <MainHeader
         rightSideComponents={() => (
           <>
@@ -230,7 +240,7 @@ const Home = () => {
         <Feedback />
         <Footer />
       </Box>
-    </>
+    </Box>
   );
 };
 

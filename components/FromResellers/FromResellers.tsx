@@ -1,0 +1,131 @@
+import { Grid } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
+import ProductCard from "../ProductCard/ProductCard";
+import useMoralisInit from "../../hooks/useMoralisInit";
+
+import { pranaAddress } from "../../config";
+import Prana from "../../artifacts/contracts/prana.sol/prana.json";
+import { useWeb3ExecuteFunction } from "react-moralis";
+import axios from "axios";
+
+export const FromResellers = () => {
+  const {
+    Moralis,
+    isAuthenticated,
+    authenticate,
+    isInitialized,
+    isWeb3Enabled,
+  } = useMoralisInit();
+  const contractProcessor = useWeb3ExecuteFunction();
+
+  const [loading, setLoading] = useState(false);
+  const [books, setBooks] = useState([]);
+
+  const getTokens = async (tokenId) => {
+    const options = {
+      contractAddress: pranaAddress,
+      functionName: "viewTokenDetails",
+      abi: Prana.abi.filter((fn) => fn.name === "viewTokenDetails"),
+      params: { _tokenId: tokenId },
+    };
+    try {
+      await contractProcessor.fetch({
+        params: options,
+        onError: (err) => {
+          console.log(err);
+          throw err;
+        },
+        onSuccess: async (viewTokenDetailsRespose) => {
+          // fetch meta data from ipfs
+          const ipfsMetaDataResponse = await axios.get(
+            viewTokenDetailsRespose[1]
+          );
+          if (ipfsMetaDataResponse.status !== 200) {
+            throw new Error("Something went wrong");
+          } else {
+            const metaDataFromApi = ipfsMetaDataResponse.data;
+            const item = {
+              ...metaDataFromApi,
+              tokenId,
+              resalePrice: viewTokenDetailsRespose[3],
+              displayPrice: viewTokenDetailsRespose[3],
+              copyNumber: viewTokenDetailsRespose[2],
+              isUpForResale: viewTokenDetailsRespose[4],
+            };
+            console.log(item);
+            setBooks((prevBooks) => [...prevBooks, item]);
+          }
+        },
+      });
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+  const getTokenList = async (tokenCount: number) => {
+    for (let index = 0; index < tokenCount; index++) {
+      const options = {
+        contractAddress: pranaAddress,
+        functionName: "tokenForResaleAtIndex",
+        abi: Prana.abi.filter((fn) => fn.name === "tokenForResaleAtIndex"),
+        params: { index },
+      };
+      await contractProcessor.fetch({
+        params: options,
+        onSuccess: (token) => {
+          getTokens(token);
+        },
+      });
+    }
+  };
+  const getUsedBooks = useCallback(async () => {
+    console.log("getUsed books");
+    setLoading(true);
+    setBooks([]);
+    const currentUser = Moralis.User.current();
+    const owner = currentUser.attributes.ethAddress;
+
+    const options = {
+      contractAddress: pranaAddress,
+      functionName: "numberofTokensForResale",
+      abi: Prana.abi.filter((fn) => fn.name === "numberofTokensForResale"),
+      params: { owner },
+    };
+    await contractProcessor.fetch({
+      params: options,
+      onSuccess: (resp) => {
+        getTokenList(resp, owner);
+        setLoading(false);
+      },
+      onError: () => {
+        setLoading(false);
+      },
+    });
+  }, [Moralis.User, contractProcessor]);
+
+  const authMeta = useCallback(async () => {
+    if (!isAuthenticated) {
+      await authenticate();
+    }
+  }, [authenticate, isAuthenticated]);
+
+  useEffect(() => {
+    if (isAuthenticated && isInitialized && isWeb3Enabled) {
+      getUsedBooks();
+    } else {
+      authMeta();
+    }
+  }, [isAuthenticated, isInitialized, isWeb3Enabled]);
+
+  return (
+    <>
+      {/* <MarketPlaceContainer /> */}
+      <Grid spacing={3} container>
+        {books.map((product, index) => (
+          <Grid item key={index}>
+            <ProductCard product={product} />
+          </Grid>
+        ))}
+      </Grid>
+    </>
+  );
+};
