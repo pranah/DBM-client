@@ -11,4 +11,5 @@ export interface ProductCardProps {
   product: Product;
   hoverEffect: boolean;
   showBuyButton: boolean;
+  to: string;
 }

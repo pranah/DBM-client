@@ -7,10 +7,10 @@ import useMoralisInit from "../../hooks/useMoralisInit";
 export const BookFromPublishers = () => {
   const { getBooks, books } = useGetPublisedBook();
   const { isInitialized } = useMoralisInit();
-
+  console.log("book", books);
   useEffect(() => {
     if (isInitialized) getBooks();
-  }, [isInitialized]);
+  }, [getBooks, isInitialized]);
 
   return (
     <>
@@ -18,7 +18,12 @@ export const BookFromPublishers = () => {
       <Grid spacing={3} container>
         {books.map((product, index) => (
           <Grid item key={index}>
-            <ProductCard product={product} />
+            <ProductCard
+              to={`buy-book/${product.isbn}`}
+              showBuyButton
+              hoverEffect
+              product={product}
+            />
           </Grid>
         ))}
       </Grid>

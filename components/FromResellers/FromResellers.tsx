@@ -21,7 +21,7 @@ export const FromResellers = () => {
   const [loading, setLoading] = useState(false);
   const [books, setBooks] = useState([]);
 
-  const getTokens = async (tokenId) => {
+  const getTokens = useCallback(async (tokenId) => {
     const options = {
       contractAddress: pranaAddress,
       functionName: "viewTokenDetails",
@@ -60,25 +60,30 @@ export const FromResellers = () => {
     } catch (error) {
       console.log("Error", error);
     }
-  };
-  const getTokenList = async (tokenCount: number) => {
-    for (let index = 0; index < tokenCount; index++) {
-      const options = {
-        contractAddress: pranaAddress,
-        functionName: "tokenForResaleAtIndex",
-        abi: Prana.abi.filter((fn) => fn.name === "tokenForResaleAtIndex"),
-        params: { index },
-      };
-      await contractProcessor.fetch({
-        params: options,
-        onSuccess: (token) => {
-          getTokens(token);
-        },
-      });
-    }
-  };
+  }, []);
+
+  const getTokenList = useCallback(
+    async (tokenCount: number) => {
+      for (let index = 0; index < tokenCount; index++) {
+        const options = {
+          contractAddress: pranaAddress,
+          functionName: "tokenForResaleAtIndex",
+          abi: Prana.abi.filter((fn) => fn.name === "tokenForResaleAtIndex"),
+          params: { index },
+        };
+        await contractProcessor.fetch({
+          params: options,
+          onSuccess: (token) => {
+            getTokens(token);
+          },
+        });
+      }
+    },
+    [getTokens]
+  );
+
   const getUsedBooks = useCallback(async () => {
-    console.log("getUsed books");
+    console.log("getused book");
     setLoading(true);
     setBooks([]);
     const currentUser = Moralis.User.current();
@@ -93,28 +98,28 @@ export const FromResellers = () => {
     await contractProcessor.fetch({
       params: options,
       onSuccess: (resp) => {
-        getTokenList(resp, owner);
+        getTokenList(resp);
         setLoading(false);
       },
       onError: () => {
         setLoading(false);
       },
     });
-  }, [Moralis.User, contractProcessor]);
-
-  const authMeta = useCallback(async () => {
-    if (!isAuthenticated) {
-      await authenticate();
-    }
-  }, [authenticate, isAuthenticated]);
+  }, [Moralis.User, getTokenList]);
 
   useEffect(() => {
     if (isAuthenticated && isInitialized && isWeb3Enabled) {
       getUsedBooks();
-    } else {
-      authMeta();
+    } else if (!isAuthenticated) {
+      authenticate();
     }
-  }, [isAuthenticated, isInitialized, isWeb3Enabled]);
+  }, [
+    authenticate,
+    getUsedBooks,
+    isAuthenticated,
+    isInitialized,
+    isWeb3Enabled,
+  ]);
 
   return (
     <>
@@ -122,7 +127,7 @@ export const FromResellers = () => {
       <Grid spacing={3} container>
         {books.map((product, index) => (
           <Grid item key={index}>
-            <ProductCard product={product} />
+            <ProductCard hoverEffect product={product} />
           </Grid>
         ))}
       </Grid>

@@ -43,7 +43,7 @@ const MarketPlace = () => {
       }}
     >
       <NavigationDrawer />
-      <Box sx={{ width: "calc(100% - 19vw)", pb: 4 }}>
+      <Box sx={{ width: "calc(100% - 19vw)", pb: 4, pt: 2 }}>
         <SecondaryHeader tabNames={tabNames} tabComponents={tabComponents} />
       </Box>
     </Box>

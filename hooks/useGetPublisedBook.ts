@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import axios from "axios";
 import { ethers } from "ethers";
@@ -11,7 +11,7 @@ export const useGetPublisedBook = () => {
   const [bookList, setBookList] = useState([]);
   const { Moralis } = useMoralisInit();
 
-  const getBooks = async () => {
+  const getBooks = useCallback(async () => {
     const query = new Moralis.Query("BookPublished");
     try {
       setisLoading(true);
@@ -45,7 +45,7 @@ export const useGetPublisedBook = () => {
 
       setError("Error while fetching the books");
     }
-  };
+  }, [Moralis.Query]);
   return {
     books: bookList,
     isLoading,
