@@ -3,6 +3,7 @@ import ProductCard from "../ProductCard/ProductCard";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import { ethers } from "ethers";
 import { pranaAddress } from "../../config";
 
 import Prana from "../../artifacts/contracts/prana.sol/prana.json";
@@ -92,7 +93,7 @@ export const BooksForRent = () => {
           tokenDetailsForTokenId = {
             isbn: result[0],
             isUpForRenting: result[6],
-            rentingPrice: result[4],
+            price: ethers.utils.formatUnits(result[4].toString(), "ether"),
             displayPrice: result[4],
             cid: result[1],
             numberOfBlocksToRent: result[5],
@@ -194,7 +195,7 @@ export const BooksForRent = () => {
       <Grid spacing={3} container>
         {booksForRent.map((product, index) => (
           <Grid item key={index}>
-            <ProductCard product={product} />
+            <ProductCard to="" hoverEffect product={product} />
           </Grid>
         ))}
       </Grid>

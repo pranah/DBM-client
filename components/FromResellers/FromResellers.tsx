@@ -7,6 +7,8 @@ import { pranaAddress } from "../../config";
 import Prana from "../../artifacts/contracts/prana.sol/prana.json";
 import { useWeb3ExecuteFunction } from "react-moralis";
 import axios from "axios";
+import Loader from "../loader/Loader";
+import { ethers } from "ethers";
 
 export const FromResellers = () => {
   const {
@@ -47,7 +49,10 @@ export const FromResellers = () => {
             const item = {
               ...metaDataFromApi,
               tokenId,
-              resalePrice: viewTokenDetailsRespose[3],
+              price: ethers.utils.formatUnits(
+                viewTokenDetailsRespose[3].toString(),
+                "ether"
+              ),
               displayPrice: viewTokenDetailsRespose[3],
               copyNumber: viewTokenDetailsRespose[2],
               isUpForResale: viewTokenDetailsRespose[4],
@@ -124,13 +129,17 @@ export const FromResellers = () => {
   return (
     <>
       {/* <MarketPlaceContainer /> */}
-      <Grid spacing={3} container>
-        {books.map((product, index) => (
-          <Grid item key={index}>
-            <ProductCard hoverEffect product={product} />
-          </Grid>
-        ))}
-      </Grid>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Grid spacing={3} container>
+          {books.map((product, index) => (
+            <Grid item key={index}>
+              <ProductCard to="" showBuyButton hoverEffect product={product} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </>
   );
 };

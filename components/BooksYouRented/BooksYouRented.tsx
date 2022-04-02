@@ -1,21 +1,23 @@
 import { Grid } from "@mui/material";
 import React, { useEffect } from "react";
 import ProductCard from "../ProductCard/ProductCard";
-import { useGetPublisedBook } from "../../hooks/useGetPublisedBook";
+import { useGetMyRentedBooks } from "../../hooks/useGetMyRentedBooks";
 import useMoralisInit from "../../hooks/useMoralisInit";
 import Loader from "../loader/Loader";
 
-export const BookFromPublishers = () => {
-  const { getBooks, books, isLoading } = useGetPublisedBook();
+export const BooksYouRented = () => {
+  const { getBooks, books, loading } = useGetMyRentedBooks();
   const { isInitialized } = useMoralisInit();
   useEffect(() => {
     if (isInitialized) getBooks();
-  }, [getBooks, isInitialized]);
+  }, [isInitialized]);
+
+  console.log("hi");
 
   return (
     <>
       {/* <MarketPlaceContainer /> */}
-      {isLoading ? (
+      {loading ? (
         <Loader />
       ) : (
         <Grid spacing={3} container>
@@ -23,7 +25,7 @@ export const BookFromPublishers = () => {
             <Grid item key={index}>
               <ProductCard
                 to={`buy-book/${product.isbn}`}
-                showBuyButton
+                //   showBuyButton
                 hoverEffect
                 product={product}
               />

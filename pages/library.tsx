@@ -1,31 +1,29 @@
-import { Container } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
-import { BooksForRent } from "../components/BooksForRent/BooksForRent";
-import { BookFromPublishers } from "../components/BooksFroPublishers/BookFromPublishers";
-import { FromResellers } from "../components/FromResellers/FromResellers";
-import { MainHeader } from "../components/MainHeader/MainHeader";
+import { BooksInYourLibrary } from "../components/BooksInYourLibrary/BooksInYourLibrary";
+import { BooksYouRented } from "../components/BooksYouRented/BooksYouRented";
 import { NavigationDrawer } from "../components/NavigationDrawer/NavigationDrawer";
 import { SecondaryHeader } from "../components/SecondaryHeader/SecondaryHeader";
-import { HeaderTabs } from "../components/Tabs/Tabs";
-
-const TabPanelFour = () => <span>Four</span>;
 
 const tabNames = [
-  "BOOKS FROM PUBLISHERS",
-  "BOOKS FROM RESELLERS",
-  "BOOKS FOR RENT",
+  "BOOKS IN YOUR LIBRARY",
+  "BOOKS YOU RENTED",
+  // "BOOKS YOU PUBLISHED",
   // "AUCTION HOUSE",
 ];
 
+// const BooksInYourLibrary = () => <>BOOKS IN YOUR LIBRARY</>;
+// const BooksYouRented = () => <>BOOKS YOU RENTED</>;
+const BooksYouPublished = () => <>BOOKS YOU PUBLISHED</>;
+
 const tabComponents = [
-  BookFromPublishers,
-  FromResellers,
-  BooksForRent,
+  BooksInYourLibrary,
+  BooksYouRented,
+  BooksYouPublished,
   // TabPanelFour,
 ];
 
-const MarketPlace = () => {
+const Library = () => {
   return (
     <Box
       sx={{
@@ -48,4 +46,4 @@ const MarketPlace = () => {
   );
 };
 
-export default MarketPlace;
+export default Library;

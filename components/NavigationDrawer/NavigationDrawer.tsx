@@ -21,7 +21,7 @@ const listItems = [
   {
     name: "Library",
     icon: <HomeOutlinedIcon />,
-    url: "",
+    url: "/library",
   },
   {
     name: "Marketplace",
@@ -42,7 +42,6 @@ const listItems = [
 
 export const NavigationDrawer = () => {
   const router = useRouter();
-  console.log("router.pathname.includes", router.pathname);
   return (
     <>
       <Drawer

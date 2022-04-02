@@ -1,7 +1,7 @@
 import { Button, Grid, Typography } from "@mui/material";
 import React from "react";
 
-export const ProductDetailButtonSetion = () => {
+export const ProductDetailButtonSetion = ({ price, onBuyClick }) => {
   return (
     <>
       <Grid
@@ -15,10 +15,15 @@ export const ProductDetailButtonSetion = () => {
             {" "}
             Current Price{" "}
           </Typography>
-          1.5
+          {price}
         </Grid>
         <Grid item flexGrow={1} sx={{ ml: 2 }}>
-          <Button size="large" fullWidth variant="contained">
+          <Button
+            onClick={onBuyClick}
+            size="large"
+            fullWidth
+            variant="contained"
+          >
             Buy Now
           </Button>
         </Grid>

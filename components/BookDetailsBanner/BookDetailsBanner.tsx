@@ -6,7 +6,7 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import PersonIcon from "@mui/icons-material/Person";
 import { Typography } from "@mui/material";
 
-export const BookDetailsBanner = () => {
+export const BookDetailsBanner = ({ genre, language }) => {
   return (
     <>
       <Box style={{ paddingLeft: "1.5rem" }}>
@@ -28,7 +28,7 @@ export const BookDetailsBanner = () => {
               Genre
             </Typography>
             <CategoryIcon sx={{ my: 1 }} />
-            <Typography variant="body2">Home Stories</Typography>
+            <Typography variant="body2">{genre}</Typography>
           </Grid>
           <Grid
             item
@@ -56,7 +56,7 @@ export const BookDetailsBanner = () => {
               Language
             </Typography>
             <LanguageIcon sx={{ my: 1 }} />
-            <Typography variant="body2">English</Typography>
+            <Typography variant="body2">{language}</Typography>
           </Grid>
           <Grid
             item

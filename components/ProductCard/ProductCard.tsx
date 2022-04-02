@@ -13,19 +13,19 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { CardActionArea } from "@mui/material";
 import Link from "next/link";
 
-const cardHoverStyles = {
+const cardHoverStyles = (showBuyButton) => ({
   "&:hover .MuiCardActions-root": {
     display: "flex",
     justifyContent: "space-between",
   },
   "&:hover .price-rating, &:hover .author-name": {
-    display: "none",
+    ...(showBuyButton ? { display: "none" } : {}),
   },
 
   "&:hover": {
     transform: "scale(1.05)",
   },
-};
+});
 
 export default function ProductCard({
   product,
@@ -42,7 +42,7 @@ export default function ProductCard({
         border: "1px solid #e2e2e2",
         cursor: "pointer",
 
-        ...(hoverEffect ? cardHoverStyles : {}),
+        ...(hoverEffect ? cardHoverStyles(showBuyButton) : {}),
       }}
     >
       <CardActionArea disableRipple>
