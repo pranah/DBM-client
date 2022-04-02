@@ -57,7 +57,6 @@ export const FromResellers = () => {
               copyNumber: viewTokenDetailsRespose[2],
               isUpForResale: viewTokenDetailsRespose[4],
             };
-            console.log(item);
             setBooks((prevBooks) => [...prevBooks, item]);
           }
         },
@@ -88,7 +87,6 @@ export const FromResellers = () => {
   );
 
   const getUsedBooks = useCallback(async () => {
-    console.log("getused book");
     setLoading(true);
     setBooks([]);
     const currentUser = Moralis.User.current();

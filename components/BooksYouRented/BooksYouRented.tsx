@@ -12,8 +12,6 @@ export const BooksYouRented = () => {
     if (isInitialized) getBooks();
   }, [isInitialized]);
 
-  console.log("hi");
-
   return (
     <>
       {/* <MarketPlaceContainer /> */}

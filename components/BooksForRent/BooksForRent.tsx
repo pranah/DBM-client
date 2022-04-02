@@ -29,7 +29,6 @@ export const BooksForRent = () => {
 
   const authMeta = useCallback(async () => {
     if (!isAuthenticated) {
-      console.log("rented------authenticate");
       await authenticate();
     }
   }, [authenticate]);
@@ -38,8 +37,6 @@ export const BooksForRent = () => {
     if (isAuthenticated && isInitialized && isWeb3Enabled) {
       getBooksForRent();
     } else {
-      console.log("rented2------authenticate");
-
       authenticate();
     }
   }, [isInitialized, isAuthenticated, isWeb3Enabled]);
@@ -125,7 +122,6 @@ export const BooksForRent = () => {
           throw err;
         },
         onSuccess: (result) => {
-          console.log("success", result);
           tokenIdsForSale = result;
         },
       });

@@ -53,8 +53,6 @@ export const useGetBooksInYourLibrary = () => {
   };
 
   const getTokens = async (tokenId) => {
-    console.log("tokenId", tokenId);
-
     const options = {
       contractAddress: pranaAddress,
       functionName: "viewTokenDetails",
