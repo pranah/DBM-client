@@ -195,7 +195,11 @@ export const BooksForRent = () => {
       <Grid spacing={3} container>
         {booksForRent.map((product, index) => (
           <Grid item key={index}>
-            <ProductCard to="" hoverEffect product={product} />
+            <ProductCard
+              to={`/rent-book/${product.tokenId}`}
+              hoverEffect
+              product={product}
+            />
           </Grid>
         ))}
       </Grid>

@@ -62,7 +62,7 @@ const Buy = () => {
               buyProductSection={() => (
                 <ProductDetailButtonSetion
                   price={books.price}
-                  onBuyClick={buyBook}
+                  onButtonClick={buyBook}
                 />
               )}
               productDetails={books}

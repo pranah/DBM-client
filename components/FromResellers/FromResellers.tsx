@@ -135,7 +135,12 @@ export const FromResellers = () => {
         <Grid spacing={3} container>
           {books.map((product, index) => (
             <Grid item key={index}>
-              <ProductCard to="" showBuyButton hoverEffect product={product} />
+              <ProductCard
+                to={`/resell-book/${product.tokenId}`}
+                showBuyButton
+                hoverEffect
+                product={product}
+              />
             </Grid>
           ))}
         </Grid>

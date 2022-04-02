@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "./ProductImage.module.css";
 
 export const ProductImage = ({ imageUrl }) => {
-  const src = imageUrl;
+  const src = imageUrl || "";
   return (
     <Card
       elevation={0}
