@@ -12,6 +12,8 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { CardActionArea } from "@mui/material";
 import Link from "next/link";
+import { CopyBadge } from "../CopyBadge/CopyBadge";
+import { ordinal_suffix_of } from "../../utils";
 
 const cardHoverStyles = (showBuyButton) => ({
   "&:hover .MuiCardActions-root": {
@@ -41,10 +43,14 @@ export default function ProductCard({
         borderRadius: "0.5rem",
         border: "1px solid #e2e2e2",
         cursor: "pointer",
+        position: "relative",
 
         ...(hoverEffect ? cardHoverStyles(showBuyButton) : {}),
       }}
     >
+      {product.copyNumber && (
+        <CopyBadge label={`${ordinal_suffix_of(product.copyNumber)} Copy`} />
+      )}
       <CardActionArea disableRipple>
         <Link href={to ? to : ""}>
           <a style={{ textDecoration: "none", color: "inherit" }}>

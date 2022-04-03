@@ -5,6 +5,7 @@ export type Product = {
   rating: number;
   author: string;
   id?: number;
+  copyNumber: number;
 };
 
 export interface ProductCardProps {
