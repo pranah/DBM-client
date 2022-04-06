@@ -41,7 +41,7 @@ export function HeaderTabs({ tabNames, tabComponents }) {
   };
 
   return (
-    <Box sx={{ width: "100%", background: "rgba(255,255,255,0.7)" }}>
+    <Box sx={{ width: "100%", background: "rgba(245, 245, 245, 0.8)" }}>
       <Box>
         <Tabs
           value={value}
@@ -49,7 +49,7 @@ export function HeaderTabs({ tabNames, tabComponents }) {
           onChange={handleChange}
           aria-label=""
           sx={{
-            backgroundColor: "rgba(255,255,255,0.7)",
+            backgroundColor: "rgba(245, 245, 245, 0.8)",
             "& .MuiTabs-indicator": {
               width: "2rem!important",
               top: 0,
@@ -63,6 +63,7 @@ export function HeaderTabs({ tabNames, tabComponents }) {
               sx={{
                 paddingRight: 0,
                 paddingLeft: 0,
+                backgroundColor: "rgba(245, 245, 245, 0.8)",
                 mr: 2,
                 alignItems: "flex-start",
                 "&.Mui-selected": {

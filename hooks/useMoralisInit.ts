@@ -1,7 +1,7 @@
 declare var window: any;
 
 import router from "next/router";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import { chain } from "../config";
 
@@ -69,16 +69,16 @@ export default function useMoralisInit() {
         });
     }
   };
-  const authenticateUser = () => {
-    console.log(
-      "authenticateUser",
-      chainId,
-      isAuthenticated,
-      isWeb3Enabled,
-      isInitialized,
-      isWeb3EnableLoading,
-      !window.ethereum
-    );
+  const authenticateUser = useCallback(() => {
+    // console.log(
+    //   "authenticateUser",
+    //   chainId,
+    //   isAuthenticated,
+    //   isWeb3Enabled,
+    //   isInitialized,
+    //   isWeb3EnableLoading,
+    //   !window.ethereum
+    // );
 
     if (
       !isAuthenticated &&
@@ -90,7 +90,7 @@ export default function useMoralisInit() {
     } else if (!window.ethereum) {
       router.push("/login");
     }
-  };
+  }, [authenticate, chainId, isAuthenticated, isWeb3Enabled]);
 
   return {
     Moralis,

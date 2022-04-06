@@ -10,6 +10,7 @@ import { MoralisProvider } from "react-moralis";
 import createEmotionCache from "../styles/createEmotionsCache";
 import theme from "../styles/theme";
 import BookDetailsProvider from "../context/providers/book-details.provider";
+import "../styles/global.css";
 
 // material
 

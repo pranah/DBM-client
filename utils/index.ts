@@ -65,4 +65,14 @@ export const productsArray: Product[] = [
     image:
       "https://ipfs.moralis.io:2053/ipfs/QmUP8WmQJasVhodsZGx8pDjgnJomvKHFKkhQcWznCAkRYu",
   },
+  {
+    id: 6,
+
+    rating: 3,
+    name: "Candide",
+    author: "Voltaire",
+    price: 0.2,
+    image:
+      "https://ipfs.moralis.io:2053/ipfs/QmUP8WmQJasVhodsZGx8pDjgnJomvKHFKkhQcWznCAkRYu",
+  },
 ];

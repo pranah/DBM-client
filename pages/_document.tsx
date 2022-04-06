@@ -7,7 +7,16 @@ import theme from "../styles/theme";
 export default class MyDocument extends Document {
   render() {
     return (
-      <Html lang="en">
+      <Html
+        style={{
+          scrollBehavior: "smooth",
+          overflow: "hidden",
+          height: "100%",
+          width: "100%",
+          overflow: "hidden",
+        }}
+        lang="en"
+      >
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
@@ -19,9 +28,18 @@ export default class MyDocument extends Document {
           {/* Inject MUI styles first to match with the prepend: true configuration. */}
           {(this.props as any).emotionStyleTags}
         </Head>
-        <body>
+        <body style={{ height: "100%", width: "100%", overflow: "hidden" }}>
           <Main />
           <NextScript />
+          <style jsx global>{`
+            /* Other global styles such as 'html, body' etc... */
+
+            #__next {
+              height: 100%;
+              width: "100%";
+              overflow: "hidden";
+            }
+          `}</style>
         </body>
       </Html>
     );

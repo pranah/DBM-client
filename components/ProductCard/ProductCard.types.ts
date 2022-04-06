@@ -5,10 +5,12 @@ export type Product = {
   rating: number;
   author: string;
   id?: number;
+  copyNumber: number;
 };
 
 export interface ProductCardProps {
   product: Product;
   hoverEffect: boolean;
   showBuyButton: boolean;
+  to: string;
 }

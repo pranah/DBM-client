@@ -53,7 +53,11 @@ export const HowItWorks = () => {
             <Typography
               component="h3"
               variant="h5"
-              sx={{ lineHeight: "36.92px" }}
+              sx={{
+                lineHeight: "36.92px",
+                fontSize: { xs: "1.4rem", lg: "2rem" },
+                fontWeight: 600,
+              }}
             >
               When eBooks become NFTs{" "}
             </Typography>

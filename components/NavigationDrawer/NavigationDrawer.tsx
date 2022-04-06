@@ -21,12 +21,12 @@ const listItems = [
   {
     name: "Library",
     icon: <HomeOutlinedIcon />,
-    url: "",
+    url: "/library",
   },
   {
     name: "Marketplace",
     icon: <StoreOutlinedIcon />,
-    url: "market-place",
+    url: "/market-place",
   },
   {
     name: "Profile",
@@ -42,7 +42,6 @@ const listItems = [
 
 export const NavigationDrawer = () => {
   const router = useRouter();
-  console.log("router.pathname.includes");
   return (
     <>
       <Drawer
@@ -80,8 +79,10 @@ export const NavigationDrawer = () => {
                 </ListItemIcon>
                 <ListItemText
                   sx={{
-                    fontWeight:
-                      router.pathname === `/${url}` ? "bold" : undefined,
+                    "&>span": {
+                      fontWeight:
+                        router.pathname === `${url}` ? "bold" : undefined,
+                    },
                   }}
                   primary={name}
                 />

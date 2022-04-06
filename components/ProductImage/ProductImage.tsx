@@ -3,9 +3,8 @@ import { Card } from "@mui/material";
 import Image from "next/image";
 import styles from "./ProductImage.module.css";
 
-export const ProductImage = () => {
-  const src =
-    "https://ipfs.moralis.io:2053/ipfs/QmckUFY6PLYvkx1esnXNkfmy3atW8PWGcwPGGAx7Yp7tLk";
+export const ProductImage = ({ imageUrl }) => {
+  const src = imageUrl || "";
   return (
     <Card
       elevation={0}

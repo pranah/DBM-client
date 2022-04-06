@@ -36,7 +36,17 @@ const Home = () => {
   const router = useRouter();
 
   return (
-    <>
+    <Box
+      sx={{
+        overflowY: "auto",
+        height: "100%",
+        msOverflowStyle: "none",
+        scrollbarWidth: "none",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+      }}
+    >
       <MainHeader
         rightSideComponents={() => (
           <>
@@ -59,6 +69,7 @@ const Home = () => {
               </Button>
 
               <Button
+                href="#sign-up"
                 sx={{
                   ml: 2,
                   color: "tertiary.main",
@@ -72,8 +83,7 @@ const Home = () => {
                 variant="contained"
                 size="medium"
               >
-                {" "}
-                Login
+                Login/Sign up
               </Button>
             </Box>
             <Box sx={{ display: { xs: "block", lg: "none" } }}>
@@ -84,7 +94,9 @@ const Home = () => {
                   component="span"
                   sx={{ mr: 1 }}
                 >
-                  Login
+                  <a style={{ textDecoration: "none" }} href="#sign-up">
+                    Login/Sign up
+                  </a>
                 </Typography>
                 <ArrowCircleRightOutlinedIcon color="tertiary" />
               </Grid>
@@ -228,7 +240,7 @@ const Home = () => {
         <Feedback />
         <Footer />
       </Box>
-    </>
+    </Box>
   );
 };
 
