@@ -19,18 +19,38 @@ export const Footer = () => {
           justifyContent="center"
           sx={{ mt: 2 }}
         >
-          <img
-            style={{ marginRight: "1rem", display: "inline-block" }}
-            src="images/linkedin.svg"
-          />
-          <img
-            style={{ marginRight: "1rem", display: "inline-block" }}
-            src="images/twitter.svg"
-          />
-          <img
-            style={{ marginRight: "1rem", display: "inline-block" }}
-            src="images/discord.svg"
-          />
+          <a
+            href="https://www.linkedin.com/company/pranah/"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <img
+              style={{ marginRight: "1rem", display: "inline-block" }}
+              src="images/linkedin.svg"
+            />
+          </a>
+          <a
+            href="https://twitter.com/pranaheBooks"
+            rel="noreferrer"
+            target="_blank"
+          >
+            {" "}
+            <img
+              style={{ marginRight: "1rem", display: "inline-block" }}
+              src="images/twitter.svg"
+            />
+          </a>
+          <a
+            href="https://discord.gg/vY9QKV5z"
+            rel="noreferrer"
+            target="_blank"
+          >
+            {" "}
+            <img
+              style={{ marginRight: "1rem", display: "inline-block" }}
+              src="images/discord.svg"
+            />
+          </a>
         </Grid>
       </Box>
       <Grid
@@ -106,18 +126,38 @@ export const Footer = () => {
         </Grid>
         <Box display={{ xs: "none", lg: "block" }}>
           <Grid sx={{ display: "flex", alignItems: "center" }} item>
-            <img
-              style={{ marginRight: "1rem", display: "inline-block" }}
-              src="images/linkedin.svg"
-            />
-            <img
-              style={{ marginRight: "1rem", display: "inline-block" }}
-              src="images/twitter.svg"
-            />
-            <img
-              style={{ marginRight: "1rem", display: "inline-block" }}
-              src="images/discord.svg"
-            />
+            <a
+              href="https://www.linkedin.com/company/pranah/"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <img
+                style={{ marginRight: "1rem", display: "inline-block" }}
+                src="images/linkedin.svg"
+              />
+            </a>
+            <a
+              href="https://twitter.com/pranaheBooks"
+              rel="noreferrer"
+              target="_blank"
+            >
+              {" "}
+              <img
+                style={{ marginRight: "1rem", display: "inline-block" }}
+                src="images/twitter.svg"
+              />
+            </a>
+            <a
+              href="https://discord.gg/vY9QKV5z"
+              rel="noreferrer"
+              target="_blank"
+            >
+              {" "}
+              <img
+                style={{ marginRight: "1rem", display: "inline-block" }}
+                src="images/discord.svg"
+              />
+            </a>
           </Grid>
         </Box>
       </Grid>
