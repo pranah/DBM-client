@@ -7,7 +7,7 @@ import { PDP } from "../../components/pdp/pdp";
 import useMoralisInit from "../../hooks/useMoralisInit";
 import { useBuyBook } from "../../hooks/useBuyBook";
 import Loader from "../../components/loader/Loader";
-import { ProductDetailButtonSetion } from "../../components/ProductDetailButtonSetion/ProductDetailButtonSetion";
+import { ProductDetailButtonSectionMyBook } from "../../components/ProductDetailButtonSectionMyBook/ProductDetailButtonSectionMyBook";
 
 const Buy = () => {
   const [books, setBooks] = useState(null);
@@ -51,6 +51,11 @@ const Buy = () => {
     if (isbn) getBookById();
   }, [getBookById, router.query]);
 
+  const bookDetails = {
+    title: books?.name || "",
+    author: books?.author || "",
+  };
+
   return (
     <>
       {loading || loadingBookState ? (
@@ -60,10 +65,7 @@ const Buy = () => {
           {books && (
             <PDP
               buyProductSection={() => (
-                <ProductDetailButtonSetion
-                  price={books.price}
-                  onButtonClick={buyBook}
-                />
+                <ProductDetailButtonSectionMyBook bookDetails={bookDetails} />
               )}
               productDetails={books}
             />
