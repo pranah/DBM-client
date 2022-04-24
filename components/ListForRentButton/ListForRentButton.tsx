@@ -2,17 +2,41 @@ import {
   Grid,
   InputAdornment,
   InputLabel,
-  OutlinedInput,
+  TextField,
   Typography,
 } from "@mui/material";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useRouter } from "next/router";
+
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { BookDetails } from "../../utils/common.types";
 import { RoundedButton } from "../ProductDetailButtonSectionMyBook/ProductDetailButtonSectionMyBook";
 import { RentBookModal } from "../RentBookModal/RentBookModal";
+import { usePutForRent } from "../../hooks/putForRent";
+import { SnackbarContext } from "../../context/providers/snack-bar.provider";
 
-const RentBookContent = () => {
+const schema = yup
+  .object()
+  .shape({
+    value: yup
+      .number()
+      .typeError("Please enter a value")
+      .required("Please enter a value")
+      .positive("Please enter a value greater than zero"),
+    noOfBlocks: yup
+      .number()
+      .typeError("Please enter a value")
+      .required("Please enter a value")
+      .positive("Please enter a value greater than zero"),
+  })
+  .required();
+
+const RentBookContent = ({ register, errors }) => {
   return (
-    <Grid container alignItems="center">
+    <Grid sx={{ mt: 5 }} container alignItems="center">
       <Grid item xs={12}>
         <Grid container alignItems="center" sx={{ mb: 1.5 }}>
           <Grid item xs={3}>
@@ -24,7 +48,10 @@ const RentBookContent = () => {
             </InputLabel>
           </Grid>
           <Grid item xs={7}>
-            <OutlinedInput
+            <TextField
+              {...register("value", { valueAsNumber: true })}
+              error={!!errors.value}
+              helperText={errors.value ? errors.value.message : ""}
               inputProps={{ min: 0 }}
               startAdornment={
                 <InputAdornment position="start">
@@ -54,7 +81,10 @@ const RentBookContent = () => {
             </InputLabel>
           </Grid>
           <Grid item xs={7}>
-            <OutlinedInput
+            <TextField
+              {...register("noOfBlocks")}
+              error={!!errors.noOfBlocks}
+              helperText={errors.noOfBlocks ? errors.noOfBlocks.message : ""}
               inputProps={{ min: 1 }}
               size="small"
               type="number"
@@ -72,14 +102,47 @@ const RentBookContent = () => {
 
 interface RentBookActionButtonProps {
   handleClose: () => void;
+  handleSubmit: Function;
 }
 
-const RentBookActionButton = ({ handleClose }: RentBookActionButtonProps) => {
+const RentBookActionButton = ({
+  handleClose,
+  handleSubmit,
+}: RentBookActionButtonProps) => {
+  const router = useRouter();
+  const tokenId = router.query.tokenId as string;
+  const { rentNFT } = usePutForRent();
+  const { setSnack } = useContext(SnackbarContext);
+  const onSuccess = () => {
+    handleClose();
+    setSnack({
+      open: true,
+      message: "Book rented Successfully",
+      severity: "success",
+    });
+    router.push("/library");
+  };
+
+  const onError = () => {
+    setSnack({
+      open: true,
+      message: "Error renting book",
+      severity: "error",
+    });
+  };
+
+  const onRentClick = (data) => {
+    rentNFT(data.value, data.noOfBlocks, tokenId, onSuccess, onError);
+  };
   return (
     <>
       <Grid container spacing={2}>
         <Grid xs={6} item>
-          <RoundedButton fullWidth variant="contained">
+          <RoundedButton
+            onClick={handleSubmit(onRentClick)}
+            fullWidth
+            variant="contained"
+          >
             List For Rent
           </RoundedButton>
         </Grid>
@@ -93,11 +156,6 @@ const RentBookActionButton = ({ handleClose }: RentBookActionButtonProps) => {
   );
 };
 
-type BookDetails = {
-  title: string;
-  author: string;
-};
-
 interface ListForRentButtonProps {
   bookDetails: BookDetails;
 }
@@ -108,6 +166,18 @@ export const ListForRentButton = ({ bookDetails }: ListForRentButtonProps) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      value: "",
+      noOfBlocks: "",
+    },
+  });
+
   return (
     <>
       <RoundedButton variant="outlined" onClick={handleOpen} size="large">
@@ -116,9 +186,16 @@ export const ListForRentButton = ({ bookDetails }: ListForRentButtonProps) => {
       <RentBookModal
         open={open}
         handleClose={handleClose}
-        actionButtons={() => <RentBookActionButton handleClose={handleClose} />}
+        actionButtons={() => (
+          <RentBookActionButton
+            handleSubmit={handleSubmit}
+            handleClose={handleClose}
+          />
+        )}
         bookDetails={bookDetails}
-        dialogContent={RentBookContent}
+        dialogContent={() => (
+          <RentBookContent errors={errors} register={register} />
+        )}
       />
     </>
   );

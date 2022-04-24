@@ -6,6 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Typography from "@mui/material/Typography";
+import { BookDetails } from "../../utils/common.types";
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -34,11 +35,6 @@ const StyledDialogTitle = (props) => {
 StyledDialogTitle.propTypes = {
   children: PropTypes.node,
   onClose: PropTypes.func.isRequired,
-};
-
-type BookDetails = {
-  title: string;
-  author: string;
 };
 
 interface RentBookModalProps {

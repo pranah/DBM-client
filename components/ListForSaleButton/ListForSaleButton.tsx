@@ -1,12 +1,13 @@
 import { Grid, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
 import Image from "next/image";
 import React, { useState } from "react";
+import { BookDetails } from "../../utils/common.types";
 import { RoundedButton } from "../ProductDetailButtonSectionMyBook/ProductDetailButtonSectionMyBook";
 import { RentBookModal } from "../RentBookModal/RentBookModal";
 
 const SaleBookContent = () => {
   return (
-    <Grid container alignItems="center">
+    <Grid sx={{ mt: 5 }} container alignItems="center">
       <InputLabel
         sx={{ mr: 2, fontWeight: "500", color: "text.primary" }}
         htmlFor="selling-price"
@@ -53,11 +54,6 @@ const SaleBookActionButton = ({ handleClose }: SaleBookActionButtonProps) => {
       </Grid>
     </>
   );
-};
-
-type BookDetails = {
-  title: string;
-  author: string;
 };
 
 interface ListForSaleButtonProps {

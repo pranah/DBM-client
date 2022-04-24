@@ -10,7 +10,9 @@ import { MoralisProvider } from "react-moralis";
 import createEmotionCache from "../styles/createEmotionsCache";
 import theme from "../styles/theme";
 import BookDetailsProvider from "../context/providers/book-details.provider";
+import { CustomizedSnackbarProvider } from "../context/providers/snack-bar.provider";
 import "../styles/global.css";
+import { LoaderProvider } from "../context/providers/loading.provider";
 
 // material
 
@@ -36,9 +38,13 @@ export default function MyApp(props: MyAppProps) {
 
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <BookDetailsProvider>
-            <Component {...pageProps} />
-          </BookDetailsProvider>
+          <LoaderProvider>
+            <CustomizedSnackbarProvider>
+              <BookDetailsProvider>
+                <Component {...pageProps} />
+              </BookDetailsProvider>
+            </CustomizedSnackbarProvider>
+          </LoaderProvider>
         </ThemeProvider>
       </CacheProvider>
     </MoralisProvider>

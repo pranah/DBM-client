@@ -16,6 +16,7 @@
     "@emotion/react": "latest",
     "@emotion/server": "latest",
     "@emotion/styled": "latest",
+    "@hookform/resolvers": "^2.8.8",
     "@material-ui/pickers": "^3.3.10",
     "@metamask/onboarding": "^1.0.1",
     "@mui/icons-material": "latest",
