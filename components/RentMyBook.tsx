@@ -5,8 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Input from "@mui/material/Input";
-import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
+import { useWeb3ExecuteFunction } from "react-moralis";
 
 import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";

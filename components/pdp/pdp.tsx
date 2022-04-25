@@ -28,6 +28,8 @@ interface PDPProps {
 }
 
 export const PDP = ({ productDetails, buyProductSection }: PDPProps) => {
+  const BuyProductSection = buyProductSection;
+
   return (
     <Box
       sx={{
@@ -88,7 +90,7 @@ export const PDP = ({ productDetails, buyProductSection }: PDPProps) => {
               language={productDetails.language}
               genre={productDetails.genre}
             />
-            {buyProductSection && buyProductSection()}
+            {buyProductSection && <BuyProductSection />}
           </Grid>
         </Grid>
         <Box sx={{ mt: 4 }}>
