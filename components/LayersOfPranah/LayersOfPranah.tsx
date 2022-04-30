@@ -1,6 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
+import Image from "next/image";
 
 export const LayersOfPranah = () => {
   return (
@@ -33,7 +34,12 @@ export const LayersOfPranah = () => {
         >
           <Grid item>
             <Grid container flexDirection="column" alignItems="center">
-              <img style={{ width: "5.5rem" }} src="images/popular-man.svg" />
+              <Image
+                width={100}
+                height={80}
+                alt="pre owned"
+                src="/images/popular-man.svg"
+              />
               <Typography
                 sx={{
                   width: "8rem",
@@ -50,7 +56,12 @@ export const LayersOfPranah = () => {
           </Grid>{" "}
           <Grid item>
             <Grid container flexDirection="column" alignItems="center">
-              <img style={{ width: "5rem" }} src="images/first-copy.svg" />
+              <Image
+                alt="first copy"
+                width={80}
+                height={80}
+                src="/images/first-copy.svg"
+              />
               <Typography
                 sx={{
                   width: "8rem",
@@ -67,7 +78,12 @@ export const LayersOfPranah = () => {
           </Grid>{" "}
           <Grid item>
             <Grid container flexDirection="column" alignItems="center">
-              <img style={{ width: "5rem" }} src="images/star-filled.svg" />
+              <Image
+                alt="limited edition"
+                width={100}
+                height={80}
+                src="/images/star-filled.svg"
+              />
               <Typography
                 sx={{
                   width: "8rem",
@@ -84,7 +100,12 @@ export const LayersOfPranah = () => {
           </Grid>
           <Grid item>
             <Grid container flexDirection="column" alignItems="center">
-              <img style={{ width: "5rem" }} src="images/autograph.svg" />
+              <Image
+                width={100}
+                height={80}
+                alt="Autographed"
+                src="/images/autograph.svg"
+              />
               <Typography
                 sx={{
                   width: "8rem",
