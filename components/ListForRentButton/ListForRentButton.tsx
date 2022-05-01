@@ -53,16 +53,18 @@ const RentBookContent = ({ register, errors }) => {
               error={!!errors.value}
               helperText={errors.value ? errors.value.message : ""}
               inputProps={{ min: 0 }}
-              startAdornment={
-                <InputAdornment position="start">
-                  <Image
-                    alt="eth"
-                    src="/images/eth-icon.svg"
-                    width={20}
-                    height={20}
-                  />
-                </InputAdornment>
-              }
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Image
+                      alt="eth"
+                      src="/images/eth-icon.svg"
+                      width={20}
+                      height={20}
+                    />
+                  </InputAdornment>
+                ),
+              }}
               size="small"
               type="number"
               id="renting-price"
@@ -161,15 +163,11 @@ interface ListForRentButtonProps {
 }
 
 export const ListForRentButton = ({ bookDetails }: ListForRentButtonProps) => {
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   const {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -177,6 +175,14 @@ export const ListForRentButton = ({ bookDetails }: ListForRentButtonProps) => {
       noOfBlocks: "",
     },
   });
+
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    reset();
+    setOpen(false);
+  };
 
   return (
     <>

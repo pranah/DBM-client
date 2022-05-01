@@ -1,35 +1,32 @@
-import { useWeb3ExecuteFunction } from "react-moralis";
-
-import { pranaAddress } from "../config";
-import Prana from "../artifacts/contracts/prana.sol/prana.json";
-import useMoralisInit from "../hooks/useMoralisInit";
-import { LoaderContext } from "../context/providers/loading.provider";
 import { useCallback, useContext } from "react";
 
-export const usePutForRent = () => {
+import { useWeb3ExecuteFunction } from "react-moralis";
+import { LoaderContext } from "../context/providers/loading.provider";
+import useMoralisInit from "./useMoralisInit";
+import { pranaAddress } from "../config";
+import Prana from "../artifacts/contracts/prana.sol/prana.json";
+
+export const usePutTokenForSale = () => {
   const { Moralis } = useMoralisInit();
   const contractProcessor = useWeb3ExecuteFunction();
   const { hideLoader, showLoader } = useContext(LoaderContext);
 
-  const rentNFT = useCallback(
+  const resellNFT = useCallback(
     async (
       myBookValueInEth: number,
-      numberofBlocksToRent: number,
       tokenId: string,
-      onSuccess?: () => void,
-      onError?: () => void
+      onSuccess: () => void,
+      onError: () => void
     ) => {
       showLoader();
-      const rentPrice = Moralis.Units.ETH(myBookValueInEth);
-      const _numberofBlocksToRent = numberofBlocksToRent * 20;
+      const resalePrice = Moralis.Units.ETH(myBookValueInEth);
       let options = {
         contractAddress: pranaAddress,
-        functionName: "putForRent",
-        abi: Prana.abi.filter((fn) => fn.name === "putForRent"),
+        functionName: "putTokenForSale",
+        abi: Prana.abi.filter((fn) => fn.name === "putTokenForSale"),
         params: {
-          _newPrice: rentPrice,
-          tokenId,
-          _numberofBlocksToRent,
+          salePrice: resalePrice,
+          tokenId: tokenId,
         },
       };
       try {
@@ -37,26 +34,23 @@ export const usePutForRent = () => {
           params: options,
           onError: (err) => {
             hideLoader();
-
-            console.log(err);
+            onError();
+            console.log("error", err);
             throw err;
           },
           onSuccess: () => {
-            console.log("success");
             hideLoader();
-
-            onSuccess && onSuccess();
+            onSuccess();
           },
         });
       } catch (error) {
-        onError && onError();
+        hideLoader();
         console.log(error);
       }
     },
     [Moralis.Units, contractProcessor, hideLoader, showLoader]
   );
-
   return {
-    rentNFT,
+    resellNFT,
   };
 };

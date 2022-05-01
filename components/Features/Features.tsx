@@ -1,6 +1,16 @@
 import { Box, Grid, Theme, Typography } from "@mui/material";
 import styles from "./Features.module.css";
+import Image from "next/image";
+
 import useMediaQuery from "@mui/material/useMediaQuery";
+import styled from "@emotion/styled";
+
+const ImageContainer = styled.div({
+  position: "absolute",
+  display: "inline-block",
+  top: "-15px",
+  left: 0,
+});
 
 export const Features = () => {
   const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
@@ -35,15 +45,15 @@ export const Features = () => {
         <span style={{ position: "relative" }}>
           {" "}
           {/* <span className={styles.telescope}></span> */}
-          <img
-            style={{
-              position: "absolute",
-              display: "inline-block",
-              top: "-15px",
-              left: "0",
-            }}
-            src="images/telescope.svg"
-          />
+          <ImageContainer>
+            <Image
+              width={50}
+              height={50}
+              src="/images/telescope.svg"
+              alt="explore"
+              // layout="responsive"
+            />
+          </ImageContainer>
           Explore All Other Features
         </span>
       </Typography>
@@ -91,11 +101,11 @@ export const Features = () => {
           xl={6}
           lg={6}
         >
-          <img
-            style={{
-              width: matches ? "100%" : undefined,
-            }}
-            src="images/writing-women.svg"
+          <Image
+            alt="Read and Annotate"
+            width={330}
+            height={346}
+            src="/images/writing-women.svg"
           />
         </Grid>
       </Grid>
@@ -133,7 +143,13 @@ export const Features = () => {
           </Typography>
         </Grid>
         <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
-          <img style={{ width: "100%" }} src="images/man-nft.svg" />
+          <Image
+            style={{ width: "100%" }}
+            alt="resell-books"
+            width={614}
+            height={345}
+            src="/images/man-nft.svg"
+          />
         </Grid>
       </Grid>
 
@@ -168,7 +184,7 @@ export const Features = () => {
           </Typography>
         </Grid>
         <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
-          <img style={{ width: "100%" }} src="images/rent.svg" />
+          <Image alt="rent" width={542} height={305} src="/images/rent.svg" />
         </Grid>
       </Grid>
       <Grid container alignItems="center" direction="row-reverse">
@@ -201,9 +217,11 @@ export const Features = () => {
           </Typography>
         </Grid>
         <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
-          <img
-            style={{ width: "100%" }}
-            src="images/online-shopping-for-books.svg"
+          <Image
+            alt="publish"
+            width={610}
+            height={343}
+            src="/images/online-shopping-for-books.svg"
           />
         </Grid>
       </Grid>
