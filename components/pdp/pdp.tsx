@@ -9,6 +9,7 @@ import { ActivityTable } from "../ActivityTable/ActivityTable";
 import { Box } from "@mui/system";
 import { ProductReviewSection } from "../ProductReviewSection/ProductReviewSection";
 import { MoreLikeThisProducts } from "../MoreLikeThisProducts/MoreLikeThisProducts";
+import { RoundedButton } from "../ProductDetailButtonSectionMyBook/ProductDetailButtonSectionMyBook";
 
 type ProductDetails = {
   author: string;
@@ -25,10 +26,16 @@ type ProductDetails = {
 interface PDPProps {
   productDetails: ProductDetails;
   buyProductSection: React.FC;
+  readBookButton?: React.FC;
 }
 
-export const PDP = ({ productDetails, buyProductSection }: PDPProps) => {
+export const PDP = ({
+  productDetails,
+  buyProductSection,
+  readBookButton,
+}: PDPProps) => {
   const BuyProductSection = buyProductSection;
+  const ReadBookButton = readBookButton;
 
   return (
     <Box
@@ -48,6 +55,7 @@ export const PDP = ({ productDetails, buyProductSection }: PDPProps) => {
         <Grid container>
           <Grid item xs={12} sm={12} md={4} lg={4}>
             <ProductImage imageUrl={productDetails.image} />
+            <>{readBookButton && <ReadBookButton />}</>
           </Grid>
           <Grid sx={{ px: 8 }} item xs={12} sm={12} md={8} lg={8}>
             <Typography

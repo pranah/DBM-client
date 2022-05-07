@@ -16,6 +16,7 @@ import Web3Modal from "web3modal";
 import Loader from "./loader/Loader";
 import useMoralisInit from "../hooks/useMoralisInit";
 import { BookCard } from "./BookCard";
+import { getNewMoralisUrl } from "../utils";
 
 export default function MyRentedBooksTab() {
   const {
@@ -144,7 +145,9 @@ export default function MyRentedBooksTab() {
           const isforRentingBasedOnBlockNumber =
             blockDifference <= numberOfBlocksRentedFor;
           if (isforRentingBasedOnBlockNumber) {
-            const ipfsMetaDataResponse = await axios.get(bookDetails.cid);
+            const ipfsMetaDataResponse = await axios.get(
+              getNewMoralisUrl(bookDetails.cid)
+            );
             if (ipfsMetaDataResponse.status !== 200) {
               throw new Error("Something went wrong");
             } else {

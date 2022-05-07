@@ -9,6 +9,7 @@ import { useWeb3ExecuteFunction } from "react-moralis";
 import axios from "axios";
 import Loader from "../loader/Loader";
 import { ethers } from "ethers";
+import { getNewMoralisUrl, isThereBookDuplicateBooks } from "../../utils";
 
 export const FromResellers = () => {
   const {
@@ -40,7 +41,7 @@ export const FromResellers = () => {
         onSuccess: async (viewTokenDetailsRespose) => {
           // fetch meta data from ipfs
           const ipfsMetaDataResponse = await axios.get(
-            viewTokenDetailsRespose[1]
+            getNewMoralisUrl(viewTokenDetailsRespose[1])
           );
           if (ipfsMetaDataResponse.status !== 200) {
             throw new Error("Something went wrong");
@@ -57,7 +58,12 @@ export const FromResellers = () => {
               copyNumber: viewTokenDetailsRespose[2],
               isUpForResale: viewTokenDetailsRespose[4],
             };
-            setBooks((prevBooks) => [...prevBooks, item]);
+            setBooks((prevBooks) => {
+              if (isThereBookDuplicateBooks(prevBooks, item)) {
+                return [...prevBooks, item];
+              }
+              return prevBooks;
+            });
           }
         },
       });
@@ -88,7 +94,7 @@ export const FromResellers = () => {
 
   const getUsedBooks = useCallback(async () => {
     setLoading(true);
-    setBooks([]);
+    setBooks(() => []);
     const currentUser = Moralis.User.current();
     const owner = currentUser.attributes.ethAddress;
 

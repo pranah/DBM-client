@@ -17,6 +17,7 @@ import { useWeb3ExecuteFunction } from "react-moralis";
 import { RentMyBook } from "../components/RentMyBook";
 import Loader from "./loader/Loader";
 import { BookCard } from "./BookCard";
+import { getNewMoralisUrl } from "../utils";
 
 export default function MyBooksTab() {
   const {
@@ -120,7 +121,7 @@ export default function MyBooksTab() {
         console.log("viewTokenDetailsRespose", viewTokenDetailsRespose);
         // fetch meta data from ipfs
         const ipfsMetaDataResponse = await axios.get(
-          viewTokenDetailsRespose[1]
+          getNewMoralisUrl(viewTokenDetailsRespose[1])
         );
         if (ipfsMetaDataResponse.status !== 200) {
           throw new Error("Something went wrong");

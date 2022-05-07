@@ -8,6 +8,7 @@ import useMoralisInit from "../../hooks/useMoralisInit";
 import { useBuyBook } from "../../hooks/useBuyBook";
 import Loader from "../../components/loader/Loader";
 import { ProductDetailButtonSetion } from "../../components/ProductDetailButtonSetion/ProductDetailButtonSetion";
+import { getNewMoralisUrl } from "../../utils";
 
 const Buy = () => {
   const [books, setBooks] = useState(null);
@@ -26,7 +27,9 @@ const Buy = () => {
     query.equalTo("isbn", isbn);
     const bookObj = await query.first();
     const bookAttributes = bookObj.attributes;
-    const meta = await axios.get(bookAttributes.bookCoverAndDetails);
+    const meta = await axios.get(
+      getNewMoralisUrl(bookAttributes.bookCoverAndDetails)
+    );
     const price = ethers.utils.formatUnits(
       bookAttributes.price.toString(),
       "ether"

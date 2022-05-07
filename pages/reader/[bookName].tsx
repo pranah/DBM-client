@@ -59,11 +59,15 @@ function ReadPage() {
   //   }
   // };
 
-  useEffect(async () => {
+  useEffect(() => {
     if (tokenId) {
-      consumeBookContent();
+      console.log("this is the token", tokenId);
+      async function fetchData() {
+        await consumeBookContent();
+      }
+      fetchData();
     }
-  }, [tokenId]);
+  }, [consumeBookContent, tokenId]);
   return (
     <>
       {url && <Reader url={url} />}

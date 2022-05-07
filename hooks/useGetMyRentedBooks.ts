@@ -8,6 +8,7 @@ import Web3Modal from "web3modal";
 
 import { ethers } from "ethers";
 import axios from "axios";
+import { getNewMoralisUrl, isThereBookDuplicateBooks } from "../utils";
 export const useGetMyRentedBooks = () => {
   const [loading, setLoading] = useState(false);
   const [books, setBooks] = useState([]);
@@ -128,7 +129,9 @@ export const useGetMyRentedBooks = () => {
           const isforRentingBasedOnBlockNumber =
             blockDifference <= numberOfBlocksRentedFor;
           if (isforRentingBasedOnBlockNumber) {
-            const ipfsMetaDataResponse = await axios.get(bookDetails.cid);
+            const ipfsMetaDataResponse = await axios.get(
+              getNewMoralisUrl(bookDetails.cid)
+            );
             if (ipfsMetaDataResponse.status !== 200) {
               throw new Error("Something went wrong");
             } else {
@@ -138,7 +141,12 @@ export const useGetMyRentedBooks = () => {
                 tokenId,
                 ...bookDetails,
               };
-              setBooks((prevNft) => [...prevNft, item]);
+              setBooks((prevNft) => {
+                if (isThereBookDuplicateBooks(prevNft, item)) {
+                  return [...prevNft, item];
+                }
+                return prevNft;
+              });
             }
           }
         }

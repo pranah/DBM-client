@@ -4,6 +4,7 @@ import { useWeb3ExecuteFunction } from "react-moralis";
 import { useState } from "react";
 import axios from "axios";
 import { ethers } from "ethers";
+import { getNewMoralisUrl } from "../utils";
 
 export const useViewRentingTokenDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +42,7 @@ export const useViewRentingTokenDetails = () => {
             copyNumber: result[2],
           };
           const ipfsMetaDataResponse = await axios.get(
-            tokenDetailsForTokenId.cid
+            getNewMoralisUrl(tokenDetailsForTokenId.cid)
           );
           if (ipfsMetaDataResponse.status !== 200) {
             throw new Error("Something went wrong");

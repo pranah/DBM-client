@@ -10,6 +10,7 @@ import Prana from "../../artifacts/contracts/prana.sol/prana.json";
 import { useWeb3ExecuteFunction } from "react-moralis";
 
 import useMoralisInit from "../../hooks/useMoralisInit";
+import { getNewMoralisUrl, isThereBookDuplicateBooks } from "../../utils";
 
 export const BooksForRent = () => {
   const {
@@ -158,7 +159,7 @@ export const BooksForRent = () => {
 
               if (ownerAddress.toLowerCase() !== account.toLocaleLowerCase()) {
                 const ipfsMetaDataResponse = await axios.get(
-                  tokenDetailsForTokenId.cid
+                  getNewMoralisUrl(tokenDetailsForTokenId.cid)
                 );
                 if (ipfsMetaDataResponse.status !== 200) {
                   throw new Error("Something went wrong");
@@ -169,7 +170,12 @@ export const BooksForRent = () => {
                     ...tokenDetailsForTokenId,
                     tokenId: tokenIdForSale,
                   };
-                  setBooksForRent((prevNft) => [...prevNft, item]);
+                  setBooksForRent((prevNft) => {
+                    if (isThereBookDuplicateBooks(prevNft, item)) {
+                      return [...prevNft, item];
+                    }
+                    return prevNft;
+                  });
                 }
               }
             } catch (error) {

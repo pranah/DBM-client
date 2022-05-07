@@ -4,6 +4,7 @@ import useMoralisInit from "./useMoralisInit";
 import { useWeb3ExecuteFunction } from "react-moralis";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { getNewMoralisUrl } from "../utils";
 
 export const useGetBooksInYourLibrary = () => {
   const [books, setBooks] = useState([]);
@@ -68,7 +69,7 @@ export const useGetBooksInYourLibrary = () => {
       onSuccess: async (viewTokenDetailsRespose) => {
         // fetch meta data from ipfs
         const ipfsMetaDataResponse = await axios.get(
-          viewTokenDetailsRespose[1]
+          getNewMoralisUrl(viewTokenDetailsRespose[1])
         );
         if (ipfsMetaDataResponse.status !== 200) {
           throw new Error("Something went wrong");
@@ -85,13 +86,25 @@ export const useGetBooksInYourLibrary = () => {
             isUpForResale: viewTokenDetailsRespose[4],
             isUpForRenting: viewRentTokenDetails.isUpForRenting,
           };
-          setBooks((prevNft) => [...prevNft, item]);
+          setBooks((prevNft) => {
+            if (
+              prevNft.findIndex((nft) => nft.tokenId === item.tokenId) === -1
+            ) {
+              return [...prevNft, item];
+            }
+            return prevNft;
+          });
         }
       },
     });
   };
 
-  async function getBooks() {
+  const getBooks = async () => {
+    setBooks(() => {
+      console.log("this is the conole");
+      return [];
+    });
+
     if (!isAuthenticated) {
       authenticate();
     }
@@ -102,14 +115,15 @@ export const useGetBooksInYourLibrary = () => {
       token_address: pranaAddress,
     });
     const tokens = nftTokens?.result;
-    console.log("getTokens");
-    await Promise.all(
-      tokens.map((token) => {
-        return getTokens(token.token_id);
-      })
-    );
+    console.log("this is the tokens", tokens);
+    console.log("this is the books", books);
+
+    for (let index = 0; index < tokens?.length; index++) {
+      await getTokens(tokens[index].token_id);
+    }
+
     setLoading(false);
-  }
+  };
 
   return {
     getBooks,
