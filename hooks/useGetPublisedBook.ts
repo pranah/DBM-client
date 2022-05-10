@@ -4,6 +4,7 @@ import axios from "axios";
 import { ethers } from "ethers";
 
 import useMoralisInit from "./useMoralisInit";
+import { getNewMoralisUrl } from "../utils";
 
 export const useGetPublisedBook = () => {
   const [isLoading, setisLoading] = useState(false);
@@ -20,7 +21,7 @@ export const useGetPublisedBook = () => {
 
       const items = await Promise.all(
         booksResponse.map(async (i) => {
-          const meta = await axios.get(i.bookCoverAndDetails);
+          const meta = await axios.get(getNewMoralisUrl(i.bookCoverAndDetails));
           let price = ethers.utils.formatUnits(i.price.toString(), "ether");
           let item = {
             price,

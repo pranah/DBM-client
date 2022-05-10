@@ -14,6 +14,7 @@ import { BookCard } from "../components/BookCard";
 
 import useMoralisInit from "../hooks/useMoralisInit";
 import Layout from "../components/layout";
+import { getNewMoralisUrl } from "../utils";
 
 export default function RentedBooks() {
   const {
@@ -166,7 +167,7 @@ export default function RentedBooks() {
 
               if (ownerAddress.toLowerCase() !== account.toLocaleLowerCase()) {
                 const ipfsMetaDataResponse = await axios.get(
-                  tokenDetailsForTokenId.cid
+                  getNewMoralisUrl(tokenDetailsForTokenId.cid)
                 );
                 if (ipfsMetaDataResponse.status !== 200) {
                   throw new Error("Something went wrong");

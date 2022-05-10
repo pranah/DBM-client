@@ -4,6 +4,7 @@ import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import { useWeb3ExecuteFunction } from "react-moralis";
 import axios from "axios";
 import { ethers } from "ethers";
+import { getNewMoralisUrl } from "../utils";
 
 export const useViewTokenDetails = () => {
   const [bookDetails, setBookDetails] = useState(null);
@@ -28,7 +29,7 @@ export const useViewTokenDetails = () => {
           onSuccess: async (viewTokenDetailsRespose) => {
             // fetch meta data from ipfs
             const ipfsMetaDataResponse = await axios.get(
-              viewTokenDetailsRespose[1]
+              getNewMoralisUrl(viewTokenDetailsRespose[1])
             );
             if (ipfsMetaDataResponse.status !== 200) {
               throw new Error("Something went wrong");

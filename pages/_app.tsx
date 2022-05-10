@@ -28,8 +28,8 @@ export default function MyApp(props: MyAppProps) {
 
   return (
     <MoralisProvider
-      appId={process.env.NEXT_PUBLIC_MORALIS_APP_ID}
-      serverUrl={process.env.NEXT_PUBLIC_MORALIS_SERVER_ID}
+      appId="Jb876CUqSN36lK3GwjBW5M6lCb93R1JLCg3wqc6L"
+      serverUrl="https://67x5ypma66pf.usemoralis.com:2053/server"
     >
       <CacheProvider value={emotionCache}>
         <Head>

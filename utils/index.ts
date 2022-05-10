@@ -15,6 +15,17 @@ export function ordinal_suffix_of(i: number) {
   return i + "th";
 }
 
+export const getNewMoralisUrl = (url: string) => {
+  if (url.substring(8, 12) === "ipfs") {
+    return url.replace(/^.{28}/g, "https://gateway.moralisipfs.com");
+  }
+  return url;
+};
+
+export const isThereBookDuplicateBooks = (prevTokens, newToken) => {
+  return prevTokens.findIndex((nft) => nft.tokenId === newToken.tokenId) === -1;
+};
+
 export const productsArray: Product[] = [
   {
     id: 1,

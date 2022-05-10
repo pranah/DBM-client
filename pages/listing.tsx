@@ -18,6 +18,7 @@ import Loader from "../components/loader/Loader";
 import { BookCard } from "../components/BookCard";
 import useMoralisInit from "../hooks/useMoralisInit";
 import Layout from "../components/layout";
+import { getNewMoralisUrl } from "../utils";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
@@ -48,7 +49,7 @@ const Home: NextPage = () => {
 
     const items = await Promise.all(
       booksResponse.map(async (i) => {
-        const meta = await axios.get(i.bookCoverAndDetails);
+        const meta = await axios.get(getNewMoralisUrl(i.bookCoverAndDetails));
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
         let item = {
           price,

@@ -19,6 +19,7 @@ import Loader from "../components/loader/Loader";
 import { BookCard } from "../components/BookCard";
 import useMoralisInit from "../hooks/useMoralisInit";
 import Layout from "../components/layout";
+import { getNewMoralisUrl } from "../utils";
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
   rpcEndpoint = process.env.NEXT_PUBLIC_WORKSPACE_URL;
@@ -67,7 +68,7 @@ const UsedBooks: NextPage = () => {
 
           // fetch meta data from ipfs
           const ipfsMetaDataResponse = await axios.get(
-            viewTokenDetailsRespose[1]
+            getNewMoralisUrl(viewTokenDetailsRespose[1])
           );
           if (ipfsMetaDataResponse.status !== 200) {
             throw new Error("Something went wrong");

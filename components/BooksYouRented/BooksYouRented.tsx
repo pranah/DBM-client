@@ -22,7 +22,7 @@ export const BooksYouRented = () => {
           {books.map((product, index) => (
             <Grid item key={index}>
               <ProductCard
-                to={`buy-book/${product.isbn}`}
+                to={`my-book/${product.tokenId}`}
                 //   showBuyButton
                 hoverEffect
                 product={product}

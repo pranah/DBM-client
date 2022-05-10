@@ -19,6 +19,7 @@ import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import axios from "axios";
 import useMoralisInit from "../hooks/useMoralisInit";
+import { getNewMoralisUrl } from "../utils";
 
 export const Reader = ({ url }) => {
   const { bookDetails } = useContext(BookDetailsContext);
@@ -112,7 +113,11 @@ export const Reader = ({ url }) => {
   const onLocationChange = (epubcifi) => {
     setLocation(epubcifi);
     // to show the page number for current chapter
-    if (renditionRef.current && tocRef.current) {
+    if (
+      renditionRef.current &&
+      tocRef.current &&
+      enditionRef.current.location
+    ) {
       const { displayed, href } = renditionRef.current.location.start;
       const chapter = tocRef.current.find((item) => item.href === href);
       setPage(
@@ -206,7 +211,9 @@ export const Reader = ({ url }) => {
             let annotationDataFromChain = null;
             const ipfsUrl = await getAnnotationFromChain();
             if (ipfsUrl) {
-              const ipfsMetaDataResponse = await axios.get(ipfsUrl);
+              const ipfsMetaDataResponse = await axios.get(
+                getNewMoralisUrl(ipfsUrl)
+              );
               if (ipfsMetaDataResponse.status !== 200) {
                 throw new Error("Something went wrong");
               } else {

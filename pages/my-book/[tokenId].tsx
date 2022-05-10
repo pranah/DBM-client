@@ -3,7 +3,10 @@ import { useRouter } from "next/router";
 import { PDP } from "../../components/pdp/pdp";
 import { useGetMyBookDetails } from "../../hooks/useGetMyBookDetails";
 import Loader from "../../components/loader/Loader";
-import { ProductDetailButtonSectionMyBook } from "../../components/ProductDetailButtonSectionMyBook/ProductDetailButtonSectionMyBook";
+import {
+  ProductDetailButtonSectionMyBook,
+  RoundedButton,
+} from "../../components/ProductDetailButtonSectionMyBook/ProductDetailButtonSectionMyBook";
 
 const MyBook = () => {
   const router = useRouter();
@@ -19,29 +22,41 @@ const MyBook = () => {
     isUpForResale: book?.isUpForResale,
   };
 
+  console.log("this is the book", book);
+
+  const onReadBook = () => {
+    router.push(`/reader/${book.isbn}?tokenId=${tokenId}`);
+  };
+
   return (
     <>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          {book && (
-            <PDP
-              buyProductSection={() => (
-                <>
-                  {bookDetails.isUpForRenting ||
-                  bookDetails.isUpForResale ? null : (
-                    <ProductDetailButtonSectionMyBook
-                      bookDetails={bookDetails}
-                    />
-                  )}
-                </>
-              )}
-              productDetails={book}
-            />
-          )}
-        </>
-      )}
+      {isLoading && <Loader />}
+      <>
+        {book && (
+          <PDP
+            readBookButton={() => (
+              <RoundedButton
+                sx={{ mt: 1 }}
+                fullWidth
+                variant="contained"
+                size="large"
+                onClick={onReadBook}
+              >
+                Read Book
+              </RoundedButton>
+            )}
+            buyProductSection={() => (
+              <>
+                {bookDetails.isUpForRenting ||
+                bookDetails.isUpForResale ? null : (
+                  <ProductDetailButtonSectionMyBook bookDetails={bookDetails} />
+                )}
+              </>
+            )}
+            productDetails={book}
+          />
+        )}
+      </>
     </>
   );
 };
