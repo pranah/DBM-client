@@ -12,7 +12,7 @@ export const HowItWorks = () => {
           px: { xs: 2, sm: 2, md: 10 },
           py: { xs: 7, sm: 7, md: 15 },
           mt: { xs: 20, sm: 20, md: 40 },
-          backgroundColor: "tertiary.main",
+          backgroundColor: "landingPageDarkPurple.main",
           position: "relative",
         }}
         container
@@ -48,6 +48,9 @@ export const HowItWorks = () => {
               height: "100%",
               color: "tertiary.text",
               textAlign: { md: "center" },
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
             <Typography
@@ -57,6 +60,7 @@ export const HowItWorks = () => {
                 lineHeight: "36.92px",
                 fontSize: { xs: "1.4rem", lg: "2rem" },
                 fontWeight: 600,
+                mb: 4,
               }}
             >
               When eBooks become NFTs{" "}
@@ -68,7 +72,13 @@ export const HowItWorks = () => {
             >
               Every single ebook, each copy of every title, is unique!
             </Typography> */}
-            <Typography sx={{ lineHeight: "35.2px" }}>
+            <Typography
+              sx={{
+                lineHeight: "32px",
+                width: { sx: "100%", lg: "80%" },
+                fontSize: { xs: "1rem", lg: "1.25rem" },
+              }}
+            >
               At Prānah, our mission is simple: give our beloved readers
               ultimate freedom over the ebooks they own. You paid for your
               ebooks, they’re your property. So it’s only logical that you

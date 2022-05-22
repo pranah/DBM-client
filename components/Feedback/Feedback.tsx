@@ -12,7 +12,7 @@ import TextareaAutosize from "@mui/material/TextareaAutosize";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
 
-export const Feedback = () => {
+export const Feedback = ({ hidehelperText }) => {
   const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
   const [email, setEmail] = useState("");
   const [toast, setToast] = useState({
@@ -54,7 +54,7 @@ export const Feedback = () => {
       id="sign-up"
       display="flex"
       justifyContent="center"
-      sx={{ py: 15, backgroundColor: "tertiary.main" }}
+      sx={{ py: 15, backgroundColor: "landingPageDarkPurple.main" }}
     >
       <Grid
         sx={{ px: 10, maxWidth: "700px", textAlign: "center" }}
@@ -87,10 +87,12 @@ export const Feedback = () => {
         >
           SignUp for Early Access{" "}
         </Typography>
-        <Typography color="tertiary.text">
-          The project is close to launch, and we’d love to know if you’re
-          interested in becoming an early adopter of the platform.
-        </Typography>
+        {!hidehelperText && (
+          <Typography color="tertiary.text">
+            The project is close to launch, and we’d love to know if you’re
+            interested in becoming an early adopter of the platform.
+          </Typography>
+        )}
         <TextField
           sx={{
             my: 2,
@@ -130,7 +132,7 @@ export const Feedback = () => {
           sx={{
             mt: 2,
             px: 8,
-            color: "tertiary.main",
+            color: "tertiary.text",
             textTransform: "none",
             borderRadius: "10px",
           }}

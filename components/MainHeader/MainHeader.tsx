@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Image from "next/image";
 import { Button, Grid } from "@mui/material";
+import Link from "next/link";
 
 function ElevationScroll(props) {
   const { children, window } = props;

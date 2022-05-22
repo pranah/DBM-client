@@ -19,7 +19,7 @@ export const Features = () => {
     <Box
       sx={{
         px: { sm: 4, xs: 4, md: 10 },
-        backgroundColor: "#E5E5E5",
+        backgroundColor: "#FAF8FF",
         py: { sm: 4, xs: 4, md: 15 },
       }}
     >
@@ -35,7 +35,7 @@ export const Features = () => {
           position: "relative",
           mb: { sm: 5, xs: 5, md: 3 },
           "&>span": {
-            background: "#E5E5E5",
+            background: "#FAF8FF",
             padding: "0 10px",
             paddingLeft: "50px",
           },
@@ -72,7 +72,8 @@ export const Features = () => {
               paddingRight: "3rem",
               borderRadius: "0px 2rem 2rem 0px",
               textShadow: "2px 2px 0px #76ebf2",
-              fontWeight: 600,
+              fontWeight: 400,
+              fontFamily: "notted",
             }}
             component="h2"
             variant="h4"
@@ -128,7 +129,8 @@ export const Features = () => {
               paddingLeft: "3rem",
               borderRadius: "2rem 0px 0px 2rem",
               textShadow: "2px 2px 0px #76ebf2",
-              fontWeight: 600,
+              fontWeight: 400,
+              fontFamily: "notted",
             }}
             component="h2"
             variant="h4"
@@ -168,7 +170,8 @@ export const Features = () => {
               paddingRight: "3rem",
               borderRadius: "0px 2rem 2rem 0px",
               textShadow: "2px 2px 0px #76ebf2",
-              fontWeight: 600,
+              fontWeight: 400,
+              fontFamily: "notted",
             }}
             component="h2"
             variant="h4"
@@ -201,7 +204,8 @@ export const Features = () => {
               paddingLeft: "3rem",
               borderRadius: "2rem 0px 0px 2rem",
               textShadow: "2px 2px 0px #76ebf2",
-              fontWeight: 600,
+              fontWeight: 400,
+              fontFamily: "notted",
             }}
             component="h2"
             variant="h4"
