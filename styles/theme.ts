@@ -23,18 +23,23 @@ const theme = createTheme({
       default: "#f5f5f5",
     },
     primary: {
-      main: "#33CCFF",
+      main: "#7842E7",
+      contrastText: "#fff",
     },
     secondary: {
       main: "#373737",
       contrastText: "#000",
     },
     tertiary: {
-      main: "#9771E9",
+      main: "#7842E7",
       text: "#fff",
     },
+
     homeText: {
       main: "#fff",
+    },
+    landingPageDarkPurple: {
+      main: "#362558",
     },
     error: {
       main: red.A400,

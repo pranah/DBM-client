@@ -14,7 +14,7 @@ export const LayersOfPranah = () => {
         <Typography
           component="h3"
           variant="h5"
-          sx={{ lineHeight: "36.92px", mb: 2 }}
+          sx={{ lineHeight: "36.92px", mb: 2, fontWeight: "600" }}
           color="tertiary.main"
         >
           More layers to your ebook

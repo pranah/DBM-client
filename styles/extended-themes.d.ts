@@ -9,6 +9,9 @@ declare module "@mui/material/styles/createPalette" {
     homeText: {
       main: string;
     };
+    landingPageDarkPurple: {
+      main: string;
+    };
     customBackground: {
       lightGray: string;
     };
@@ -20,6 +23,9 @@ declare module "@mui/material/styles/createPalette" {
       text: string;
     };
     homeText: {
+      main: string;
+    };
+    landingPageDarkPurple: {
       main: string;
     };
     customBackground: {

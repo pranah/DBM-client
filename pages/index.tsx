@@ -26,7 +26,7 @@ type ImageProps = {
 // `;
 
 const ImageComponent = styled("img")<ImageProps>`
-  width: 100%;
+  width: 121px;
   margin-right: 0.5rem;
   @media (max-width: 768px) {
     width: 30%;
@@ -62,7 +62,7 @@ const Home = () => {
                 color="tertiary"
                 size="medium"
                 onClick={async () => {
-                  router.push("/listing");
+                  router.push("/coming-soon");
                 }}
               >
                 Explore
@@ -72,7 +72,7 @@ const Home = () => {
                 href="#sign-up"
                 sx={{
                   ml: 2,
-                  color: "tertiary.main",
+                  // color: "tertiary.main",
                   border: "1px solid",
                   borderColor: "tertiary.main",
                   borderRadius: "0.625rem",
@@ -116,21 +116,22 @@ const Home = () => {
             <Typography
               sx={{
                 lineHeight: { sm: "110%", lg: "78px" },
-                fontWeight: 600,
-                backgroundImage:
-                  "radial-gradient(86.81% 906.07% at 3.08% 50%, #9977E1 0%, #76EBF2 97.32%)",
-                color: "transparent",
-                backgroundClip: "text",
-                WebkitBackgroundClip: "text",
+                fontWeight: 400,
+                // backgroundImage:
+                //   "radial-gradient(86.81% 906.07% at 3.08% 50%, #9977E1 0%, #76EBF2 97.32%)",
+                color: "landingPageDarkPurple.main",
+                // backgroundClip: "text",
+                // WebkitBackgroundClip: "text",
+                fontFamily: "notted",
               }}
               component="h2"
-              variant="h3"
+              variant="h2"
               color="primary"
             >
               Your ebooks are yours, period.
             </Typography>
             <Typography
-              sx={{ my: 5 }}
+              sx={{ mt: 2, mb: 8 }}
               color="text.secondary"
               component="div"
               variant="h5"
@@ -140,15 +141,15 @@ const Home = () => {
             <Button
               sx={{
                 padding: "0.5rem 3rem",
-                color: "tertiary.main",
+                // color: "",
                 textTransform: "none",
-                boxShadow: "5px 5px 0px #9977e1, inset 0px 4px 0px #76ebf2",
+                // boxShadow: "5px 5px 0px #9977e1, inset 0px 4px 0px #76ebf2",
               }}
               color="primary"
               variant="contained"
               size="large"
               onClick={async () => {
-                router.push("/listing");
+                router.push("/coming-soon");
               }}
             >
               Explore <ArrowForwardIcon />
