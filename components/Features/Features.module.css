@@ -1,9 +1,27 @@
 .imageContainer {
-  background-image: url("/images/bg-features.png");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 85% 85%;
   padding: 4rem;
+}
+
+.readContainer{
+  background-image: url("/images/ellipse-read.svg");
+  background-size: 90% 90%;
+}
+.resellContainer{
+  background-image: url("/images/ellipse-resell.svg");
+  background-size: 100% 100%;
+
+}
+.rentContainer{
+  background-image: url("/images/ellipse-rent.svg");
+  background-size: 100% 100%;
+
+}
+.publishContainer{
+  background-image: url("/images/ellipse-publish.svg");
+  background-size: 100% 100%;
+
 }
 
 .telescope {

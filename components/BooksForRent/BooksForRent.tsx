@@ -157,9 +157,11 @@ export const BooksForRent = () => {
               );
               const ownerAddress = await findOwnerOfToken(tokenIdForSale);
 
-              if (ownerAddress.toLowerCase() !== account.toLocaleLowerCase()) {
+              if (
+                ownerAddress?.toLowerCase() !== account?.toLocaleLowerCase()
+              ) {
                 const ipfsMetaDataResponse = await axios.get(
-                  getNewMoralisUrl(tokenDetailsForTokenId.cid)
+                  getNewMoralisUrl(tokenDetailsForTokenId?.cid)
                 );
                 if (ipfsMetaDataResponse.status !== 200) {
                   throw new Error("Something went wrong");

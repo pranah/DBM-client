@@ -11,7 +11,7 @@ export const HowItWorks = () => {
         sx={{
           px: { xs: 2, sm: 2, md: 10 },
           py: { xs: 7, sm: 7, md: 15 },
-          mt: { xs: 20, sm: 20, md: 40 },
+          mt: { xs: 20, sm: 20, md: 54 },
           backgroundColor: "landingPageDarkPurple.main",
           position: "relative",
         }}

@@ -25,14 +25,20 @@ export const LayersOfPranah = () => {
         </Typography>
         <Grid
           container
-          spacing={4}
+          spacing={{
+            sm: 4,
+            xs: 4,
+            md: 0,
+          }}
           alignItems="center"
           sx={{
             width: { sm: "100%", xs: "100%", md: "auto" },
             justifyContent: { sm: "center", xs: "center" },
+            ml: { xs: 0, sm: 0 },
+            mt: 9,
           }}
         >
-          <Grid item>
+          <Grid item sx={{ mr: { md: 19 } }}>
             <Grid container flexDirection="column" alignItems="center">
               <Image
                 width={100}
@@ -54,7 +60,7 @@ export const LayersOfPranah = () => {
               </Typography>
             </Grid>
           </Grid>{" "}
-          <Grid item>
+          <Grid item sx={{ mr: { md: 19 } }}>
             <Grid container flexDirection="column" alignItems="center">
               <Image
                 alt="first copy"
@@ -76,7 +82,7 @@ export const LayersOfPranah = () => {
               </Typography>
             </Grid>
           </Grid>{" "}
-          <Grid item>
+          <Grid item sx={{ mr: { md: 19 } }}>
             <Grid container flexDirection="column" alignItems="center">
               <Image
                 alt="limited edition"

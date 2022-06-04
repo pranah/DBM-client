@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 import styled from "@emotion/styled";
+import clsx from "clsx";
 
 const ImageContainer = styled.div({
   position: "absolute",
@@ -71,7 +72,7 @@ export const Features = () => {
               width: "min-content",
               paddingRight: "3rem",
               borderRadius: "0px 2rem 2rem 0px",
-              textShadow: "2px 2px 0px #76ebf2",
+              // textShadow: "2px 2px 0px #76ebf2",
               fontWeight: 400,
               fontFamily: "notted",
             }}
@@ -91,7 +92,7 @@ export const Features = () => {
           </Typography>
         </Grid>
         <Grid
-          className={styles.imageContainer}
+          className={clsx(styles.imageContainer, styles.readContainer)}
           sx={{
             display: "flex",
             alignItems: "center",
@@ -128,7 +129,7 @@ export const Features = () => {
               mb: 2,
               paddingLeft: "3rem",
               borderRadius: "2rem 0px 0px 2rem",
-              textShadow: "2px 2px 0px #76ebf2",
+              // textShadow: "2px 2px 0px #76ebf2",
               fontWeight: 400,
               fontFamily: "notted",
             }}
@@ -144,7 +145,13 @@ export const Features = () => {
             of the value goes to the author/publisher, as content creators.
           </Typography>
         </Grid>
-        <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
+        <Grid
+          className={clsx(styles.imageContainer, styles.resellContainer)}
+          item
+          md={6}
+          xl={6}
+          lg={6}
+        >
           <Image
             style={{ width: "100%" }}
             alt="resell-books"
@@ -169,7 +176,7 @@ export const Features = () => {
               width: "min-content",
               paddingRight: "3rem",
               borderRadius: "0px 2rem 2rem 0px",
-              textShadow: "2px 2px 0px #76ebf2",
+              // textShadow: "2px 2px 0px #76ebf2",
               fontWeight: 400,
               fontFamily: "notted",
             }}
@@ -186,7 +193,13 @@ export const Features = () => {
             make you money before coming back to you.
           </Typography>
         </Grid>
-        <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
+        <Grid
+          className={clsx(styles.imageContainer, styles.rentContainer)}
+          item
+          md={6}
+          xl={6}
+          lg={6}
+        >
           <Image alt="rent" width={542} height={305} src="/images/rent.svg" />
         </Grid>
       </Grid>
@@ -203,7 +216,7 @@ export const Features = () => {
               mb: 2,
               paddingLeft: "3rem",
               borderRadius: "2rem 0px 0px 2rem",
-              textShadow: "2px 2px 0px #76ebf2",
+              // textShadow: "2px 2px 0px #76ebf2",
               fontWeight: 400,
               fontFamily: "notted",
             }}
@@ -220,7 +233,13 @@ export const Features = () => {
             for the publishing community.
           </Typography>
         </Grid>
-        <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
+        <Grid
+          className={clsx(styles.imageContainer, styles.publishContainer)}
+          item
+          md={6}
+          xl={6}
+          lg={6}
+        >
           <Image
             alt="publish"
             width={610}

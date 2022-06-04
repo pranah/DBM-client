@@ -108,6 +108,7 @@ const Home = () => {
         <Grid
           sx={{
             px: { sm: 2, xs: 2, md: 12 },
+            mt: { md: 18 },
           }}
           spacing={1}
           container
