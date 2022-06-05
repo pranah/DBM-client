@@ -12,6 +12,10 @@ import TextareaAutosize from "@mui/material/TextareaAutosize";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
 
+interface FeedbackProps {
+  hidehelperText?: boolean;
+}
+
 export const Feedback = ({ hidehelperText }) => {
   const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
   const [email, setEmail] = useState("");
@@ -148,4 +152,8 @@ export const Feedback = ({ hidehelperText }) => {
       </Grid>
     </Box>
   );
+};
+
+Feedback.defaultProps = {
+  hidehelperText: false,
 };
