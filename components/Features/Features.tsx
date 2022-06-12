@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 import styled from "@emotion/styled";
+import clsx from "clsx";
 
 const ImageContainer = styled.div({
   position: "absolute",
@@ -12,6 +13,13 @@ const ImageContainer = styled.div({
   left: 0,
 });
 
+const TypographyDescription = styled(Typography)(({ theme }) => {
+  return {
+    color: theme.palette.landingPageDarkPurple.main,
+    lineHeight: "25px",
+    fontSize: theme.typography.h6.fontSize,
+  };
+});
 export const Features = () => {
   const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
 
@@ -71,7 +79,7 @@ export const Features = () => {
               width: "min-content",
               paddingRight: "3rem",
               borderRadius: "0px 2rem 2rem 0px",
-              textShadow: "2px 2px 0px #76ebf2",
+              // textShadow: "2px 2px 0px #76ebf2",
               fontWeight: 400,
               fontFamily: "notted",
             }}
@@ -81,17 +89,17 @@ export const Features = () => {
           >
             Read & Annotate
           </Typography>
-          <Typography>
+          <TypographyDescription>
             Dive into the books you love, and annotate them while you read it.
             Annotations make a book come alive. It’s an added layer, a story
             within a story. Each of your annotations are attached to your
             particular ebook, and they change hands with the ebook. A note
             written by your father in his favourite book can be passed on to
             your daughter, in time.
-          </Typography>
+          </TypographyDescription>
         </Grid>
         <Grid
-          className={styles.imageContainer}
+          className={clsx(styles.imageContainer, styles.readContainer)}
           sx={{
             display: "flex",
             alignItems: "center",
@@ -128,7 +136,7 @@ export const Features = () => {
               mb: 2,
               paddingLeft: "3rem",
               borderRadius: "2rem 0px 0px 2rem",
-              textShadow: "2px 2px 0px #76ebf2",
+              // textShadow: "2px 2px 0px #76ebf2",
               fontWeight: 400,
               fontFamily: "notted",
             }}
@@ -138,13 +146,19 @@ export const Features = () => {
           >
             Resell{" "}
           </Typography>
-          <Typography>
+          <TypographyDescription>
             As your property, you are able to resell an ebook you own, and you
             decide the price. You can auction them as well, of course. A portion
             of the value goes to the author/publisher, as content creators.
-          </Typography>
+          </TypographyDescription>
         </Grid>
-        <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
+        <Grid
+          className={clsx(styles.imageContainer, styles.resellContainer)}
+          item
+          md={6}
+          xl={6}
+          lg={6}
+        >
           <Image
             style={{ width: "100%" }}
             alt="resell-books"
@@ -169,7 +183,7 @@ export const Features = () => {
               width: "min-content",
               paddingRight: "3rem",
               borderRadius: "0px 2rem 2rem 0px",
-              textShadow: "2px 2px 0px #76ebf2",
+              // textShadow: "2px 2px 0px #76ebf2",
               fontWeight: 400,
               fontFamily: "notted",
             }}
@@ -179,14 +193,20 @@ export const Features = () => {
           >
             Rent{" "}
           </Typography>
-          <Typography>
+          <TypographyDescription>
             You can rent your ebooks out, without worrying whether you’ll get
             them back. Choose a time period to rent them out, and choose the
             price you want to rent it on. Sit back and relax while your ebooks
             make you money before coming back to you.
-          </Typography>
+          </TypographyDescription>
         </Grid>
-        <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
+        <Grid
+          className={clsx(styles.imageContainer, styles.rentContainer)}
+          item
+          md={6}
+          xl={6}
+          lg={6}
+        >
           <Image alt="rent" width={542} height={305} src="/images/rent.svg" />
         </Grid>
       </Grid>
@@ -203,7 +223,7 @@ export const Features = () => {
               mb: 2,
               paddingLeft: "3rem",
               borderRadius: "2rem 0px 0px 2rem",
-              textShadow: "2px 2px 0px #76ebf2",
+              // textShadow: "2px 2px 0px #76ebf2",
               fontWeight: 400,
               fontFamily: "notted",
             }}
@@ -213,14 +233,20 @@ export const Features = () => {
           >
             Publish{" "}
           </Typography>
-          <Typography>
+          <TypographyDescription>
             Publish your books on our platform, and get royalties on any
             secondary transactions on the ebook NFTs, in addition to the direct
             sales! A whole new revenue stream gets opened up, a much needed help
             for the publishing community.
-          </Typography>
+          </TypographyDescription>
         </Grid>
-        <Grid className={styles.imageContainer} item md={6} xl={6} lg={6}>
+        <Grid
+          className={clsx(styles.imageContainer, styles.publishContainer)}
+          item
+          md={6}
+          xl={6}
+          lg={6}
+        >
           <Image
             alt="publish"
             width={610}

@@ -10,28 +10,8 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { LayersOfPranah } from "../components/LayersOfPranah/LayersOfPranah";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import { useRouter } from "next/router";
+import { HomePageCarousel } from "../components/HomePageCarousel/HomePageCarousel";
 
-type ImageProps = {
-  left?: string;
-  right?: string;
-  zIndex?: number;
-};
-
-// const ImageComponent = styled("img")<ImageProps>`
-//   width: 50%;
-//   position: relative;
-//   left: ${(props) => props.left};
-//   right: ${(props) => props.right};
-//   z-index: ${(props) => props.zIndex};
-// `;
-
-const ImageComponent = styled("img")<ImageProps>`
-  width: 121px;
-  margin-right: 0.5rem;
-  @media (max-width: 768px) {
-    width: 30%;
-  }
-`;
 const Home = () => {
   const router = useRouter();
 
@@ -90,7 +70,6 @@ const Home = () => {
               <Grid container alignItems="center">
                 <Typography
                   color="tertiary.main"
-                  variant="span"
                   component="span"
                   sx={{ mr: 1 }}
                 >
@@ -108,6 +87,7 @@ const Home = () => {
         <Grid
           sx={{
             px: { sm: 2, xs: 2, md: 12 },
+            mt: { md: 18 },
           }}
           spacing={1}
           container
@@ -164,75 +144,7 @@ const Home = () => {
             xl={6}
             lg={6}
           >
-            <Box
-              sx={{
-                height: "100%",
-                width: "50%",
-                background:
-                  "linear-gradient(89.85deg, #F5F5F5 0.14%, rgba(245, 245, 245, 0.95) 45.61%, rgba(245, 245, 245, 0.44) 74.6%, rgba(245, 245, 245, 0) 99.45%, rgba(245, 245, 245, 0) 113.74%)",
-                position: "absolute",
-                left: 0,
-              }}
-            ></Box>
-            <Box
-              sx={{
-                px: { xs: 4, sm: 4, md: 0 },
-                mt: { xs: 4, sm: 4, md: 0 },
-                overflow: "hidden",
-                width: "100%",
-              }}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <ImageComponent left="15%" zIndex={0} src="images/image-7.png" />
-              <ImageComponent left="15%" zIndex={0} src="images/image-2.png" />
-              <ImageComponent src="images/image-3.png" />
-              <ImageComponent
-                right="15%"
-                zIndex={-1}
-                src="images/image-4.png"
-              />
-              <ImageComponent
-                right="15%"
-                zIndex={-1}
-                src="images/image-5.png"
-              />
-              <ImageComponent
-                right="15%"
-                zIndex={-1}
-                src="images/image-6.png"
-              />
-            </Box>
-            <Box
-              sx={{
-                px: { xs: 4, sm: 4, md: 0 },
-                mt: { xs: 4, sm: 4, md: 0 },
-                overflow: "hidden",
-                width: "100%",
-              }}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <ImageComponent left="15%" zIndex={0} src="images/image-2.png" />
-              <ImageComponent src="images/image-3.png" />
-              <ImageComponent
-                right="15%"
-                zIndex={-1}
-                src="images/image-4.png"
-              />
-              <ImageComponent
-                right="15%"
-                zIndex={-1}
-                src="images/image-5.png"
-              />
-              <ImageComponent
-                right="15%"
-                zIndex={-1}
-                src="images/image-6.png"
-              />
-            </Box>
+            <HomePageCarousel />
           </Grid>
         </Grid>
         <HowItWorks />

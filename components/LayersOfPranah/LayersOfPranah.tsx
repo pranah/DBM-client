@@ -19,20 +19,26 @@ export const LayersOfPranah = () => {
         >
           More layers to your ebook
         </Typography>
-        <Typography sx={{ mb: 4 }} variant="subtitle1" color="tertiary.main">
+        <Typography sx={{ mb: 9 }} variant="subtitle1" color="tertiary.main">
           As unique entities, your ebooks would have additional layers on our
           platform
         </Typography>
         <Grid
           container
-          spacing={4}
+          spacing={{
+            sm: 4,
+            xs: 4,
+            md: 0,
+          }}
           alignItems="center"
           sx={{
             width: { sm: "100%", xs: "100%", md: "auto" },
             justifyContent: { sm: "center", xs: "center" },
+            ml: { xs: 0, sm: 0 },
+            mt: 9,
           }}
         >
-          <Grid item>
+          <Grid item sx={{ mr: { md: 10 } }}>
             <Grid container flexDirection="column" alignItems="center">
               <Image
                 width={100}
@@ -54,7 +60,7 @@ export const LayersOfPranah = () => {
               </Typography>
             </Grid>
           </Grid>{" "}
-          <Grid item>
+          <Grid item sx={{ mr: { md: 10 } }}>
             <Grid container flexDirection="column" alignItems="center">
               <Image
                 alt="first copy"
@@ -72,11 +78,11 @@ export const LayersOfPranah = () => {
                 variant="subtitle2"
                 color="tertiary.main"
               >
-                First Copies{" "}
+                First Copies
               </Typography>
             </Grid>
           </Grid>{" "}
-          <Grid item>
+          <Grid item sx={{ mr: { md: 10 } }}>
             <Grid container flexDirection="column" alignItems="center">
               <Image
                 alt="limited edition"

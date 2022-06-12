@@ -12,6 +12,10 @@ import TextareaAutosize from "@mui/material/TextareaAutosize";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
 
+interface FeedbackProps {
+  hidehelperText?: boolean;
+}
+
 export const Feedback = ({ hidehelperText }) => {
   const matches = useMediaQuery((theme: Theme) => theme.breakpoints.down("md"));
   const [email, setEmail] = useState("");
@@ -54,7 +58,10 @@ export const Feedback = ({ hidehelperText }) => {
       id="sign-up"
       display="flex"
       justifyContent="center"
-      sx={{ py: 15, backgroundColor: "landingPageDarkPurple.main" }}
+      sx={{
+        py: { sm: 7, xs: 7, md: 15 },
+        backgroundColor: "landingPageDarkPurple.main",
+      }}
     >
       <Grid
         sx={{ px: 10, maxWidth: "700px", textAlign: "center" }}
@@ -145,4 +152,8 @@ export const Feedback = ({ hidehelperText }) => {
       </Grid>
     </Box>
   );
+};
+
+Feedback.defaultProps = {
+  hidehelperText: false,
 };

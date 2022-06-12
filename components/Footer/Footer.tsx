@@ -2,6 +2,7 @@ import React from "react";
 
 import { Box, Button, Grid, Typography } from "@mui/material";
 import Link from "next/link";
+import Image from "next/image";
 
 export const Footer = () => {
   return (
@@ -68,7 +69,12 @@ export const Footer = () => {
           }}
           item
         >
-          <img src="images/logo.svg" />
+          <Image
+            alt="pranah"
+            src="/images/paranh-footer.svg"
+            width={121}
+            height={41}
+          />
 
           <Link href="#">
             <Typography

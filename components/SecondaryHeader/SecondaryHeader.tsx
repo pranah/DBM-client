@@ -4,12 +4,13 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Image from "next/image";
-import { Box, Button, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
 import { HeaderTabs } from "../Tabs/Tabs";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 
 const drawerWidth = "19vw";
 function ElevationScroll(props) {
@@ -82,18 +83,24 @@ export const SecondaryHeader = ({ tabNames, tabComponents }) => {
           }}
         >
           <Toolbar>
-            <Grid
-              sx={{ width: "100%" }}
-              container
-              justifyContent="space-between"
-              alignItems="center"
-            >
+            <Grid sx={{ width: "100%" }} container alignItems="center">
               <TextField
                 label="Search"
                 id="search"
                 type="search"
                 size="small"
+                sx={{
+                  mr: 2,
+                }}
               />
+              <IconButton
+                sx={{ color: "black" }}
+                size="large"
+                aria-label="upload"
+                color="inherit"
+              >
+                <FileUploadOutlinedIcon />
+              </IconButton>
             </Grid>
           </Toolbar>
           <Toolbar sx={{ width: "100%" }}>
