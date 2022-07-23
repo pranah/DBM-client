@@ -55,7 +55,7 @@ const BackgroundCarousel = ({
           min: 0,
         },
         items: visibleSlidesInMobile,
-        partialVisibilityGutter: 10,
+        partialVisibilityGutter: 55,
       },
       tablet: {
         breakpoint: {
@@ -66,10 +66,10 @@ const BackgroundCarousel = ({
         partialVisibilityGutter: 25,
       },
     }}
+    shouldResetAutoplay={false}
     showDots={false}
     sliderClass=""
     slidesToSlide={1}
-    // swipeable
     transitionDuration={3000}
   >
     {children}
@@ -127,7 +127,7 @@ export const HomePageCarousel = () => {
       <BackgroundCarousel
         partialVisible={true}
         visibleSlidesInPc={4}
-        visibleSlidesInMobile={3}
+        visibleSlidesInMobile={2}
       >
         <ImageComponent left="15%" zIndex={0} src="images/image-2.png" />
         <ImageComponent src="images/image-3.png" />
