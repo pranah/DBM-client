@@ -14,21 +14,27 @@ const ImageComponent = styled("img")<ImageProps>`
   margin-right: 0.5rem;
 `;
 
-const BackgroundCarousel = ({ children }) => (
+const BackgroundCarousel = ({
+  children,
+  partialVisible,
+  visibleSlidesInPc,
+  visibleSlidesInMobile,
+}) => (
   <Carousel
     // additionalTransfrom={10}
     arrows={false}
-    autoPlay
-    autoPlaySpeed={1}
+    autoPlay={true}
+    autoPlaySpeed={3}
     centerMode={false}
     className=""
     containerClass="container-with-dots"
-    customTransition="all 1s linear"
+    customTransition="all 3s linear"
     dotListClass=""
     draggable={false}
     focusOnSelect={false}
     infinite
     itemClass=""
+    partialVisible={partialVisible}
     // keyBoardControl
     // minimumTouchDrag={80}
     // infiniteLoop
@@ -40,31 +46,31 @@ const BackgroundCarousel = ({ children }) => (
           max: 3000,
           min: 1024,
         },
-        items: 5,
-        partialVisibilityGutter: 40,
+        items: visibleSlidesInPc,
+        partialVisibilityGutter: 25,
       },
       mobile: {
         breakpoint: {
           max: 464,
           min: 0,
         },
-        items: 3,
-        partialVisibilityGutter: 40,
+        items: visibleSlidesInMobile,
+        partialVisibilityGutter: 10,
       },
       tablet: {
         breakpoint: {
           max: 1024,
           min: 464,
         },
-        items: 5,
-        partialVisibilityGutter: 40,
+        items: visibleSlidesInPc,
+        partialVisibilityGutter: 25,
       },
     }}
     showDots={false}
     sliderClass=""
-    slidesToSlide={2}
+    slidesToSlide={1}
     // swipeable
-    transitionDuration={1000}
+    transitionDuration={3000}
   >
     {children}
   </Carousel>
@@ -95,7 +101,11 @@ export const HomePageCarousel = () => {
         alignItems="center"
         justifyContent="center"
       > */}
-      <BackgroundCarousel>
+      <BackgroundCarousel
+        partialVisible={false}
+        visibleSlidesInPc={5}
+        visibleSlidesInMobile={3}
+      >
         <ImageComponent src="images/image-7.png" />
         <ImageComponent src="images/image-2.png" />
         <ImageComponent src="images/image-3.png" />
@@ -114,7 +124,11 @@ export const HomePageCarousel = () => {
         alignItems="center"
         justifyContent="center"
       > */}
-      <BackgroundCarousel>
+      <BackgroundCarousel
+        partialVisible={true}
+        visibleSlidesInPc={4}
+        visibleSlidesInMobile={3}
+      >
         <ImageComponent left="15%" zIndex={0} src="images/image-2.png" />
         <ImageComponent src="images/image-3.png" />
         <ImageComponent right="15%" zIndex={-1} src="images/image-4.png" />
