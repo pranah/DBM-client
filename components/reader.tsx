@@ -106,7 +106,7 @@ export const Reader = ({ url }) => {
       }
       renditionRef.current.on("selected", setRenderSelection);
       return () => {
-        renditionRef.current.off("selected", setRenderSelection);
+        renditionRef?.current.off("selected", setRenderSelection);
       };
     }
   }, [setSelections, selections]);
@@ -116,7 +116,7 @@ export const Reader = ({ url }) => {
     if (
       renditionRef.current &&
       tocRef.current &&
-      enditionRef.current.location
+      renditionRef.current.location
     ) {
       const { displayed, href } = renditionRef.current.location.start;
       const chapter = tocRef.current.find((item) => item.href === href);

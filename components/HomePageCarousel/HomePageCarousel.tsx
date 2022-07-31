@@ -2,6 +2,7 @@ import { Box } from "@mui/system";
 import styled from "@emotion/styled";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import React from "react";
 
 type ImageProps = {
   left?: string;
@@ -34,36 +35,47 @@ const BackgroundCarousel = ({
     focusOnSelect={false}
     infinite
     itemClass=""
-    partialVisible={partialVisible}
+    // partialVisible={partialVisible}
     // keyBoardControl
     // minimumTouchDrag={80}
     // infiniteLoop
     renderButtonGroupOutside={false}
     renderDotsOutside={false}
     responsive={{
+      xLargeDesktop: {
+        breakpoint: { max: 1920, min: 1440 },
+        items: 5,
+      },
       desktop: {
         breakpoint: {
-          max: 3000,
+          max: 1440,
           min: 1024,
         },
-        items: visibleSlidesInPc,
+        items: 5,
         partialVisibilityGutter: 25,
       },
       mobile: {
         breakpoint: {
           max: 464,
+          min: 340,
+        },
+        items: 3,
+        partialVisibilityGutter: 0,
+      },
+      smallMobile: {
+        breakpoint: {
+          max: 340,
           min: 0,
         },
-        items: visibleSlidesInMobile,
-        partialVisibilityGutter: 55,
+        items: 2,
+        partialVisibilityGutter: 0,
       },
       tablet: {
         breakpoint: {
           max: 1024,
           min: 464,
         },
-        items: visibleSlidesInPc,
-        partialVisibilityGutter: 25,
+        items: 5,
       },
     }}
     shouldResetAutoplay={false}
