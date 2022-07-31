@@ -81,7 +81,7 @@ export const Features = () => {
               borderRadius: "0px 2rem 2rem 0px",
               // textShadow: "2px 2px 0px #76ebf2",
               fontWeight: 400,
-              fontFamily: "notted",
+              fontFamily: "Playfair Display",
             }}
             component="h2"
             variant="h4"
@@ -138,7 +138,7 @@ export const Features = () => {
               borderRadius: "2rem 0px 0px 2rem",
               // textShadow: "2px 2px 0px #76ebf2",
               fontWeight: 400,
-              fontFamily: "notted",
+              fontFamily: "Playfair Display",
             }}
             component="h2"
             variant="h4"
@@ -185,7 +185,7 @@ export const Features = () => {
               borderRadius: "0px 2rem 2rem 0px",
               // textShadow: "2px 2px 0px #76ebf2",
               fontWeight: 400,
-              fontFamily: "notted",
+              fontFamily: "Playfair Display",
             }}
             component="h2"
             variant="h4"
@@ -225,7 +225,7 @@ export const Features = () => {
               borderRadius: "2rem 0px 0px 2rem",
               // textShadow: "2px 2px 0px #76ebf2",
               fontWeight: 400,
-              fontFamily: "notted",
+              fontFamily: "Playfair Display",
             }}
             component="h2"
             variant="h4"

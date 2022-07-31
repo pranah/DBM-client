@@ -11,6 +11,7 @@ import { LayersOfPranah } from "../components/LayersOfPranah/LayersOfPranah";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import { useRouter } from "next/router";
 import { HomePageCarousel } from "../components/HomePageCarousel/HomePageCarousel";
+import React from "react";
 
 const Home = () => {
   const router = useRouter();
@@ -87,6 +88,7 @@ const Home = () => {
         <Grid
           sx={{
             px: { sm: 2, xs: 2, md: 12 },
+            pr: { md: 0 },
             mt: { md: 18 },
           }}
           spacing={1}
@@ -102,7 +104,7 @@ const Home = () => {
                 color: "landingPageDarkPurple.main",
                 // backgroundClip: "text",
                 // WebkitBackgroundClip: "text",
-                fontFamily: "notted",
+                fontFamily: "Playfair+Display",
               }}
               component="h2"
               variant="h2"
