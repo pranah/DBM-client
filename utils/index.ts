@@ -16,9 +16,9 @@ export function ordinal_suffix_of(i: number) {
 }
 
 export const getNewMoralisUrl = (url: string) => {
-  if (url.substring(8, 12) === "ipfs") {
-    return url.replace(/^.{28}/g, "https://gateway.moralisipfs.com");
-  }
+  // if (url.substring(8, 12) === "ipfs") {
+  //   return url.replace(/^.{28}/g, "https://gateway.moralisipfs.com");
+  // }
   return url;
 };
 

@@ -12,6 +12,23 @@ export const useGetPublisedBook = () => {
   const [bookList, setBookList] = useState([]);
   const { Moralis } = useMoralisInit();
 
+  // const getBooks = useCallback(async () => {
+  //   try {
+  //     setisLoading(true);
+  //     const response = await axios.get("api/market-place");
+  //     if (response.status !== 200) {
+  //       setError("Error while fetching the books");
+  //     } else {
+  //       setBookList(response.data.books);
+  //       setisLoading(false);
+  //     }
+  //   } catch (error) {
+  //     setisLoading(false);
+
+  //     setError("Error while fetching the books");
+  //   }
+  // }, []);
+
   const getBooks = useCallback(async () => {
     const query = new Moralis.Query("BookPublished");
     try {

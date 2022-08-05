@@ -2,6 +2,7 @@ import { Box } from "@mui/system";
 import styled from "@emotion/styled";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import React from "react";
 
 type ImageProps = {
   left?: string;
@@ -14,42 +15,60 @@ const ImageComponent = styled("img")<ImageProps>`
   margin-right: 0.5rem;
 `;
 
-const BackgroundCarousel = ({ children }) => (
+const BackgroundCarousel = ({
+  children,
+  partialVisible,
+  visibleSlidesInPc,
+  visibleSlidesInMobile,
+}) => (
   <Carousel
     // additionalTransfrom={10}
     arrows={false}
-    autoPlay
-    autoPlaySpeed={1}
+    autoPlay={true}
+    autoPlaySpeed={3}
     centerMode={false}
     className=""
     containerClass="container-with-dots"
-    customTransition="all 1s linear"
+    customTransition="all 3s linear"
     dotListClass=""
     draggable={false}
     focusOnSelect={false}
     infinite
     itemClass=""
+    // partialVisible={partialVisible}
     // keyBoardControl
     // minimumTouchDrag={80}
     // infiniteLoop
     renderButtonGroupOutside={false}
     renderDotsOutside={false}
     responsive={{
+      xLargeDesktop: {
+        breakpoint: { max: 1920, min: 1440 },
+        items: 5,
+      },
       desktop: {
         breakpoint: {
-          max: 3000,
+          max: 1440,
           min: 1024,
         },
         items: 5,
-        partialVisibilityGutter: 40,
+        partialVisibilityGutter: 25,
       },
       mobile: {
         breakpoint: {
           max: 464,
-          min: 0,
+          min: 340,
         },
         items: 3,
-        partialVisibilityGutter: 40,
+        partialVisibilityGutter: 0,
+      },
+      smallMobile: {
+        breakpoint: {
+          max: 340,
+          min: 0,
+        },
+        items: 2,
+        partialVisibilityGutter: 0,
       },
       tablet: {
         breakpoint: {
@@ -57,14 +76,13 @@ const BackgroundCarousel = ({ children }) => (
           min: 464,
         },
         items: 5,
-        partialVisibilityGutter: 40,
       },
     }}
+    shouldResetAutoplay={false}
     showDots={false}
     sliderClass=""
-    slidesToSlide={2}
-    // swipeable
-    transitionDuration={1000}
+    slidesToSlide={1}
+    transitionDuration={3000}
   >
     {children}
   </Carousel>
@@ -95,7 +113,11 @@ export const HomePageCarousel = () => {
         alignItems="center"
         justifyContent="center"
       > */}
-      <BackgroundCarousel>
+      <BackgroundCarousel
+        partialVisible={false}
+        visibleSlidesInPc={5}
+        visibleSlidesInMobile={3}
+      >
         <ImageComponent src="images/image-7.png" />
         <ImageComponent src="images/image-2.png" />
         <ImageComponent src="images/image-3.png" />
@@ -114,7 +136,11 @@ export const HomePageCarousel = () => {
         alignItems="center"
         justifyContent="center"
       > */}
-      <BackgroundCarousel>
+      <BackgroundCarousel
+        partialVisible={true}
+        visibleSlidesInPc={4}
+        visibleSlidesInMobile={2}
+      >
         <ImageComponent left="15%" zIndex={0} src="images/image-2.png" />
         <ImageComponent src="images/image-3.png" />
         <ImageComponent right="15%" zIndex={-1} src="images/image-4.png" />
