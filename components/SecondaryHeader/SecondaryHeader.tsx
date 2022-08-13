@@ -11,6 +11,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import { SearchWithUpload } from "../SearchWithUpload/SearchWithUpload";
 
 const drawerWidth = "19vw";
 function ElevationScroll(props) {
@@ -65,8 +66,14 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export const SecondaryHeader = ({ tabNames, tabComponents }) => {
+export const SecondaryHeader = ({
+  headerComponent,
+  tabNames,
+  tabComponents,
+}) => {
   const [value, setValue] = React.useState(0);
+
+  const HeaderComponent = headerComponent || SearchWithUpload;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -83,25 +90,7 @@ export const SecondaryHeader = ({ tabNames, tabComponents }) => {
           }}
         >
           <Toolbar>
-            <Grid sx={{ width: "100%" }} container alignItems="center">
-              <TextField
-                label="Search"
-                id="search"
-                type="search"
-                size="small"
-                sx={{
-                  mr: 2,
-                }}
-              />
-              <IconButton
-                sx={{ color: "black" }}
-                size="large"
-                aria-label="upload"
-                color="inherit"
-              >
-                <FileUploadOutlinedIcon />
-              </IconButton>
-            </Grid>
+            <HeaderComponent tabIndex={value} />
           </Toolbar>
           <Toolbar sx={{ width: "100%" }}>
             <Tabs
@@ -143,9 +132,9 @@ export const SecondaryHeader = ({ tabNames, tabComponents }) => {
         <Box>
           {tabComponents && (
             <Box sx={{ px: 3 }}>
-              {tabComponents.map((tabComponent, i) => (
+              {tabComponents.map((TabComponent, i) => (
                 <TabPanel value={value} index={i} key={i}>
-                  {tabComponent()}
+                  <TabComponent tabIndex={value} setTab={setValue} />
                 </TabPanel>
               ))}
             </Box>

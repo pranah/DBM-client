@@ -11,6 +11,7 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import StoreOutlinedIcon from "@mui/icons-material/StoreOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -37,6 +38,11 @@ const listItems = [
     name: "Transactions",
     icon: <ReceiptLongOutlinedIcon />,
     url: "",
+  },
+  {
+    name: "Publish",
+    icon: <AddCircleOutlineIcon />,
+    url: "/publish",
   },
 ];
 

@@ -3,6 +3,23 @@ import { red } from "@mui/material/colors";
 
 // Create a theme instance.
 const theme = createTheme({
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          borderColor: "#CCCCCC",
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderColor: "#CCCCCC",
+          borderRadius: "10px",
+        },
+      },
+    },
+  },
   typography: {
     fontFamily: [
       "Poppins",
