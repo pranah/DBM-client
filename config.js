@@ -4,7 +4,11 @@ export const chain = {
   name: "Mumbai",
   title: "Polygon Testnet Mumbai",
   chain: "Polygon",
-  rpc: ["https://rpc-mumbai.matic.today/"],
+  rpc: [
+    "https://matic-mumbai.chainstacklabs.com",
+    "https://rpc-mumbai.maticvigil.com",
+    "https://matic-testnet-archive-rpc.bwarelabs.com",
+  ],
   faucets: ["https://faucet.polygon.technology/"],
   nativeCurrency: { name: "MATIC", symbol: "MATIC", decimals: 18 },
   infoURL: "https://polygon.technology/",
