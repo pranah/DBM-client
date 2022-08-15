@@ -2,7 +2,7 @@ import { pranaAddress } from "../config";
 import Prana from "../artifacts/contracts/prana.sol/prana.json";
 import useMoralisInit from "./useMoralisInit";
 import { useWeb3ExecuteFunction } from "react-moralis";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { getNewMoralisUrl } from "../utils";
 
@@ -14,11 +14,8 @@ export const useGetBooksInYourLibrary = () => {
     Moralis,
     isAuthenticated,
     authenticate,
-    isInitialized,
     chainId,
     account,
-    isWeb3Enabled,
-    user,
   } = useMoralisInit();
   const contractProcessor = useWeb3ExecuteFunction();
 

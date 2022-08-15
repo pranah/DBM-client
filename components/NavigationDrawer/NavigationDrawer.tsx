@@ -31,7 +31,7 @@ const listItems = [
   {
     name: "Profile",
     icon: <AccountCircleOutlinedIcon />,
-    url: "",
+    url: "/profile",
   },
   {
     name: "Transactions",
