@@ -32,7 +32,7 @@ export default function useMoralisInit() {
     }
     addToNetwork();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, isWeb3Enabled]);
+  }, [isAuthenticated, isWeb3Enabled,user]);
   const toHex = (num: number) => {
     return "0x" + num.toString(16);
   };
