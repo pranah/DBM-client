@@ -29,7 +29,7 @@ const SignUp: NextPage = () => {
   const { redirects } = router.query;
   useEffect(() => {
     if (isWeb3Enabled && isAuthenticated && user.get("initialized")) {
-      router.replace(`${redirects}`);
+      router.replace(`${redirects || "/market-place"}`);
       // do stuff with the user
     } else {
       authenticate();

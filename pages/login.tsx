@@ -7,11 +7,17 @@ import { useRouter } from "next/router";
 
 import { NextPage } from "next";
 import useMoralisInit from "../hooks/useMoralisInit";
+import { useEffect } from "react";
 
 const Login: NextPage = () => {
   const { isWeb3Enabled, authenticate } = useMoralisInit();
   let router = useRouter();
-
+  useEffect(() => {
+    if (isWeb3Enabled) {
+      authenticate();
+      router.push("/signUp");
+    }
+  }, [isWeb3Enabled]);
   const handleSubmit = () => {
     if (isWeb3Enabled) {
       authenticate();
