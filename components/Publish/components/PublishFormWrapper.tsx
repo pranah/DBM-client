@@ -6,7 +6,6 @@ export const PublishFormWrapper = ({ children, tab, setTab }) => {
       return prevState < 2 ? prevState + 1 : prevState;
     });
   };
-  console.log("tab", tab);
 
   return (
     <>

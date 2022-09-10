@@ -9,12 +9,12 @@ export const ContentsForm = () => {
         <Grid item xs={6}>
           <Grid container sx={{ mb: 3 }}>
             <Grid item xs={6}>
-              <FileUpload />
+              <FileUpload labelName="Upload Ebook file" />
             </Grid>
           </Grid>
           <Grid container sx={{ mb: 3 }}>
             <Grid item xs={6}>
-              <FileUpload />
+              <FileUpload labelName="Upload Cover Images" />
             </Grid>
           </Grid>
           <Grid container>
@@ -25,6 +25,7 @@ export const ContentsForm = () => {
                 multiline
                 variant="outlined"
                 size="small"
+                placeholder="Write description here.."
                 id="description"
                 rows={8}
               />
@@ -35,6 +36,7 @@ export const ContentsForm = () => {
                 multiline
                 fullWidth
                 variant="outlined"
+                placeholder="Write description here.."
                 size="small"
                 id="reviews"
                 rows={8}
