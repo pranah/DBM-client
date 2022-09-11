@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { NavigationDrawer } from "../../components/NavigationDrawer/NavigationDrawer";
 import { Header, Contents, General, OtherInfo } from "../../components/Publish";
 import { SecondaryHeader } from "../../components/SecondaryHeader/SecondaryHeader";
@@ -9,6 +9,16 @@ const tabNames = ["General", "Contents", "Author & Other info"];
 const tabComponents = [General, Contents, OtherInfo];
 
 const Publish = () => {
+  const [data, setData] = useState({});
+
+  // const tabComponentsWithSetData = ()=>{
+
+  // }
+
+  const handleDataUpdate = (formState) => {
+    setData((data) => ({ ...data, ...formState }));
+  };
+
   return (
     <>
       <Box

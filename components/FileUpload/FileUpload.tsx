@@ -3,9 +3,15 @@ import Image from "next/image";
 interface FileUploadProp {
   labelName: string;
   isEbookUpload?: boolean;
+  name: string;
 }
 
-export const FileUpload = ({ labelName, isEbookUpload }: FileUploadProp) => {
+export const FileUpload = ({
+  labelName,
+  isEbookUpload,
+  name,
+  ...props
+}: FileUploadProp) => {
   return (
     <>
       <label
@@ -20,14 +26,9 @@ export const FileUpload = ({ labelName, isEbookUpload }: FileUploadProp) => {
           justifyContent: "center",
         }}
         tabindex="0"
-        htmlFor="upload-photo"
+        htmlFor={name}
       >
-        <input
-          style={{ display: "none" }}
-          id="upload-photo"
-          name="upload-photo"
-          type="file"
-        />
+        <input style={{ display: "none" }} id={name} type="file" {...props} />
         {isEbookUpload ? (
           <Image
             width={33}
