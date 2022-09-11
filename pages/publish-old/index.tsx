@@ -33,7 +33,10 @@ const Publish: NextPage = () => {
   };
 
   useEffect(async () => {
-    const res = await authMeta();
+    const fetchData = async () => {
+      await authMeta();
+    };
+    fetchData();
   }, []);
 
   const router = useRouter();
