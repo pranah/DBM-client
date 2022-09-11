@@ -31,6 +31,7 @@ export const useGetPublisedBook = () => {
 
   const getBooks = useCallback(async () => {
     const query = new Moralis.Query("BookPublished");
+    query.descending("createdAt");
     try {
       setisLoading(true);
       const books = await query.find();
