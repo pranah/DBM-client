@@ -32,7 +32,7 @@ const Publish: NextPage = () => {
     }
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     const fetchData = async () => {
       await authMeta();
     };
