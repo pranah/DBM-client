@@ -143,7 +143,7 @@ export const Footer = () => {
               />
             </a>
             <a
-              href="https://twitter.com/pranaheBooks"
+              href="https://twitter.com/pranahbooks"
               rel="noreferrer"
               target="_blank"
             >
