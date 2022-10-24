@@ -32,7 +32,7 @@ const Home = () => {
         rightSideComponents={() => (
           <>
             <Box sx={{ display: { xs: "none", lg: "block" } }}>
-              <Button
+<!--               <Button
                 sx={{
                   borderRadius: "0.625rem",
                   textTransform: "none",
@@ -47,7 +47,7 @@ const Home = () => {
                 }}
               >
                 Explore
-              </Button>
+              </Button> -->
 
               <Button
                 href="#sign-up"
