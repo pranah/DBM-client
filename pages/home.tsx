@@ -38,7 +38,7 @@ const Home = () => {
         rightSideComponents={() => (
           <>
             <Box sx={{ display: { xs: "none", lg: "block" } }}>
-              <Button
+<!--               <Button
                 sx={{
                   borderRadius: "0.625rem",
                   textTransform: "none",
@@ -50,7 +50,7 @@ const Home = () => {
                 size="medium"
               >
                 Explore
-              </Button>
+              </Button> -->
 
               <Button
                 sx={{
@@ -119,7 +119,7 @@ const Home = () => {
             >
               An NFT marketplace for Books
             </Typography>
-            <Button
+<!--             <Button
               sx={{
                 padding: "0.5rem 3rem",
                 color: "tertiary.main",
@@ -131,7 +131,7 @@ const Home = () => {
               size="large"
             >
               Explore <ArrowForwardIcon />
-            </Button>
+            </Button> -->
           </Grid>
           <Grid
             sx={{ position: "relative" }}
