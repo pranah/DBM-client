@@ -11,10 +11,11 @@ import { LayersOfPranah } from "../components/LayersOfPranah/LayersOfPranah";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import { useRouter } from "next/router";
 import { HomePageCarousel } from "../components/HomePageCarousel/HomePageCarousel";
-import React from "react";
+import React, { useRef } from "react";
 
 const Home = () => {
   const router = useRouter();
+  const feedbackRef = useRef(null)
 
   return (
     <Box
@@ -32,7 +33,7 @@ const Home = () => {
         rightSideComponents={() => (
           <>
             <Box sx={{ display: { xs: "none", lg: "block" } }}>
-<!--               <Button
+               {/* <Button
                 sx={{
                   borderRadius: "0.625rem",
                   textTransform: "none",
@@ -43,11 +44,11 @@ const Home = () => {
                 color="tertiary"
                 size="medium"
                 onClick={async () => {
-                  router.push("/coming-soon");
-                }}
+                  feedbackRef.current.scrollIntoView()    
+                            }}
               >
                 Explore
-              </Button> -->
+              </Button>  */}
 
               <Button
                 href="#sign-up"
@@ -131,10 +132,10 @@ const Home = () => {
               variant="contained"
               size="large"
               onClick={async () => {
-                router.push("/coming-soon");
+                feedbackRef.current.scrollIntoView()    
               }}
             >
-              Explore <ArrowForwardIcon />
+               SignUp for Early Access <ArrowForwardIcon />
             </Button>
           </Grid>
           <Grid
@@ -152,7 +153,9 @@ const Home = () => {
         <HowItWorks />
         <LayersOfPranah />
         <Features />
+        <div ref={feedbackRef} >
         <Feedback />
+        </div>
         <Footer />
       </Box>
     </Box>
