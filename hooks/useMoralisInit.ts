@@ -1,7 +1,7 @@
 declare var window: any;
 
 import router from "next/router";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import { chain } from "../config";
 
@@ -18,14 +18,21 @@ export default function useMoralisInit() {
     enableWeb3,
     user,
   } = useMoralis();
+
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
   useEffect(() => {
-    if (!isWeb3Enabled && !isWeb3EnableLoading)
+    setIsAuthenticating(true);
+
+    if (!isWeb3Enabled && !isWeb3EnableLoading) {
+      console.log("no web3 enable");
       try {
         enableWeb3();
       } catch (e) {
         console.log(e);
       }
-    if (isWeb3Enabled && isAuthenticated && !user?.get("initialized")) {
+    }
+    if (isWeb3Enabled && !isAuthenticated) {
       if (router.pathname !== "/signUp")
         router.push(`/signUp?redirects=${router.pathname}`);
       // do stuff with the user

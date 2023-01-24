@@ -16,6 +16,8 @@ import { Publish as PublishForm } from "../../components/PublishForm";
 import Loader from "../../components/loader/Loader";
 import useMoralisInit from "../../hooks/useMoralisInit";
 import Layout from "../../components/layout";
+import { useUploadToIpfs } from "../../hooks/useUploadToIpfs";
+import { IPFS_URL } from "../../utils/constants";
 
 const Publish: NextPage = () => {
   const [fileUrl, setFileUrl] = useState(null);
@@ -24,6 +26,7 @@ const Publish: NextPage = () => {
   const { saveFile, isUploading } = useMoralisFile();
   const { Moralis, isAuthenticated, authenticate } = useMoralisInit();
   const contractProcessor = useWeb3ExecuteFunction();
+  const { client } = useUploadToIpfs();
 
   const authMeta = async () => {
     if (!isAuthenticated) {
@@ -76,17 +79,14 @@ const Publish: NextPage = () => {
 
   const uploadToIpfs = async (file) => {
     try {
-      console.log(file);
-      const uploadedFile = await saveFile(file.name, file, {
-        saveIPFS: true,
-      });
-      if (uploadedFile?._ipfs) {
-        return uploadedFile?._ipfs;
+      const uploadedFile = await client.add(file);
+      if (uploadedFile?.path) {
+        return `${IPFS_URL}${uploadedFile?.path}`;
       } else {
         throw new Error("File Upload Failed");
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error while uploading", error);
       throw error;
     }
   };
@@ -105,14 +105,20 @@ const Publish: NextPage = () => {
       metaDataForIpfs.file = epubIpfsUrl;
       metaDataForIpfs.image = imageIpfsUrl;
       const metaDataJsonString = JSON.stringify(metaDataForIpfs);
-      const metaDataIpfsIResp = await saveFile(
-        "data.json",
-        {
-          base64: window.btoa(unescape(encodeURIComponent(metaDataJsonString))),
-        },
-        { saveIPFS: true }
-      );
-      const url = metaDataIpfsIResp._ipfs;
+      // const metaDataIpfsIResp = await saveFile(
+      //   "data.json",
+      //   {
+      //     base64: window.btoa(unescape(encodeURIComponent(metaDataJsonString))),
+      //   },
+      //   { saveIPFS: true }
+      // );
+      // const url = metaDataIpfsIResp._ipfs;
+      const blob = new Blob([metaDataJsonString], { type: "text/json" });
+
+      const data = new FormData();
+      data.append("file", blob);
+      const url = await uploadToIpfs(data);
+
       /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
       createSale(url, metaDataForIpfs);
     } catch (error) {

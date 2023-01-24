@@ -3,8 +3,8 @@ import axios from "axios";
 import { ethers } from "ethers";
 
 /* Moralis init code */
-const serverUrl = "https://67x5ypma66pf.usemoralis.com:2053/server";
-const appId = "Jb876CUqSN36lK3GwjBW5M6lCb93R1JLCg3wqc6L";
+const serverUrl = "http://localhost:1337/server";
+const appId = "001";
 
 export default async function handler(req, res) {
   try {

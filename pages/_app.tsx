@@ -27,10 +27,7 @@ export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   return (
-    <MoralisProvider
-      appId="Jb876CUqSN36lK3GwjBW5M6lCb93R1JLCg3wqc6L"
-      serverUrl="https://67x5ypma66pf.usemoralis.com:2053/server"
-    >
+    <MoralisProvider appId="001" serverUrl="http://localhost:1337/server">
       <CacheProvider value={emotionCache}>
         <Head>
           <meta name="viewport" content="initial-scale=1, width=device-width" />

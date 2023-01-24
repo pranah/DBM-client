@@ -1,5 +1,5 @@
-export const pranaAddress = "0xff97bC38Be807cffA640F75B859A930983851053";
-export const pranaHelperAddress = "0xA50ba7F0829dFA906855A683C85f6513253EF70f";
+export const pranaAddress = "0xFAcb9B8d1770A37fbb95424359Cc2A3798642d8e";
+export const pranaHelperAddress = "0x16f7dA5c67F1466fF13D288230d1936cEa105cba";
 export const chain = {
   name: "Mumbai",
   title: "Polygon Testnet Mumbai",
