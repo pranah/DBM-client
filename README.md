@@ -1,6 +1,6 @@
 # Prānah
 
-![prana: deck cover](prana_cover_pic.png)
+![Prānah cover](cover_pic.png)
 
 ## Ebook Publishing and Distribution using NFTs
 
