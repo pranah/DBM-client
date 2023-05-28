@@ -29,7 +29,7 @@ const ComingSoon = () => {
       >
         <Box sx={{ mt: 3, textAlign: "center" }}>
           <Image
-            alt="pranah"
+            alt="Pranah"
             src="/images/logo-light.svg"
             width={200}
             height={60}

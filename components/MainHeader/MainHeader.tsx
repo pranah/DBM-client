@@ -53,7 +53,7 @@ export const MainHeader = ({ rightSideComponents }: MainHeaderProps) => {
             <Grid container justifyContent="space-between" alignItems="center">
               <Typography variant="h6" component="h1">
                 <Image
-                  alt="pranah"
+                  alt="Pranah"
                   src="/images/logo.svg"
                   width={121}
                   height={41}
